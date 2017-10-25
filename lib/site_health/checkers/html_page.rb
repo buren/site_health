@@ -19,14 +19,21 @@ module SiteHealth
         HTMLJournal.new(
           url: url,
           page: page,
-          missing_title: missing_title?,
+          missing_title?: missing_title?,
+          redirect?: redirect?,
           errors: result.errors.map { |e| W3CJournalBuilder.build(e) },
           warnings: result.warnings.map { |e| W3CJournalBuilder.build(e) }
         )
       end
 
       def missing_title?
+        return false if redirect?
+
         page.title.to_s.strip.empty?
+      end
+
+      def redirect?
+        page.redirect?
       end
 
       # @return [W3CValidators::Results]

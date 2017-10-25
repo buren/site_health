@@ -1,13 +1,14 @@
 require "spidr"
-require 'w3c_validators'
+require "w3c_validators"
 require "site_health/version"
 
 require "site_health/key_struct"
+require "site_health/url_map"
 
-require 'site_health/journals/css_journal'
-require 'site_health/journals/html_journal'
-require 'site_health/journals/xml_journal'
-require 'site_health/journals/w3c_journal'
+require "site_health/journals/css_journal"
+require "site_health/journals/html_journal"
+require "site_health/journals/xml_journal"
+require "site_health/journals/w3c_journal"
 
 require "site_health/checkers/css_page"
 require "site_health/checkers/html_page"
@@ -33,6 +34,7 @@ module SiteHealth
     end
 
     ChecksJournal = KeyStruct.new(
+      :urls,
       :missing_html_title,
       :broken_urls,
       :http_error_urls,
@@ -50,7 +52,8 @@ module SiteHealth
     end
 
     def call
-      url_map = Hash.new { |hash, key| hash[key] = [] }
+      url_map = UrlMap.new(default: [])
+      urls = UrlMap.new(default: {})
 
       missing_html_title = []
       http_error_urls = []
@@ -68,29 +71,38 @@ module SiteHealth
         spider.every_page do |page|
           code_journal = HTTPCodeJournal.new(url: page.url, code: page.code)
           http_error_urls << code_journal if code_journal.error?
+          urls[page.url][:code] = page.code
 
           if page.css?
             result = Checkers::CSSPage.check(page)
             xml_error_urls << result if result.errors?
+            urls[page.url][:css] = result
           end
 
           if page.xml?
             result = Checkers::XMLPage.check(page)
             xml_error_urls << result if result.errors?
+            urls[page.url][:xml] = result
           end
 
           if page.html?
             result = Checkers::HTMLPage.check(page)
             missing_html_title << result if result.missing_title?
             html_error_urls << result if result.errors?
+            urls[page.url][:html] = result
           end
         end
+      end
+
+      spider.visited_urls.map do |url|
+        urls[url][:links_to] = url_map[url]
       end
 
       http_error_urls = map_http_error_urls(http_error_urls, url_map)
       broken_urls = broken_links(spider, url_map) + http_error_urls
 
       ChecksJournal.new(
+        urls: urls,
         missing_html_title: missing_html_title,
         broken_urls: broken_urls,
         http_error_urls: http_error_urls,

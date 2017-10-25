@@ -14,7 +14,7 @@ Crawl a site and check various health indicators, such as:
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'site_health'
+gem "site_health"
 ```
 
 And then execute:
@@ -28,7 +28,7 @@ Or install it yourself as:
 ## Usage
 
 ```ruby
-journal = SiteHealth.check('https://example.com')
+journal = SiteHealth.check("https://example.com")
 
 # HTML
 journal.missing_html_title # List of URLs that are missing the HTML title
@@ -62,3 +62,16 @@ Bug reports and pull requests are welcome on GitHub at https://github.com/buren/
 ## License
 
 The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
+
+---
+
+## TODO
+
+- Implement `ChecksJournal#to_json` (maybe `#to_csv`, `#to_html` too)
+- Add logger support
+- Checkers
+  * canonical URL
+  * http vs https links
+  * links matching a pattern
+  * validate JavaScript (hm... might be totally out of scope or maybe there is a public API somewhere?)
+  * validate JSON

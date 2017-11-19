@@ -1,8 +1,4 @@
 module SiteHealth
-  XMLJournal = KeyStruct.new(:page, :url, :errors)
-  class XMLJournal
-    def errors?
-      errors.any?
-    end
+  class XMLJournal < Journal
   end
 end

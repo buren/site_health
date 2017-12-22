@@ -4,10 +4,10 @@
 
 Crawl a site and check various health indicators, such as:
 
-- HTTP error status
-- Invalid HTML/CSS/XML
+- Server errors
+- HTTP errors
+- Invalid HTML/CSS/XML/JSON
 - Missing HTML page title
-- Broken links
 
 ## Installation
 
@@ -29,24 +29,56 @@ Or install it yourself as:
 
 ```ruby
 journal = SiteHealth.check("https://example.com")
+# =>
+{
+  server_error_urls: [],
+  "http://example.com" => {
+    http_status: 200,
+    redirect: false,
+    content_type: "html",
+    html: {
+      title: nil,
+      description: nil,
+      redirect: false,
+      links_to: [],
+      links_from: [],
+      errors: [],
+    }
+  }
+}
+```
 
-# HTML
-journal.missing_html_title # List of URLs that are missing the HTML title
-journal.html_error_urls # List of URLs with HTML errors in them
+## Configuration
 
-# CSS
-journal.css_error_urls # List of URLs with CSS errors in them
+```ruby
+SiteHealth.configure do |config|
+  # Override default checkers
+  config.checkers = [
+    SiteHealth::Checkers::JSON,
+    SiteHealth::Checkers::HTML
+  ]
+  # You can also register additional checkers
+  config.register_checker YourCustomChecker
+end
+```
 
-# XML
-journal.xml_error_urls # List of URLs with XML errors in them
+__Add your own checker__:
 
-# Broken URLs
-broken = journal.broken_urls.first
-broken.url # The URL that failed
-broken.exists_on # Array of URLs where the broken URL was present
+```ruby
+class ProfanityChecker < SiteHealth::Checker
+  def call
+    page.body.include?('shit')
+  end
 
-# HTTP
-journal.http_error_urls # All URLs with HTTP status code >= 400
+  def name
+    'profanity'
+  end
+
+  # content types the checker should run on
+  def types
+    %i[html json xml css javascript]
+  end
+end
 ```
 
 ## Development
@@ -67,11 +99,10 @@ The gem is available as open source under the terms of the [MIT License](https:/
 
 ## TODO
 
-- Implement `ChecksJournal#to_json` (maybe `#to_csv`, `#to_html` too)
+- Result formats `#to_json` (maybe `#to_csv`, `#to_html` too)
 - Add logger support
 - Checkers
   * canonical URL
   * http vs https links
   * links matching a pattern
-  * validate JavaScript (hm... might be totally out of scope or maybe there is a public API somewhere?)
-  * validate JSON
+  * validate JavaScript (hm... might be totally out of scope or maybe there is a gem or public API somewhere?)

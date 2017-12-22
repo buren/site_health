@@ -11,16 +11,16 @@ module SiteHealth
 
     # @return [Hash]
     def journal
-      @links_from.each do |destination, origins|
-        @journal[destination][:links_from] = origins
-      end
-
-      @links_to.each do |origin, destinations|
-        @journal[origin][:links_to] = destinations
-      end
-
       @journal.tap do |journal|
-        journal["failures"] = @failures
+        @links_from.each do |destination, origins|
+          journal[destination][:links_from] = origins
+        end
+
+        @links_to.each do |origin, destinations|
+          journal[origin][:links_to] = destinations
+        end
+
+        journal[:server_error_urls] = @failures
       end
     end
 
@@ -40,9 +40,9 @@ module SiteHealth
     # @return [Hash]
     def add_page(page)
       @journal[page.url].tap do |journal|
-        journal["content_type"] = page.content_type
-        journal["http_status"] = page.code
-        journal["redirect"] = page.redirect?
+        journal[:content_type] = page.content_type
+        journal[:http_status] = page.code
+        journal[:redirect] = page.redirect?
         journal.merge!(checkers(page))
       end
     end
@@ -53,7 +53,7 @@ module SiteHealth
           checker = klass.new(page)
           next unless checker.should_check?
 
-          journal[checker.name] = checker.call
+          journal[checker.name.to_sym] = checker.call
         end
       end
     end

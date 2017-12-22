@@ -1,39 +1,36 @@
+require "w3c_validators"
+
 module SiteHealth
   module Checkers
-    class HTMLPage
-      def self.check(page)
-        new(page).check
-      end
-
-      attr_reader :page, :url
-
-      # @param [Spidr::Page] the crawled page
-      def initialize(page)
-        @page = page
-        @url = page.url
-      end
-
-      def check
-        result = check_content
-
-        HTMLJournal.new(
-          url: url,
-          page: page,
-          missing_title?: missing_title?,
-          redirect?: redirect?,
+    class HTML < Checker
+      def call
+        # result = check_content
+        result = Struct.new(:errors, :warnings).new([], [])
+        {
+          title: page.title,
+          missing_title: missing_title?,
+          redirect: redirect?,
           errors: result.errors.map { |e| W3CJournalBuilder.build(e) },
           warnings: result.warnings.map { |e| W3CJournalBuilder.build(e) }
-        )
+        }
+      end
+
+      def name
+        "html"
+      end
+
+      def types
+        %i[html]
+      end
+
+      def redirect?
+        page.redirect?
       end
 
       def missing_title?
         return false if redirect?
 
         page.title.to_s.strip.empty?
-      end
-
-      def redirect?
-        page.redirect?
       end
 
       # @return [W3CValidators::Results]

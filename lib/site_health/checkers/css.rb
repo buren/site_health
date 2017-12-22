@@ -1,27 +1,23 @@
+require "w3c_validators"
+
 module SiteHealth
   module Checkers
-    class CSSPage
-      def self.check(page)
-        new(page).check
-      end
-
-      attr_reader :page, :url
-
-      # @param [Spidr::Page] the crawled page
-      def initialize(page)
-        @page = page
-        @url = page.url
-      end
-
-      def check
+    class CSS < Checker
+      def call
         result = check_content
 
-        CSSJournal.new(
-          url: url,
-          page: page,
+        {
           errors: result.errors.map { |e| W3CJournalBuilder.build(e) },
           warnings: result.warnings.map { |e| W3CJournalBuilder.build(e) }
-        )
+        }
+      end
+
+      def name
+        "css"
+      end
+
+      def types
+        %i[css]
       end
 
       # @return [W3CValidators::Results]

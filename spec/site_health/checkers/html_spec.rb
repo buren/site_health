@@ -1,7 +1,7 @@
 require "spec_helper"
 require "ostruct"
 
-RSpec.describe SiteHealth::Checkers::HTMLPage do
+RSpec.describe SiteHealth::Checkers::HTML do
   describe "#missing_title?" do
     def build_mock_html_checker(data)
       OpenStruct.new(
@@ -38,7 +38,7 @@ RSpec.describe SiteHealth::Checkers::HTMLPage do
     end
   end
 
-  describe "::check" do
+  describe "::call" do
     def build_mock_html_checker(data)
       OpenStruct.new(
         url: data[:url],
@@ -47,17 +47,13 @@ RSpec.describe SiteHealth::Checkers::HTMLPage do
       )
     end
 
-    it "returns HTMLJournal" do
+    it "returns result data" do
       url = "https://example.com"
       page = build_mock_html_checker(url: url)
       checker = described_class.new(page)
 
-      check_content_result = OpenStruct.new(errors: [], warnings: [])
-      allow(checker).to receive(:check_content).and_return(check_content_result)
-
-      result = checker.check
-      expect(result.url). to eq(url)
-      expect(result.class).to eq(SiteHealth::HTMLJournal)
+      result = checker.call
+      expect(result[:missing_title]).to eq(true)
     end
   end
 end

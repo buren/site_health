@@ -2,9 +2,9 @@ module SiteHealth
   class UrlMap
     include Enumerable
 
-    def initialize(default: nil)
-      @data = if default
-                Hash.new { |hash, key| hash[key] = default }
+    def initialize
+      @data = if block_given?
+                Hash.new { |hash, key| hash[key] = yield }
               else
                 {}
               end

@@ -43,11 +43,11 @@ module SiteHealth
         journal[:content_type] = page.content_type
         journal[:http_status] = page.code
         journal[:redirect] = page.redirect?
-        journal.merge!(checkers(page))
+        journal.merge!(page_checkers(page))
       end
     end
 
-    def checkers(page)
+    def page_checkers(page)
       {}.tap do |journal|
         SiteHealth.config.checkers.each do |klass|
           checker = klass.new(page)

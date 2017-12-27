@@ -16,21 +16,11 @@ module SiteHealth
       end
 
       def name
-        "html"
+        "w3c_validator"
       end
 
       def types
         %i[html]
-      end
-
-      def redirect?
-        page.redirect?
-      end
-
-      def missing_title?
-        return false if redirect?
-
-        page.title.to_s.strip.empty?
       end
 
       # @return [W3CValidators::Results]

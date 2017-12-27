@@ -23,6 +23,7 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency "spidr", "~> 0.6"
   spec.add_dependency "w3c_validators", "~> 1.3"
+  spec.add_dependency "html-proofer", "~> 3.7"
 
   spec.add_development_dependency "bundler", "~> 1.16.a"
   spec.add_development_dependency "rake", "~> 10.0"

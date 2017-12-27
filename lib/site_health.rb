@@ -1,6 +1,8 @@
 require "spidr"
+require "html-proofer"
 
 require "site_health/version"
+require "site_health/configuration"
 
 require "site_health/key_struct"
 require "site_health/url_map"
@@ -34,30 +36,5 @@ module SiteHealth
 
   def self.config
     configure
-  end
-
-  class Configuration
-    attr_reader :checkers
-
-    def initialize
-      @checkers = default_checkers
-    end
-
-    def checkers=(checkers)
-      @checkers = Array(checkers)
-    end
-
-    def register_checker(checker)
-      @checkers << checker
-    end
-
-    def default_checkers
-      [
-        Checkers::HTML,
-        Checkers::XML,
-        Checkers::CSS,
-        Checkers::JSON
-      ]
-    end
   end
 end

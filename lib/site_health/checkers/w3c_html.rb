@@ -1,22 +1,20 @@
 require "w3c_validators"
 
+require "site_health/w3c_journal_builder"
+
 module SiteHealth
   module Checkers
-    class HTML < Checker
+    class W3CHTML < Checker
       def call
-        # result = check_content
-        result = Struct.new(:errors, :warnings).new([], [])
+        result = check_content
         {
-          title: page.title,
-          missing_title: missing_title?,
-          redirect: redirect?,
           errors: result.errors.map { |e| W3CJournalBuilder.build(e) },
           warnings: result.warnings.map { |e| W3CJournalBuilder.build(e) }
         }
       end
 
       def name
-        "w3c_validator"
+        "w3c_html"
       end
 
       def types
@@ -28,7 +26,7 @@ module SiteHealth
       # @see https://github.com/w3c-validators/w3c_validators/issues/39 we really want to use #validate_text instead of #validate_uri but due to the linked issue thats not possible
       def check_content
         validator = W3CValidators::NuValidator.new
-        validator.validate_uri(url)
+        validator.validate_text(page.body)
       end
     end
   end

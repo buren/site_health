@@ -5,9 +5,12 @@ module SiteHealth
     class HTMLProofer < Checker
       def call
         tempfile(page.body) do |file|
-          proofer = ::HTMLProofer.check_file(file.path, SiteHealth.config.html_proofer)
+          config = SiteHealth.config.html_proofer
+          proofer = ::HTMLProofer.check_file(file.path, config.to_h)
           proofer.run rescue RuntimeError # NOTE: HTMLProofer raises if errors are found
-          proofer.failed_tests
+          proofer.failed_tests.map do |failed_test|
+						failed_test.split('.html:').last
+          end
         end
       end
 

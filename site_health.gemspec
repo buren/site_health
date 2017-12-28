@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["burenstam@gmail.com"]
 
   spec.summary       = %q{Crawl a site and check various helth indicators.}
-  spec.description   = %q{Crawl a site and check various health indicators, such as: HTTP 4XX, 5XX status and valid HTML.}
+  spec.description   = %q{Crawl a site and check various health indicators, such as: HTTP 4XX, 5XX status and valid HTML/XML/JSON.}
   spec.homepage      = "https://github.com/buren/site_health"
   spec.license       = "MIT"
 

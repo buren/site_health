@@ -1,16 +1,13 @@
 require "spec_helper"
-require "ostruct"
 
 require "site_health/checkers/missing_title"
 
 RSpec.describe SiteHealth::Checkers::MissingTitle do
-  let(:nil_page) { OpenStruct.new(url: "", body: "") }
-
   describe "#call" do
     it "returns false if title is present" do
-      result = described_class.new(mock_test_page("html/index.html")).call
+      page = mock_test_page("html/index.html")
+      result = described_class.new(page).call
 
-      expect(result).to eq(false)
       expect(result).to eq(false)
     end
 

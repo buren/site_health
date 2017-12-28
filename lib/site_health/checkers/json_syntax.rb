@@ -2,15 +2,17 @@ require "json"
 
 module SiteHealth
   module Checkers
-    class JSON < Checker
+    class JSONSyntax < Checker
       def call
+        errors = []
         error_message = validate_json(page.body)
+        errors << error_message if error_message
 
-        { errors: error_message ? [error_message] : [] }
+        { errors: errors }
       end
 
       def name
-        "json"
+        "json_syntax"
       end
 
       def types

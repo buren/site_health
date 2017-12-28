@@ -9,7 +9,7 @@ module SiteHealth
       @failures = []
     end
 
-    # @return [Hash]
+    # @return [Hash] check results
     def journal
       @journal.tap do |journal|
         @links_from.each do |destination, origins|
@@ -25,12 +25,12 @@ module SiteHealth
     end
 
     # @return [Array] all URL that have failed
-    def add_failed_url(url)
+    def check_failed_url(url)
       @failures << url
     end
 
     # @return [Hash] with from/to links
-    def add_link(origin, destination)
+    def check_link(origin, destination)
       {
         from: @links_from[destination] << origin,
         to: @links_to[origin] << destination
@@ -38,16 +38,18 @@ module SiteHealth
     end
 
     # @return [Hash]
-    def add_page(page)
+    def check_page(page)
       @journal[page.url].tap do |journal|
         journal[:content_type] = page.content_type
         journal[:http_status] = page.code
         journal[:redirect] = page.redirect?
-        journal.merge!(page_checkers(page))
+        journal[:title] = page.title
+        journal.merge!(lab_results(page))
       end
     end
 
-    def page_checkers(page)
+    # @return [Hash] results of all checkers for page
+    def lab_results(page)
       {}.tap do |journal|
         SiteHealth.config.checkers.each do |klass|
           checker = klass.new(page)

@@ -1,16 +1,21 @@
+require "site_health/html_proofer_configuration"
+
 module SiteHealth
   class Configuration
     attr_reader :checkers, :html_proofer
 
     def initialize
       @checkers = nil
-      # TODO: Provide transparent access to HTMLProofer options
-      @html_proofer = {
-        log_level: :fatal # one of: :debug, :info, :warn, :error, or :fatal
-      }
+      @html_proofer = nil
     end
 
-    # NOTE: 
+    def html_proofer
+      @html_proofer = HTMLProoferConfiguration.new
+      yield(@html_proofer) if block_given?
+      @html_proofer
+    end
+
+    # NOTE:
     #   We can't initialize the default checkers in the constructor since
     #   those files are yet to be required
     def checkers
@@ -27,12 +32,11 @@ module SiteHealth
 
     def default_checkers
       [
-        Checkers::HTML,
+        Checkers::HTMLProofer,
         Checkers::MissingTitle,
         Checkers::Redirect,
         Checkers::XML,
-        Checkers::CSS,
-        Checkers::JSON
+        Checkers::JSONSyntax
       ]
     end
   end

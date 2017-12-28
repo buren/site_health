@@ -1,11 +1,8 @@
 require "spec_helper"
-require "ostruct"
 
 require "site_health/checkers/html_proofer"
 
 RSpec.describe SiteHealth::Checkers::HTMLProofer do
-  let(:nil_page) { OpenStruct.new(url: "", body: "") }
-
   describe "#call" do
     it "returns empty list if body is an empty string" do
       result = described_class.new(nil_page).call
@@ -13,12 +10,18 @@ RSpec.describe SiteHealth::Checkers::HTMLProofer do
       expect(result).to eq([])
     end
 
-    it "returns failures for page" do
+    it "returns bad link failure" do
       page = mock_test_page("html/single_bad_link.html")
-      
       result = described_class.new(page).call
 
       expect(result.first).to match("which does not exist")
+    end
+
+    it "returns bad HTML-syntax" do
+      page = mock_test_page("html/bad_syntax.html")
+      result = described_class.new(page).call
+
+      expect(result.first).to match("ERROR: error parsing attribute name")
     end
   end
 

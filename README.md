@@ -81,6 +81,16 @@ class ProfanityChecker < SiteHealth::Checker
 end
 ```
 
+__Configure HTMLProofer__:
+```ruby
+SiteHealth.configure do |config|
+  config.html_proofer do |proofer_config|
+    proofer_config.log_level = :info
+    proofer_config.check_opengraph = false
+  end
+end
+```
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.

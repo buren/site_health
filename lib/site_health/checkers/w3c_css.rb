@@ -1,8 +1,10 @@
 require "w3c_validators"
 
+require "site_health/w3c_journal_builder"
+
 module SiteHealth
   module Checkers
-    class CSS < Checker
+    class W3CCSS < Checker
       def call
         result = check_content
 
@@ -13,7 +15,7 @@ module SiteHealth
       end
 
       def name
-        "css"
+        "w3c_css"
       end
 
       def types
@@ -25,7 +27,7 @@ module SiteHealth
       # @see https://github.com/w3c-validators/w3c_validators/issues/39 we really want to use #validate_text instead of #validate_uri but due to the linked issue thats not possible
       def check_content
         validator = W3CValidators::CSSValidator.new
-        validator.validate_uri(url)
+        validator.validate_text(page.body)
       end
     end
   end

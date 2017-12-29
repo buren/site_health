@@ -9,7 +9,7 @@ module SiteHealth
           proofer = ::HTMLProofer.check_file(file.path, config.to_h)
           proofer.run rescue RuntimeError # NOTE: HTMLProofer raises if errors are found
           proofer.failed_tests.map do |failed_test|
-            failed_test.split(".html:").last
+            failed_test.split(".html:").last # Removes file name from error message
           end
         end
       end

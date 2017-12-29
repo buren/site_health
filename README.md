@@ -6,8 +6,8 @@ Crawl a site and check various health indicators, such as:
 
 - Server errors
 - HTTP errors
-- Invalid HTML/CSS/XML/JSON
-- Missing HTML page title
+- Invalid HTML/XML/JSON
+- Missing HTML title
 
 ## Installation
 

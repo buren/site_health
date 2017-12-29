@@ -8,8 +8,6 @@ module SiteHealth
           config = SiteHealth.config.html_proofer
           proofer = ::HTMLProofer.check_file(file.path, config.to_h)
           proofer.run rescue RuntimeError # NOTE: HTMLProofer raises if errors are found
-          require 'byebug'
-          byebug
           proofer.failed_tests.map do |failed_test|
             failed_test.split(".html:").last
           end

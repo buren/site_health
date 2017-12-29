@@ -67,11 +67,11 @@ __Add your own checker__:
 ```ruby
 class ProfanityChecker < SiteHealth::Checker
   def call
-    page.body.include?('shit')
+    page.body.include?("shit")
   end
 
   def name
-    'profanity'
+    "profanity"
   end
 
   # content types the checker should run on

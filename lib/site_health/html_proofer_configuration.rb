@@ -6,6 +6,7 @@ module SiteHealth
                   :check_html,
                   :check_external_hash,
                   :empty_alt_ignore,
+									:check_img_http,
 									:enforce_https,
 									:external_only
 
@@ -24,6 +25,7 @@ module SiteHealth
       @check_opengraph = true
       @check_html = true
       @check_external_hash = true
+			@check_img_http = false
       @empty_alt_ignore = false
       @error_sort = :path
 			@enforce_https = false
@@ -53,6 +55,7 @@ module SiteHealth
         check_html: check_html,
         check_external_hash: check_external_hash,
         empty_alt_ignore: empty_alt_ignore,
+				check_img_http: check_img_http,
         error_sort: error_sort,
 				enforce_https: enforce_https,
 				external_only: external_only

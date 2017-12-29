@@ -1,7 +1,7 @@
 require "bundler/setup"
 require "site_health"
 
-Dir['spec/support/**/*.rb'].each { |f| require_relative "../#{f}" }
+Dir["spec/support/**/*.rb"].each { |f| require_relative "../#{f}" }
 
 RSpec.configure do |config|
   config.include SiteHealth::SpecHelper

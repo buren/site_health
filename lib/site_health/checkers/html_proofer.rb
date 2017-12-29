@@ -1,22 +1,24 @@
-require 'tempfile'
+require "tempfile"
 
 module SiteHealth
-	module Checkers
+  module Checkers
     class HTMLProofer < Checker
       def call
         tempfile(page.body) do |file|
           config = SiteHealth.config.html_proofer
           proofer = ::HTMLProofer.check_file(file.path, config.to_h)
           proofer.run rescue RuntimeError # NOTE: HTMLProofer raises if errors are found
+          require 'byebug'
+          byebug
           proofer.failed_tests.map do |failed_test|
-						failed_test.split('.html:').last
+            failed_test.split(".html:").last
           end
         end
       end
 
       def tempfile(string)
         result = nil
-        file = Tempfile.new([name, '.html'])
+        file = Tempfile.new([name, ".html"])
 
         begin
           file.write(string)
@@ -28,7 +30,7 @@ module SiteHealth
       end
 
       def name
-        'html_proofer'
+        "html_proofer"
       end
 
       def types

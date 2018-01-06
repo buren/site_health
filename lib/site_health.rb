@@ -21,6 +21,8 @@ require "site_health/nurse"
 
 # Top-level module/namespace
 module SiteHealth
+  # @return [Hash] journal data
+  # @see Nurse#journal
   def self.check(site)
     nurse = Nurse.new
 
@@ -34,12 +36,15 @@ module SiteHealth
     nurse.journal
   end
 
+  # @return [Configuration] the current configuration
+  # @yieldparam [Configuration] the current configuration
   def self.configure
     @configuration ||= Configuration.new
     yield(@configuration) if block_given?
     @configuration
   end
 
+  # @return [Configuration] the current configuration
   def self.config
     configure
   end

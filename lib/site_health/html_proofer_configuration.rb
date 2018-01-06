@@ -15,6 +15,7 @@ module SiteHealth
                   :check_favicon,
                   :ignore_missing_internal_links
 
+    # Valid log levels
     LOG_LEVELS = %i[
       debug
       info
@@ -23,6 +24,7 @@ module SiteHealth
       fatal
     ].freeze
 
+    # Valid error sorts
     ERROR_SORTS = %i[path desc status].freeze
 
     def initialize

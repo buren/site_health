@@ -4,17 +4,32 @@ require "site_health/checkers/html_proofer"
 
 RSpec.describe SiteHealth::Checkers::HTMLProofer do
   describe "#call" do
-    it "returns empty list if body is an empty string" do
-      result = described_class.new(nil_page).call
+    it "returns no failures for 'perfect' page" do
+      page = mock_test_page("html/perfect.html")
+      result = described_class.new(page).call
 
       expect(result).to eq([])
     end
 
-    xit "returns bad link failure" do
+    it "returns missing favicon failure" do
+      page = mock_test_page("html/missing_favicon.html")
+      result = described_class.new(page).call
+
+      expect(result).to eq(["no favicon specified"])
+    end
+
+        it "returns missing favicon failure" do
+      page = mock_test_page("html/missing_image_alt.html")
+      result = described_class.new(page).call
+
+      expect(result.first).to match("does not have an alt attribute")
+    end
+
+    it "returns bad link failure" do
       page = mock_test_page("html/single_bad_link.html")
       result = described_class.new(page).call
 
-      expect(result.first).to match("which does not exist")
+      expect(result.first).to match("is an invalid URL")
     end
 
     it "returns bad HTML-syntax" do

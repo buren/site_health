@@ -2,17 +2,22 @@ require "site_health/html_proofer_configuration"
 
 module SiteHealth
   class Configuration
-    attr_reader :checkers, :html_proofer
-
     def initialize
       @checkers = nil
       @html_proofer = nil
+      @w3c = nil
     end
 
     def html_proofer
-      @html_proofer = HTMLProoferConfiguration.new
+      @html_proofer ||= HTMLProoferConfiguration.new
       yield(@html_proofer) if block_given?
       @html_proofer
+    end
+
+    def w3c
+      @w3c ||= W3CValidatorsConfiguration.new
+      yield(@w3c) if block_given?
+      @w3c
     end
 
     # NOTE:
@@ -34,6 +39,7 @@ module SiteHealth
       [
         Checkers::HTMLProofer,
         Checkers::MissingTitle,
+        Checkers::MissingDescription,
         Checkers::Redirect,
         Checkers::XML,
         Checkers::JSONSyntax

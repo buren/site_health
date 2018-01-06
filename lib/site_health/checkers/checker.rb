@@ -16,16 +16,12 @@ module SiteHealth
       html
     ].freeze
 
-    # @see #call
-    def self.call(page)
-      new(page).call
-    end
-
-    attr_reader :page
+    attr_reader :page, :config
 
     # @param [Spidr::Page] the crawled page
-    def initialize(page)
+    def initialize(page, config: SiteHealth.config)
       @page = page
+      @config = config
     end
 
     def call

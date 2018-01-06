@@ -8,14 +8,14 @@ RSpec.describe SiteHealth::Checkers::XML do
       page = mock_test_page("xml/good.xml")
       result = described_class.new(page).call
 
-      expect(result[:errors]).to be_empty
+      expect(result).to be_empty
     end
 
     it "returns error message if XML is invalid" do
       page = mock_test_page("xml/bad.xml")
       result = described_class.new(page).call
 
-      expect(result[:errors].first).to eq("3:1: FATAL: Extra content at the end of the document")
+      expect(result.first).to eq("3:1: FATAL: Extra content at the end of the document")
     end
   end
 

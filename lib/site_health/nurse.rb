@@ -2,7 +2,10 @@ require "site_health/url_map"
 
 module SiteHealth
   class Nurse
-    def initialize
+    attr_reader :config
+
+    def initialize(config = SiteHealth.config)
+      @config = config
       @journal = UrlMap.new { {} }
       @links_to = UrlMap.new { [] }
       @links_from = UrlMap.new { [] }
@@ -20,7 +23,7 @@ module SiteHealth
           journal[origin][:links_to] = destinations
         end
 
-        journal[:server_error_urls] = @failures
+        journal[:internal_server_error_urls] = @failures
       end
     end
 
@@ -51,8 +54,8 @@ module SiteHealth
     # @return [Hash] results of all checkers for page
     def lab_results(page)
       {}.tap do |journal|
-        SiteHealth.config.checkers.each do |klass|
-          checker = klass.new(page)
+        config.checkers.each do |klass|
+          checker = klass.new(page, config: config)
           next unless checker.should_check?
 
           journal[checker.name.to_sym] = checker.call

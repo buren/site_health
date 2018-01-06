@@ -8,14 +8,14 @@ RSpec.describe SiteHealth::Checkers::JSONSyntax do
       page = mock_test_page("json/good.json")
       result = described_class.new(page).call
 
-      expect(result[:errors]).to be_empty
+      expect(result).to eq('OK')
     end
 
     it "returns error message if JSON is invalid" do
       page = mock_test_page("json/bad.json")
       result = described_class.new(page).call
 
-      expect(result[:errors]).to eq(["765: unexpected token at '1'"])
+      expect(result).to eq("765: unexpected token at '1'")
     end
   end
 

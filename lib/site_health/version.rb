@@ -1,3 +1,6 @@
 module SiteHealth
-  VERSION = "0.1.0"
+  PATCH = 0
+  MINOR = 1
+  MAJOR = 0
+  VERSION = "#{MAJOR}.#{MINOR}.#{PATCH}"
 end

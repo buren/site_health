@@ -1,5 +1,6 @@
 require "bundler/setup"
 require "site_health"
+require "byebug"
 
 Dir["spec/support/**/*.rb"].each { |f| require_relative "../#{f}" }
 

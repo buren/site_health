@@ -4,6 +4,7 @@ module SiteHealth
   module Checkers
     # Checks for various HTML misstakes (backed by the excellent HTMLProofer gem)
     class HTMLProofer < Checker
+      # @return [Array<String>] list of HTML-errors
       def call
         tempfile(page.body) do |file|
           proofer = ::HTMLProofer.check_file(file.path, config.html_proofer.to_h)
@@ -12,6 +13,7 @@ module SiteHealth
         end
       end
 
+      # @return [Array<String>] list failures
       def build_test_failures(failed_tests)
         failed_tests.map do |failed_test|
           # HTMLProofer expects internal links to be present on disk, Jekyll-style,
@@ -26,6 +28,9 @@ module SiteHealth
         end.compact
       end
 
+      # Creates a tempfile around the passed block
+      # @return [Object] whatever the passed block returns
+      # @yieldparam [Tempfile] the temporary file
       def tempfile(string)
         file = Tempfile.new([name, ".html"])
         begin
@@ -36,10 +41,12 @@ module SiteHealth
         yield(file).tap { file.unlink }
       end
 
+      # @return [String] the name of the checker
       def name
         "html_proofer"
       end
 
+      # @return [Array<Symbol>] list of page types the checker will run on
       def types
         %i[html]
       end

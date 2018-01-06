@@ -6,6 +6,7 @@ module SiteHealth
   module Checkers
     # Checks for various CSS errors and warnings (backed by the excellent W3CValidations gem)
     class W3CCSS < Checker
+      # @return [Hash] with :errors and :warnings keys that return an error of possible violations
       def call
         result = check_content
         {
@@ -14,10 +15,12 @@ module SiteHealth
         }
       end
 
+      # @return [String] the name of the checker
       def name
         "w3c_css"
       end
 
+      # @return [Array<Symbol>] list of page types the checker will run on
       def types
         %i[css]
       end

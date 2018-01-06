@@ -42,9 +42,9 @@ module SiteHealth
     end
 
 
-    # @param [Symbol] desired log level
+    # @param [Symbol] level desired log level
     # @return [Symbol] current log level
-    # @raises [ArgumentError] raises if invalid log level
+    # @raise [ArgumentError] raises if invalid log level
     def log_level=(level)
       unless LOG_LEVELS.include?(level.to_sym)
         raise ArgumentError, "unknown log level :#{level}, must be one of: #{LOG_LEVELS.join(",")}"
@@ -53,9 +53,9 @@ module SiteHealth
       @log_level = level
     end
 
-    # @param [Symbol] desired error sorting
+    # @param [Symbol] sort desired error sorting
     # @return [Symbol] current error sorting
-    # @raises [ArgumentError] raises if invalid error sorting
+    # @raise [ArgumentError] raises if invalid error sorting
     def error_sort=(sort)
       unless ERROR_SORTS.include?(sort.to_sym)
         raise ArgumentError, "unknown sort order :#{sort}, must be one of: #{ERROR_SORTS.join(",")}"

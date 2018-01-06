@@ -25,21 +25,21 @@ module SiteHealth
       @w3c
     end
 
-    # NOTE:
-    #   We can't initialize the default checkers in the constructor since
-    #   those files are yet to be required
     # @return [Array<Checker>] array of checkers to run
     def checkers
+      # NOTE:
+      #   We can't initialize the default checkers in the constructor since
+      #   those files, might not yet be required
       @checkers || default_checkers
     end
 
-    # @param [Array<Checker>] array of checkers to run
     # @return [Array<Checker>] array of checkers to run
+    # @param [Array<Checker>] checkers array of checkers to run
     def checkers=(checkers)
       @checkers = Array(checkers)
     end
 
-    # @param [Checker] additional checker to run
+    # @param [Checker] checker additional checker to run
     # @return [Array<Checker>] array of checkers to run
     def register_checker(checker)
       @checkers << checker

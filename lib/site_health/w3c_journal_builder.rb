@@ -20,7 +20,7 @@ module SiteHealth
 
   # Build a W3CJournal object
   module W3CJournalBuilder
-    # @param [W3CValidators::Result]
+    # @param [W3CValidators::Result] result
     # @return [W3CJournal]
     def self.build(result)
       W3CJournal.new(

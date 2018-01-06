@@ -20,7 +20,8 @@ module SiteHealth
 
     attr_reader :page, :config
 
-    # @param [Spidr::Page] the crawled page
+    # @param [Spidr::Page] page the crawled page
+    # @param config [SiteHealth::Configuration]
     def initialize(page, config: SiteHealth.config)
       @page = page
       @config = config

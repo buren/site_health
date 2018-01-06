@@ -1,4 +1,5 @@
 module SiteHealth
+  # Parent class for all checkers (all checkers must inheirit from this class)
   class Checker
     CHECKABLE_TYPES = %i[
       plain_text
@@ -25,7 +26,7 @@ module SiteHealth
     end
 
     def call
-      fail(NotImplementedError, "please implement!")
+      raise(NotImplementedError, "please implement!")
     end
 
     def url

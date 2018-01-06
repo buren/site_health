@@ -19,6 +19,7 @@ require "site_health/checkers/xml"
 
 require "site_health/nurse"
 
+# Top-level module/namespace
 module SiteHealth
   def self.check(site)
     nurse = Nurse.new

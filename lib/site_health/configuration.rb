@@ -1,6 +1,7 @@
 require "site_health/html_proofer_configuration"
 
 module SiteHealth
+  # Holds configuration data
   class Configuration
     def initialize
       @checkers = nil

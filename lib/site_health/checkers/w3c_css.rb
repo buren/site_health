@@ -4,6 +4,7 @@ require "site_health/w3c_journal_builder"
 
 module SiteHealth
   module Checkers
+    # Checks for various CSS errors and warnings (backed by the excellent W3CValidations gem)
     class W3CCSS < Checker
       def call
         result = check_content

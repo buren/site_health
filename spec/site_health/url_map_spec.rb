@@ -6,7 +6,6 @@ RSpec.describe SiteHealth::UrlMap do
     it "sets and gets value ands converts the key to a string" do
       map = described_class.new.tap { |map| map[:wat] = :man }
 
-
       expect(map[:wat]).to eq(:man)
       expect(map["wat"]).to eq(:man)
     end

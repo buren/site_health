@@ -1,4 +1,5 @@
 module SiteHealth
+  # Holds HTMLProofer configuration data
   class HTMLProoferConfiguration
     attr_reader :log_level, :error_sort
 
@@ -56,7 +57,7 @@ module SiteHealth
       @error_sort = sort
     end
 
-    # @return [Hash] Config as hash, only contains keys for ::HTMLProofer config
+    # @return [Hash] config as hash, only contains keys for ::HTMLProofer config
     def to_h
       {
         log_level: log_level,

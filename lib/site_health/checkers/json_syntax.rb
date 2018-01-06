@@ -2,14 +2,13 @@ require "json"
 
 module SiteHealth
   module Checkers
+    # Checks if JSON syntax is valid
     class JSONSyntax < Checker
       def call
-        begin
-          ::JSON.parse(page.body)
-          'OK'
-        rescue ::JSON::ParserError => e
-          e.message
-        end
+        ::JSON.parse(page.body)
+        'OK'
+      rescue ::JSON::ParserError => e
+        e.message
       end
 
       def name

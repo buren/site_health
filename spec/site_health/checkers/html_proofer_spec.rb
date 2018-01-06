@@ -18,7 +18,7 @@ RSpec.describe SiteHealth::Checkers::HTMLProofer do
       expect(result).to eq(["no favicon specified"])
     end
 
-        it "returns missing favicon failure" do
+    it "returns missing favicon failure" do
       page = mock_test_page("html/missing_image_alt.html")
       result = described_class.new(page).call
 

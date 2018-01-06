@@ -1,4 +1,3 @@
-
 lib = File.expand_path("../lib", __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require "site_health/version"
@@ -10,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["burenstam@gmail.com"]
 
   spec.summary       = %q{Crawl a site and check various helth indicators.}
-  spec.description   = %q{Crawl a site and check various health indicators, such as: HTTP 4XX, 5XX status and valid HTML/XML/JSON.}
+  spec.description   = %q{Crawl a site and check various health indicators, such as: HTTP 4XX, 5XX status, valid HTML/XML/JSON. Missing image alt attributes.}
   spec.homepage      = "https://github.com/buren/site_health"
   spec.license       = "MIT"
 

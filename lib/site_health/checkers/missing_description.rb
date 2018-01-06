@@ -1,5 +1,6 @@
 module SiteHealth
   module Checkers
+    # Checks if HTML-meta description is present
     class MissingDescription < Checker
       def call
         return false if page.redirect?

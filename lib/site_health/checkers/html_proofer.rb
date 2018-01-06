@@ -2,6 +2,7 @@ require "tempfile"
 
 module SiteHealth
   module Checkers
+    # Checks for various HTML misstakes (backed by the excellent HTMLProofer gem)
     class HTMLProofer < Checker
       def call
         tempfile(page.body) do |file|
@@ -16,8 +17,8 @@ module SiteHealth
           # HTMLProofer expects internal links to be present on disk, Jekyll-style,
           # since we're checking remote pages we ignore those failures
           if config.html_proofer.ignore_missing_internal_links &&
-              (failed_test.include?("internally linking to") ||
-              failed_test.include?("internal image"))
+             (failed_test.include?("internally linking to") ||
+             failed_test.include?("internal image"))
             next
           end
 

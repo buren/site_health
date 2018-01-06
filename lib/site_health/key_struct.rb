@@ -1,4 +1,5 @@
 module SiteHealth
+  # Enhance Struct to work with keywords
   class KeyStruct < Struct
     def initialize(**keyword_args)
       keyword_args.each do |key, value|

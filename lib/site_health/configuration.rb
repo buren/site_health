@@ -1,10 +1,13 @@
 require "site_health/html_proofer_configuration"
+require "site_health/w3c_validators_configuration"
 
 module SiteHealth
   # Holds configuration data
   class Configuration
+    attr_reader :checkers
+
     def initialize
-      @checkers = nil
+      @checkers = default_checkers
       @html_proofer = nil
       @w3c = nil
     end
@@ -23,14 +26,6 @@ module SiteHealth
       @w3c ||= W3CValidatorsConfiguration.new
       yield(@w3c) if block_given?
       @w3c
-    end
-
-    # @return [Array<Checker>] array of checkers to run
-    def checkers
-      # NOTE:
-      #   We can't initialize the default checkers in the constructor since
-      #   those files, might not yet be required
-      @checkers || default_checkers
     end
 
     # @return [Array<Checker>] array of checkers to run

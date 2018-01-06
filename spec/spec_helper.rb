@@ -1,3 +1,15 @@
+require 'simplecov'
+require 'coveralls'
+
+formatters = [
+  SimpleCov::Formatter::HTMLFormatter,
+  Coveralls::SimpleCov::Formatter
+]
+SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter.new(formatters)
+SimpleCov.start do
+  add_filter '/spec/'
+end
+
 require "bundler/setup"
 require "site_health"
 require "byebug"
@@ -5,6 +17,9 @@ require "byebug"
 Dir["spec/support/**/*.rb"].each { |f| require_relative "../#{f}" }
 
 RSpec.configure do |config|
+  # Runs tests in random order
+  config.order = "random"
+
   config.include SiteHealth::SpecHelper
 
   # Enable flags like --only-failures and --next-failure

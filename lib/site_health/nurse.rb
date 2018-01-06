@@ -3,7 +3,7 @@ require "site_health/url_map"
 module SiteHealth
   # Holds page analysis data
   class Nurse
-    attr_reader :config
+    attr_reader :config, :links_to, :links_from, :failures
 
     def initialize(config = SiteHealth.config)
       @config = config

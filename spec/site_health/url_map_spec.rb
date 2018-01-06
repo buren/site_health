@@ -22,4 +22,12 @@ RSpec.describe SiteHealth::UrlMap do
     map = described_class.new { [] }
     expect(map[:wat] << 1).to eq([1])
   end
+
+  describe "#to_h" do
+    it "returns the UrlMap as a hash" do
+      map = described_class.new
+      map[:wat] = 1
+      expect(map.to_h).to eq("wat" => 1)
+    end
+  end
 end

@@ -8,15 +8,7 @@ require "site_health/key_struct"
 require "site_health/url_map"
 
 require "site_health/checkers/checker"
-require "site_health/checkers/html_proofer"
-require "site_health/checkers/json_syntax"
-require "site_health/checkers/missing_description"
-require "site_health/checkers/missing_title"
-require "site_health/checkers/redirect"
-require "site_health/checkers/w3c_css"
-require "site_health/checkers/w3c_html"
-require "site_health/checkers/xml"
-
+require "site_health/checkers/default_checkers"
 require "site_health/nurse"
 
 # Top-level module/namespace

@@ -2,7 +2,7 @@ require "spec_helper"
 
 require "site_health/checkers/json_syntax"
 
-RSpec.describe SiteHealth::Checkers::JSONSyntax do
+RSpec.describe SiteHealth::JSONSyntax do
   describe "#call" do
     it "returns *no* error message if JSON is valid" do
       page = mock_test_page("json/good.json")

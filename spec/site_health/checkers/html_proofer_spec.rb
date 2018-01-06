@@ -2,7 +2,7 @@ require "spec_helper"
 
 require "site_health/checkers/html_proofer"
 
-RSpec.describe SiteHealth::Checkers::HTMLProofer do
+RSpec.describe SiteHealth::HTMLProofer do
   describe "#call" do
     it "returns no failures for 'perfect' page" do
       page = mock_test_page("html/perfect.html")

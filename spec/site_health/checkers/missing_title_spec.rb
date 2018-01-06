@@ -2,7 +2,7 @@ require "spec_helper"
 
 require "site_health/checkers/missing_title"
 
-RSpec.describe SiteHealth::Checkers::MissingTitle do
+RSpec.describe SiteHealth::MissingTitle do
   describe "#call" do
     it "returns false if title is present" do
       page = mock_test_page("html/index.html")

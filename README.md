@@ -54,8 +54,8 @@ journal = SiteHealth.check("https://example.com")
 SiteHealth.configure do |config|
   # Override default checkers
   config.checkers = [
-    SiteHealth::Checkers::JSON,
-    SiteHealth::Checkers::HTML
+    SiteHealth::JSON,
+    SiteHealth::HTML
   ]
   # You can also register additional checkers
   config.register_checker YourCustomChecker

@@ -48,12 +48,12 @@ module SiteHealth
     # @return [Array<Checker>] array of default checkers to run
     def default_checkers
       [
-        Checkers::HTMLProofer,
-        Checkers::MissingTitle,
-        Checkers::MissingDescription,
-        Checkers::Redirect,
-        Checkers::XML,
-        Checkers::JSONSyntax
+        HTMLProofer,
+        MissingTitle,
+        MissingDescription,
+        Redirect,
+        XML,
+        JSONSyntax
       ]
     end
   end

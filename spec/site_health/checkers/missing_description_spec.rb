@@ -2,7 +2,7 @@ require "spec_helper"
 
 require "site_health/checkers/missing_description"
 
-RSpec.describe SiteHealth::Checkers::MissingDescription do
+RSpec.describe SiteHealth::MissingDescription do
   describe "#call" do
     it "returns false if description is present" do
       page = mock_test_page("html/index.html")

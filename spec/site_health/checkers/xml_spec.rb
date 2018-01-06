@@ -2,7 +2,7 @@ require "spec_helper"
 
 require "site_health/checkers/xml"
 
-RSpec.describe SiteHealth::Checkers::XML do
+RSpec.describe SiteHealth::XML do
   describe "#call" do
     it "returns *no* error message if XML is valid" do
       page = mock_test_page("xml/good.xml")

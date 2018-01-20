@@ -4,12 +4,13 @@ require "site_health/w3c_validators_configuration"
 module SiteHealth
   # Holds configuration data
   class Configuration
-    attr_reader :checkers
+    attr_reader :checkers, :google_page_speed_api_key
 
     def initialize
       @checkers = default_checkers
       @html_proofer = nil
       @w3c = nil
+      @google_page_speed_api_key = nil
     end
 
     # @return [HTMLProoferConfiguration] the current configuration

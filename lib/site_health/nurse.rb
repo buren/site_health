@@ -5,7 +5,7 @@ module SiteHealth
   class Nurse
     attr_reader :config, :links_to, :links_from, :failures
 
-    def initialize(config = SiteHealth.config)
+    def initialize(config: SiteHealth.config)
       @config = config
       @journal = UrlMap.new { {} }
       @links_to = UrlMap.new { [] }

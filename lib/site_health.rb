@@ -15,8 +15,8 @@ require "site_health/nurse"
 module SiteHealth
   # @return [Hash] journal data
   # @see Nurse#journal
-  def self.check(site)
-    nurse = Nurse.new
+  def self.check(site, config: SiteHealth.config)
+    nurse = Nurse.new(config: config)
 
     # TODO: Add a way for adding checks for destination links
     Spidr.site(site) do |spider|

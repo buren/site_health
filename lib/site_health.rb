@@ -13,16 +13,38 @@ require "site_health/nurse"
 
 # Top-level module/namespace
 module SiteHealth
+  # @param [String] site to be checked
+  # @param config [SiteHealth::Configuration] the configuration to use
   # @return [Hash] journal data
   # @see Nurse#journal
   def self.check(site, config: SiteHealth.config)
     nurse = Nurse.new(config: config)
 
-    # TODO: Add a way for adding checks for destination links
     Spidr.site(site) do |spider|
-      spider.every_link { |origin, dest| nurse.check_link(origin, dest) }
       spider.every_failed_url { |url| nurse.check_failed_url(url) }
       spider.every_page { |page| nurse.check_page(page) }
+    end
+
+    nurse.journal
+  end
+
+  # @param [Array<String>, String] urls to be checked
+  # @param config [SiteHealth::Configuration] the configuration to use
+  # @return [Hash] journal data
+  # @see Nurse#journal
+  def self.check_urls(urls, config: SiteHealth.config)
+    nurse = Nurse.new(config: config)
+    agent = Spidr::Agent.new
+
+    Array(urls).each do |url|
+      page = agent.get_page(url)
+
+      if page.nil?
+        nurse.check_failed_url(url)
+        next
+      end
+
+      nurse.check_page(page)
     end
 
     nurse.journal

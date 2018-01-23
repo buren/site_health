@@ -3,29 +3,20 @@ require "site_health/url_map"
 module SiteHealth
   # Holds page analysis data
   class Nurse
-    attr_reader :config, :links_to, :links_from, :failures
+    attr_reader :config, :failures
 
     def initialize(config: SiteHealth.config)
       @config = config
-      @journal = UrlMap.new { {} }
-      @links_to = UrlMap.new { [] }
-      @links_from = UrlMap.new { [] }
+      @pages_journal = UrlMap.new { {} }
       @failures = []
     end
 
     # @return [Hash] check results
     def journal
-      @journal.tap do |journal|
-        @links_from.each do |destination, origins|
-          journal[destination][:links_from] = origins
-        end
-
-        @links_to.each do |origin, destinations|
-          journal[origin][:links_to] = destinations
-        end
-
-        journal[:internal_server_error_urls] = @failures
-      end
+      {
+        checked_urls: @pages_journal.to_h,
+        internal_server_error_urls: failures
+      }
     end
 
     # @return [Array] all URL that have failed
@@ -33,21 +24,18 @@ module SiteHealth
       @failures << url
     end
 
-    # @return [Hash] with from/to links
-    def check_link(origin, destination)
-      {
-        from: @links_from[destination] << origin,
-        to: @links_to[origin] << destination
-      }
-    end
-
     # @return [Hash]
     def check_page(page)
-      @journal[page.url].tap do |journal|
+      @pages_journal[page.url].tap do |journal|
         journal[:content_type] = page.content_type
         journal[:http_status] = page.code
         journal[:redirect] = page.redirect?
         journal[:title] = page.title
+        journal[:links_to] = page.each_url.map do |url|
+          (@pages_journal[url][:links_from] ||= []) << page.url
+          url.to_s
+        end
+
         journal.merge!(lab_results(page))
       end
     end

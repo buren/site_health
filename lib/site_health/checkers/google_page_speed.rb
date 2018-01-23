@@ -22,5 +22,10 @@ module SiteHealth
         puts "[ERROR] #{page.url.to_s} failed: #{e.message}"
       end
     end
+
+    # @return [String] the name of the checker
+    def name
+      'google_page_speed'
+    end
   end
 end

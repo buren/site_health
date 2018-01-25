@@ -7,7 +7,10 @@ module SiteHealth
 
     # @return [Google::Apis::PagespeedonlineV2::Result] Google page speed result
     def call
-      service = Service.new #(key: config.google_page_speed_api_key)
+      api_key = config.google_page_speed_api_key
+
+      service = Service.new
+      service.key = api_key
       # TODO: Returning an object might cause problems with JSON::dump, since that
       # does not recursivly run #to_h on all objects (or does it?)
       begin

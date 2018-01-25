@@ -1,14 +1,19 @@
 require "site_health/url_map"
+require "site_health/event_emitter"
 
 module SiteHealth
+  class EventHandler < EventEmitter.define(:page, :failed_url, :check)
+  end
+
   # Holds page analysis data
   class Nurse
-    attr_reader :config, :failures
+    attr_reader :config, :failures, :clerk
 
     def initialize(config: SiteHealth.config)
       @config = config
       @pages_journal = UrlMap.new { {} }
       @failures = []
+      @clerk = EventHandler.new
     end
 
     # @return [Hash] check results
@@ -21,10 +26,11 @@ module SiteHealth
 
     # @return [Array] all URL that have failed
     def check_failed_url(url)
+      clerk.emit_failed_url(url)
       @failures << url
     end
 
-    # @return [Hash]
+    # @return [Hash] result data
     def check_page(page)
       @pages_journal[page.url].tap do |journal|
         journal[:content_type] = page.content_type
@@ -37,17 +43,22 @@ module SiteHealth
         end
 
         journal.merge!(lab_results(page))
+        clerk.emit_page(page, journal)
       end
     end
 
     # @return [Hash] results of all checkers for page
     def lab_results(page)
       {}.tap do |journal|
-        config.checkers.each do |klass|
-          checker = klass.new(page, config: config)
+        config.checkers.each do |checker_klass|
+          checker = checker_klass.new(page, config: config)
           next unless checker.should_check?
 
-          journal[checker.name.to_sym] = checker.call
+          checker_name = checker.name.to_sym
+          result = checker.call
+
+          clerk.emit_check(checker_name, result)
+          journal[checker_name] = result
         end
       end
     end

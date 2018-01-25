@@ -28,24 +28,7 @@ Or install it yourself as:
 ## Usage
 
 ```ruby
-journal = SiteHealth.check("https://example.com")
-# =>
-{
-  server_error_urls: [],
-  "http://example.com" => {
-    http_status: 200,
-    redirect: false,
-    content_type: "html",
-    html: {
-      title: nil,
-      description: nil,
-      redirect: false,
-      links_to: [],
-      links_from: [],
-      errors: [],
-    }
-  }
-}
+nurse = SiteHealth.check("https://example.com")
 ```
 
 ## Configuration

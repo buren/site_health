@@ -15,12 +15,12 @@ require "site_health/nurse"
 module SiteHealth
   # @param [String] site to be checked
   # @param config [SiteHealth::Configuration] the configuration to use
-  # @yieldparam [SiteHealth::EventHandler] returns object for subscribing to events
+  # @yieldparam [SiteHealth::Nurse] nurse (a.k.a agent)
   # @return [Hash] journal data
   # @see Nurse#journal
   def self.check(site, config: SiteHealth.config)
     nurse = Nurse.new(config: config)
-    yield(nurse.clerk) if block_given?
+    yield(nurse) if block_given?
 
     Spidr.site(site) do |spider|
       spider.every_failed_url { |url| nurse.check_failed_url(url) }
@@ -30,12 +30,12 @@ module SiteHealth
 
   # @param [Array<String>, String] urls to be checked
   # @param config [SiteHealth::Configuration] the configuration to use
-  # @yieldparam [SiteHealth::EventHandler] returns object for subscribing to events
+  # @yieldparam [SiteHealth::Nurse] nurse (a.k.a agent)
   # @return [Hash] journal data
   # @see Nurse#journal
   def self.check_urls(urls, config: SiteHealth.config)
     nurse = Nurse.new(config: config)
-    yield(nurse.clerk) if block_given?
+    yield(nurse) if block_given?
 
     agent = Spidr::Agent.new
 

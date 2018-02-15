@@ -1,4 +1,4 @@
-# SiteHealth
+# SiteHealth [![Build Status](https://travis-ci.org/buren/site_health.svg?branch=master)](https://travis-ci.org/buren/site_health)
 
 :warning: Project is still experimental, API will change (a lot) without notice.
 

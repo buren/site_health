@@ -5,10 +5,15 @@ module SiteHealth
     Pagespeedonline = Google::Apis::PagespeedonlineV2
     PagespeedService = Pagespeedonline::PagespeedonlineService
 
+    def initialize(*args, **keyword_args)
+      Google::Apis.logger = SiteHealth.logger
+      Google::Apis.logger.level = SiteHealth.logger.level
+
+      super(*args, **keyword_args)
+    end
+
     # @return [Google::Apis::PagespeedonlineV2::Result, nil] Google page speed result
     def call
-      # TODO: Returning an object might cause problems with JSON::dump, since that
-      # does not recursivly run #to_h on all objects (or does it?)
       perform_request
     end
 

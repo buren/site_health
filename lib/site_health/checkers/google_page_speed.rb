@@ -13,8 +13,8 @@ module SiteHealth
       @service = PagespeedService.new
       @service.key = api_key
 
-      Google::Apis.logger = SiteHealth.logger
-      Google::Apis.logger.level = SiteHealth.logger.level
+      Google::Apis.logger = logger
+      Google::Apis.logger.level = logger.level
     end
 
     # @return [Google::Apis::PagespeedonlineV2::Result, nil] Google page speed result
@@ -26,7 +26,7 @@ module SiteHealth
     def perform_request(strategy: "desktop", api_key: config.google_page_speed_api_key)
       service.run_pagespeed(
         page.url.to_s,
-        locale: 'en',
+        locale: config.locale,
         strategy: strategy
       ).to_h
     rescue Google::Apis::ClientError => e

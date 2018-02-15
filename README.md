@@ -27,11 +27,59 @@ Or install it yourself as:
 
 ## Usage
 
+Crawl and check site
+
 ```ruby
 nurse = SiteHealth.check("https://example.com")
 ```
 
+Check list of URLs
+```ruby
+nurse = SiteHealth.check_urls(["https://example.com"])
+```
+
+Write raw JSON result to file
+```ruby
+nurse = SiteHealth.check("https://example.com")
+json = JSON.pretty_generate(nurse.journal)
+
+File.write("result.json", json)
+```
+
+Event handlers
+
+```ruby
+urls = ["https://example.com"]
+nurse = SiteHealth.check_urls(urls) do |nurse|
+  nurse.clerk do |clerk|
+    clerk.every_page do |page, journal|
+      puts "Found page #{page.title} - #{page.url}"
+    end
+
+    clerk.every_check do |name, result|
+      puts "Ran check: #{name}"
+    end
+
+    clerk.every_failed_url do |url|
+      puts "Failed to fetch: #{url}"
+    end
+  end
+end
+```
+
+Write page speed summary CSV
+
+```ruby
+nurse = SiteHealth.check("https://example.com")
+checked_urls_data = nurse.journal[
+
+summary = SiteHealth::PageSpeedSummarizer.new(checked_urls_data)
+File.write("page_size_summary.csv", summary.to_csv)
+```
+
 ## Configuration
+
+All configuration is optional.
 
 ```ruby
 SiteHealth.configure do |config|
@@ -40,8 +88,18 @@ SiteHealth.configure do |config|
     SiteHealth::JSON,
     SiteHealth::HTML
   ]
-  # You can also register additional checkers
-  config.register_checker YourCustomChecker
+
+  # Configure HTMLProofer
+  config.html_proofer do |proofer_config|
+    proofer_config.log_level = :info
+    proofer_config.check_opengraph = false
+  end
+
+  # Configure W3C HTML/CSS validator
+  config.w3c_validators do |w3c_config|
+    w3c_config.css_uri = 'http://localhost:8888/check'
+    w3c_config.html_uri = 'http://localhost:8888/check'
+  end
 end
 ```
 
@@ -50,7 +108,7 @@ __Add your own checker__:
 ```ruby
 class ProfanityChecker < SiteHealth::Checker
   def call
-    page.body.include?("shit")
+    page.body.include?(" damn ")
   end
 
   def name
@@ -62,25 +120,10 @@ class ProfanityChecker < SiteHealth::Checker
     %i[html json xml css javascript]
   end
 end
-```
 
-__Configure HTMLProofer__:
-```ruby
+# Then register it
 SiteHealth.configure do |config|
-  config.html_proofer do |proofer_config|
-    proofer_config.log_level = :info
-    proofer_config.check_opengraph = false
-  end
-end
-```
-
-__Configure W3C HTML/CSS validator__:
-```ruby
-SiteHealth.configure do |config|
-  config.w3c_validators do |w3c_config|
-    w3c_config.css_uri = 'http://localhost:8888/check'
-    w3c_config.html_uri = 'http://localhost:8888/check'
-  end
+  config.register_checker ProfanityChecker
 end
 ```
 

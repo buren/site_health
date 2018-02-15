@@ -1,8 +1,15 @@
-require 'simplecov'
-require 'coveralls'
-require 'webmock'
+require "simplecov"
+require "coveralls"
+require "webmock"
+require "vcr"
+
 
 WebMock.disable_net_connect!(allow_localhost: true)
+
+VCR.configure do |c|
+  c.cassette_library_dir = 'spec/vcr'
+  c.hook_into :webmock
+end
 
 formatters = [
   SimpleCov::Formatter::HTMLFormatter,
@@ -10,7 +17,7 @@ formatters = [
 ]
 SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter.new(formatters)
 SimpleCov.start do
-  add_filter '/spec/'
+  add_filter "/spec/"
 end
 
 require "bundler/setup"

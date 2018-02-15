@@ -38,7 +38,7 @@ module SiteHealth
       OpenStruct.new(url: "", body: "")
     end
 
-    def mock_page(url: "", code: 200, body:, content_type: nil)
+    def mock_page(url: "", code: 200, body: "", content_type: nil)
       response = MockHTTPResponse.new(
         code: code,
         body: body,

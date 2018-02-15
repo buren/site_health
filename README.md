@@ -89,6 +89,12 @@ SiteHealth.configure do |config|
     SiteHealth::HTML
   ]
 
+  # Configure logger
+  config.logger = Logger.new(STDOUT).tap do |logger|
+    logger.progname = 'SiteHealth'
+    logger.level = Logger::INFO
+  end
+
   # Configure HTMLProofer
   config.html_proofer do |proofer_config|
     proofer_config.log_level = :info

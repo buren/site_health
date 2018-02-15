@@ -3,7 +3,7 @@ require "site_health/checkers/google_page_speed"
 
 RSpec.describe SiteHealth::GooglePageSpeed do
   describe "#perform_request" do
-    def example_result
+    let(:example_result) do
       checker = described_class.new(mock_page(url: "https://example.com"))
 
       result = nil

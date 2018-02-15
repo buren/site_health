@@ -1,5 +1,8 @@
 require 'simplecov'
 require 'coveralls'
+require 'webmock'
+
+WebMock.disable_net_connect!(allow_localhost: true)
 
 formatters = [
   SimpleCov::Formatter::HTMLFormatter,

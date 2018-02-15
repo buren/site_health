@@ -24,9 +24,11 @@ Gem::Specification.new do |spec|
   spec.add_dependency "w3c_validators", "~> 1.3"
   spec.add_dependency "html-proofer", "~> 3.8"
   spec.add_dependency "google-api-client", "~> 0.19"
-  spec.add_development_dependency "simplecov", "~> 0.14.1"
-  spec.add_development_dependency "coveralls", "~> 0.8"
 
+  spec.add_development_dependency "simplecov", "0.14.1"
+  spec.add_development_dependency "coveralls", "~> 0.8"
+  spec.add_development_dependency "vcr", "~> 4.0"
+  spec.add_development_dependency "webmock", "~> 3.3"
   spec.add_development_dependency "bundler", "~> 1.16.a"
   spec.add_development_dependency "rake", "~> 10.0"
   spec.add_development_dependency "rspec", "~> 3.0"

@@ -25,7 +25,7 @@ module SiteHealth
     def initialize(page, config: SiteHealth.config)
       @page = page
       @config = config
-      @logger = SiteHealth.logger
+      @logger = config.logger
     end
 
     # Abstract method that subclasses must implement

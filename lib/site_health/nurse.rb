@@ -42,7 +42,7 @@ module SiteHealth
           url.to_s
         end
 
-        journal.merge!(lab_results(page))
+        journal[:checks] = lab_results(page)
         clerk.emit_page(page, journal)
       end
     end

@@ -1,4 +1,5 @@
 module SiteHealth
+  # Holds WC3Validator errors/warnings data
   W3CJournal = KeyStruct.new(
     :message,
     :value,
@@ -17,8 +18,9 @@ module SiteHealth
     :skipped_string
   )
 
+  # Build a W3CJournal object
   module W3CJournalBuilder
-    # @param [W3CValidators::Result]
+    # @param [W3CValidators::Result] result
     # @return [W3CJournal]
     def self.build(result)
       W3CJournal.new(

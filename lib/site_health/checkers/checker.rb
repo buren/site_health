@@ -18,13 +18,14 @@ module SiteHealth
       html
     ].freeze
 
-    attr_reader :page, :config
+    attr_reader :page, :config, :logger
 
     # @param [Spidr::Page] page the crawled page
     # @param config [SiteHealth::Configuration]
     def initialize(page, config: SiteHealth.config)
       @page = page
       @config = config
+      @logger = SiteHealth.logger
     end
 
     # Abstract method that subclasses must implement

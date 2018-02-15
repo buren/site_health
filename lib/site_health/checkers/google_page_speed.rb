@@ -5,11 +5,16 @@ module SiteHealth
     Pagespeedonline = Google::Apis::PagespeedonlineV2
     PagespeedService = Pagespeedonline::PagespeedonlineService
 
+    attr_reader :service
+
     def initialize(*args, **keyword_args)
+      super(*args, **keyword_args)
+
+      @service = PagespeedService.new
+      @service.key = api_key
+
       Google::Apis.logger = SiteHealth.logger
       Google::Apis.logger.level = SiteHealth.logger.level
-
-      super(*args, **keyword_args)
     end
 
     # @return [Google::Apis::PagespeedonlineV2::Result, nil] Google page speed result
@@ -19,23 +24,18 @@ module SiteHealth
 
     # @return [Google::Apis::PagespeedonlineV2::Result, nil] Google page speed result
     def perform_request(strategy: "desktop", api_key: config.google_page_speed_api_key)
-      service = PagespeedService.new
-      service.key = api_key
-
-      begin
-        service.run_pagespeed(
-          page.url.to_s,
-          locale: 'en',
-          strategy: strategy
-        ).to_h # TODO: Remove #to_h
-      rescue Google::Apis::ClientError => e
-        # Google::Apis::ClientError: noDocumentLoaded: The URL was fetched, but nothing
-        # was rendered. Ensure that the URL points to an HTML page that loads
-        # successfully in a web browser.
-        puts "[ERROR] #{page.url.to_s} failed: #{e.message}"
-      rescue Google::Apis::ServerError => e
-        puts "[ERROR] #{page.url.to_s} failed: #{e.message}"
-      end
+      service.run_pagespeed(
+        page.url.to_s,
+        locale: 'en',
+        strategy: strategy
+      ).to_h
+    rescue Google::Apis::ClientError => e
+      # Google::Apis::ClientError: noDocumentLoaded: The URL was fetched, but nothing
+      # was rendered. Ensure that the URL points to an HTML page that loads
+      # successfully in a web browser.
+      logger.error "#{page.url.to_s} failed: #{e.message}"
+    rescue Google::Apis::ServerError => e
+      logger.error "#{page.url.to_s} failed: #{e.message}"
     end
 
     # @return [String] the name of the checker

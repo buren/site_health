@@ -4,8 +4,9 @@ require "site_health/nurse"
 
 RSpec.describe SiteHealth::Nurse do
   describe "#journal" do
-    it "returns empty UrlMap when given no data" do
-      expect(described_class.new.journal).to be_a(SiteHealth::UrlMap)
+    it "returns hash with checked_urls and internal_server_error_urls keys" do
+      expected = %i(checked_urls internal_server_error_urls)
+      expect(described_class.new.journal.keys).to eq(expected)
     end
   end
 

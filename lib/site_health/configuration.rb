@@ -5,7 +5,7 @@ require "site_health/w3c_validators_configuration"
 module SiteHealth
   # Holds configuration data
   class Configuration
-    attr_reader :checkers, :google_page_speed_api_key, :logger
+    attr_reader :checkers, :google_page_speed_api_key, :logger, :locale
 
     def initialize
       @checkers = default_checkers
@@ -13,6 +13,7 @@ module SiteHealth
       @w3c = nil
       @google_page_speed_api_key = nil
       @logger = NullLogger.new
+      @locale = 'en'
     end
 
     # Set logger

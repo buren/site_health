@@ -143,10 +143,9 @@ The gem is available as open source under the terms of the [MIT License](https:/
 
 ## TODO
 
-- Result formats `#to_json` (maybe `#to_csv`, `#to_html` too)
-- Add logger support
+- Good way to render result/reports data
+- Improve logger support
 - Checkers
   * canonical URL
   * http vs https links
   * links matching a pattern
-  * validate JavaScript (hm... might be totally out of scope or maybe there is a gem or public API somewhere?)

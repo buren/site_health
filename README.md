@@ -7,7 +7,9 @@ Crawl a site and check various health indicators, such as:
 - Server errors
 - HTTP errors
 - Invalid HTML/XML/JSON
-- Missing HTML title
+- Missing HTML title/description
+- Missing image alt-attribute
+- Google Pagespeed
 
 ## Installation
 

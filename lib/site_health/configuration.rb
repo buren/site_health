@@ -1,16 +1,27 @@
+require "site_health/null_logger"
 require "site_health/html_proofer_configuration"
 require "site_health/w3c_validators_configuration"
 
 module SiteHealth
   # Holds configuration data
   class Configuration
-    attr_reader :checkers, :google_page_speed_api_key
+    attr_reader :checkers, :google_page_speed_api_key, :logger
 
     def initialize
       @checkers = default_checkers
       @html_proofer = nil
       @w3c = nil
       @google_page_speed_api_key = nil
+      @logger = NullLogger.new
+    end
+
+    # Set logger
+    # @return [Object] the set logger
+    # @param [Object] logger an object than response to quacks like a Logger
+    # @example set a logger that prints to standard out (STDOUT)
+    #    SiteHealth.logger = Logger.new(STDOUT)
+    def logger=(logger)
+      @logger = logger
     end
 
     # @return [HTMLProoferConfiguration] the current configuration

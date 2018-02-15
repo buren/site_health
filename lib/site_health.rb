@@ -1,3 +1,5 @@
+require "logger"
+
 require "spidr"
 require "html-proofer"
 
@@ -51,6 +53,11 @@ module SiteHealth
     end
 
     nurse
+  end
+
+  # @see Configuration#logger
+  def self.logger
+    config.logger
   end
 
   # @return [Configuration] the current configuration

@@ -11,10 +11,10 @@ module SiteHealth
       super(*args, **keyword_args)
 
       @service = PagespeedService.new
-      @service.key = api_key
+      @service.key = config.google_page_speed_api_key
 
       Google::Apis.logger = logger
-      Google::Apis.logger.level = logger.level
+      Google::Apis.logger.level = logger.level if logger.level
     end
 
     # @return [Google::Apis::PagespeedonlineV2::Result, nil] Google page speed result
@@ -23,7 +23,7 @@ module SiteHealth
     end
 
     # @return [Google::Apis::PagespeedonlineV2::Result, nil] Google page speed result
-    def perform_request(strategy: "desktop", api_key: config.google_page_speed_api_key)
+    def perform_request(strategy: "desktop")
       service.run_pagespeed(
         page.url.to_s,
         locale: config.locale,

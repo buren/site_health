@@ -71,9 +71,7 @@ Write page speed summary CSV
 
 ```ruby
 nurse = SiteHealth.check("https://example.com")
-checked_urls_data = nurse.journal[
-
-summary = SiteHealth::PageSpeedSummarizer.new(checked_urls_data)
+summary = SiteHealth::PageSpeedSummarizer.new(nurse.journal)
 File.write("page_size_summary.csv", summary.to_csv)
 ```
 

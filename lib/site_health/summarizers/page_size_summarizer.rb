@@ -1,7 +1,7 @@
 module SiteHealth
   class PageSpeedSummarizer
     def initialize(data)
-      @data = data
+      @data = data[:checked_urls]
     end
 
     def to_csv
@@ -52,7 +52,7 @@ module SiteHealth
         bytes_to_kb(stats[:javascript_response_bytes]),
         bytes_to_kb(stats[:other_response_bytes])
       ]
-      kbytes_columns << kbytes_columns.sum
+      kbytes_columns << kbytes_columns.sum.round(1)
 
       host_columns = [
         stats[:number_hosts],

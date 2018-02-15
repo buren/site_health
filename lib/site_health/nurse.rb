@@ -33,6 +33,10 @@ module SiteHealth
     # @return [Hash] result data
     def check_page(page)
       @pages_journal[page.url].tap do |journal|
+        started_at = Time.now
+        journal[:started_at] = started_at
+
+        journal[:url] = page.url
         journal[:content_type] = page.content_type
         journal[:http_status] = page.code
         journal[:redirect] = page.redirect?
@@ -43,6 +47,10 @@ module SiteHealth
         end
 
         journal[:checks] = lab_results(page)
+
+        finished_at = Time.now
+        journal[:finished_at] = finished_at
+        journal[:runtime_in_seconds] = (finished_at - started_at).round(1)
         clerk.emit_page(page, journal)
       end
     end

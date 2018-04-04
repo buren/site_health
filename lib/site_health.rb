@@ -28,6 +28,8 @@ module SiteHealth
       spider.every_failed_url { |url| nurse.check_failed_url(url) }
       spider.every_page { |page| nurse.check_page(page) }
     end
+
+    nurse
   end
 
   # @param [Array<String>, String] urls to be checked

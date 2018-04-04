@@ -35,6 +35,7 @@ module SiteHealth
       @pages_journal[page.url].tap do |journal|
         started_at = Time.now
         journal[:started_at] = started_at
+        journal[:checked] = true
 
         journal[:url] = page.url
         journal[:content_type] = page.content_type

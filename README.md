@@ -54,8 +54,9 @@ Event handlers
 urls = ["https://example.com"]
 nurse = SiteHealth.check_urls(urls) do |nurse|
   nurse.clerk do |clerk|
-    clerk.every_page do |page, journal|
-      puts "Found page #{page.title} - #{page.url}"
+    clerk.every_journal do |journal, page|
+      time_in_seconds = journal[:runtime_in_seconds]
+      puts "Found page #{page.title} - #{page.url} (checks took #{time_in_seconds})"
     end
 
     clerk.every_check do |name, result|

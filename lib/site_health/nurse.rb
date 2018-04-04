@@ -2,7 +2,7 @@ require "site_health/url_map"
 require "site_health/event_emitter"
 
 module SiteHealth
-  class EventHandler < EventEmitter.define(:page, :failed_url, :check)
+  class EventHandler < EventEmitter.define(:journal, :failed_url, :check)
   end
 
   # Holds page analysis data
@@ -51,7 +51,8 @@ module SiteHealth
         finished_at = Time.now
         journal[:finished_at] = finished_at
         journal[:runtime_in_seconds] = (finished_at - started_at).round(1)
-        clerk.emit_page(page, journal)
+
+        clerk.emit_journal(journal, page)
       end
     end
 

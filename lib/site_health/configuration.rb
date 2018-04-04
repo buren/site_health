@@ -61,7 +61,8 @@ module SiteHealth
         MissingDescription,
         Redirect,
         XML,
-        JSONSyntax
+        JSONSyntax,
+        PageNotFound
       ]
     end
   end

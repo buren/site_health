@@ -7,10 +7,11 @@ module SiteHealth
 
   # Holds page analysis data
   class Nurse
-    attr_reader :config, :failures, :clerk
+    attr_reader :config, :failures, :clerk, :checkers
 
     def initialize(config: SiteHealth.config)
       @config = config
+      @checkers = config.checkers
       @pages_journal = UrlMap.new { {} }
       @failures = []
       @clerk = EventHandler.new
@@ -59,18 +60,17 @@ module SiteHealth
 
     # @return [Hash] results of all checkers for page
     def lab_results(page)
-      {}.tap do |journal|
-        config.checkers.each do |checker_klass|
-          checker = checker_klass.new(page, config: config)
-          next unless checker.should_check?
+      journal = {}
+      checkers.each do |checker_klass|
+        checker = checker_klass.new(page, config: config)
+        next unless checker.should_check?
 
-          checker_name = checker.name.to_sym
-          checker.call
+        checker.call
 
-          clerk.emit_check(checker_name, checker)
-          journal[checker_name] = checker
-        end
+        clerk.emit_check(checker)
+        journal[checker.name.to_sym] = checker
       end
+      journal
     end
   end
 end

@@ -29,9 +29,14 @@ module SiteHealth
       content_type = "html" if file_extension == "html"
       content_type = "json" if file_extension == "json"
       content_type = "xml" if file_extension == "xml"
+      body = nil
 
-      body = File.read("spec/data/fake-site/#{name}")
-      mock_page(body: body, content_type: content_type)
+      begin
+        body = File.read("spec/data/fake-site/#{name}")
+        mock_page(body: body, content_type: content_type)
+      rescue Errno::ENOENT
+        mock_page(code: 404)
+      end
     end
 
     def nil_page

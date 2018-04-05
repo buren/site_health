@@ -92,13 +92,24 @@ RSpec.describe SiteHealth::Checker do
     end
   end
 
-  describe "add issue" do
-    it "can add an issue" do
+  describe "#add_issue" do
+    it "adds issue to the issues list" do
       page = Struct.new(:url).new("http://example.com/wat")
       checker = described_class.new(page)
       checker.add_issue(code: :watman, title: "is invalid")
 
       expect(checker.issues.first.code).to eq(:watman)
+    end
+  end
+
+  describe "#add_data" do
+    it "merges the new data with the current data" do
+      page = Struct.new(:url).new("http://example.com/wat")
+      checker = described_class.new(page)
+      checker.add_data(any: :thing)
+      checker.add_data(any: :thang)
+
+      expect(checker.data).to eq(:watman)
     end
   end
 end

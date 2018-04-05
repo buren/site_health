@@ -55,6 +55,15 @@ RSpec.describe SiteHealth::FacebookShareLink do
       #     &link=https%3A%2F%2Fdevelopers.facebook.com%2Fdocs%2Fdialogs%2F
       #     &redirect_uri=https://developers.facebook.com/tools/explorer
 
+      it "returns correct data" do
+        url = "#{base_url}?app_id=145634995501895&display=popup"
+        page = mock_page(url: url)
+        checker = SiteHealth::FacebookShareLink.new(page)
+        checker.call
+
+        expect(checker.data).to eq({})
+      end
+
       %W[
         #{base_url}?app_id=145634995501895&display=popup
         #{base_url}?app_id=145634995501895&display=popup&caption=An%20example&link=https%3A%2F%2Fdevelopers.facebook.com%2Fdocs%2Fdialogs%2F&redirect_uri=https://developers.facebook.com/tools/explorer

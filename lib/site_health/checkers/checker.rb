@@ -66,9 +66,16 @@ module SiteHealth
 
     # Adds an issue
     # @return [Array<Issue>] the current list of issues
-    # @see Issue#initialize
+    # @see Issue#initialize for supported arguments
     def add_issue(**args)
       issues << Issue.new(**args.merge(checker_name: name))
+    end
+
+    # Adds data
+    # @param [Hash] the hash to be added
+    # @return [Hash] the current data
+    def add_data(hash)
+      data.merge!(hash)
     end
 
     # @return [Hash] hash representation of the object

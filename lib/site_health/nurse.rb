@@ -65,10 +65,10 @@ module SiteHealth
           next unless checker.should_check?
 
           checker_name = checker.name.to_sym
-          result = checker.call
+          checker.call
 
-          clerk.emit_check(checker_name, result)
-          journal[checker_name] = result
+          clerk.emit_check(checker_name, checker)
+          journal[checker_name] = checker
         end
       end
     end

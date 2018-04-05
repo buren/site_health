@@ -28,7 +28,7 @@ module SiteHealth
         runtime_in_seconds
       ]
       rows = @data.map do |url, data|
-        pagespeed_data = data.dig(:checks, :google_page_speed)
+        pagespeed_data = data.dig(:checks, :google_page_speed).data
         next unless pagespeed_data
 
         url = data[:url]

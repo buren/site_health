@@ -17,10 +17,24 @@ module SiteHealth
       Google::Apis.logger.level = logger.level if logger.level
     end
 
-    # @return [Google::Apis::PagespeedonlineV2::Result, nil] Google page speed result
-    def call
-      perform_request
+    # @return [String] the name of the checker
+    def name
+      'google_page_speed'
     end
+
+    # @return [Array<Symbol>] list of page types the checker will run on
+    def types
+      %i[html]
+    end
+
+    protected
+
+    def check
+      result = perform_request
+      add_data(result)
+    end
+
+    private
 
     # @return [Google::Apis::PagespeedonlineV2::Result, nil] Google page speed result
     def perform_request(strategy: "desktop")
@@ -36,11 +50,6 @@ module SiteHealth
       logger.error "#{page.url.to_s} failed: #{e.message}"
     rescue Google::Apis::ServerError => e
       logger.error "#{page.url.to_s} failed: #{e.message}"
-    end
-
-    # @return [String] the name of the checker
-    def name
-      'google_page_speed'
     end
   end
 end

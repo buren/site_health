@@ -114,8 +114,11 @@ __Add your own checker__:
 
 ```ruby
 class ProfanityChecker < SiteHealth::Checker
-  def call
-    page.body.include?(" damn ")
+  def check
+    add_data(profanity: {
+      damn: page.body.include?(" damn "),
+      shit: page.body.include?(" shit ")
+    })
   end
 
   def name

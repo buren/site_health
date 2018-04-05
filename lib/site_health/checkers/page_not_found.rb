@@ -1,9 +1,9 @@
 module SiteHealth
   # Checks if HTML-meta title is present
   class PageNotFound < Checker
-    # @return [Boolean] determines whether the page returned a HTTP 404 status code
-    def call
-      page.missing?
+    def check
+      # @return [Boolean] determines whether the page returned a HTTP 404 status code
+      add_data(not_found: page.missing?)
     end
 
     # @return [String] the name of the checker

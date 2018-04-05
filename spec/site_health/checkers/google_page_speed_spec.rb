@@ -8,7 +8,7 @@ RSpec.describe SiteHealth::GooglePageSpeed do
 
       result = nil
       VCR.use_cassette("#{checker.name}_perform_request") do
-        result = checker.perform_request
+        result = checker.send(:perform_request)
       end
 
       result

@@ -109,7 +109,7 @@ RSpec.describe SiteHealth::Checker do
       checker.add_data(any: :thing)
       checker.add_data(any: :thang)
 
-      expect(checker.data).to eq(:watman)
+      expect(checker.data).to eq(any: :thang)
     end
   end
 end

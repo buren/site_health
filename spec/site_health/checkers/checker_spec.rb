@@ -2,9 +2,30 @@ require "spec_helper"
 
 RSpec.describe SiteHealth::Checker do
   describe "#call" do
+    it "returns self" do
+      page = Struct.new(:url, :plain_text?).new("http://example.com", plain_text?: true)
+      checker = described_class.new(page)
+      allow(checker).to receive(:check).and_return(nil)
+
+      expect(checker.call).to eq(checker)
+    end
+
+    it "yields self" do
+      page = Struct.new(:url, :plain_text?).new("http://example.com", plain_text?: true)
+      checker = described_class.new(page)
+      allow(checker).to receive(:check).and_return(nil)
+
+      checker.call do |ch|
+        expect(checker).to eq(ch)
+      end
+    end
+  end
+
+  describe "#check" do
     it "raises NotImplementedError" do
       expect do
-        described_class.new(nil).call
+        # we must use #send here since the method is protected
+        described_class.new(nil).send(:check)
       end.to raise_error(NotImplementedError)
     end
   end
@@ -68,6 +89,16 @@ RSpec.describe SiteHealth::Checker do
       end
 
       expect(checker.new(html_page).should_check?).to eq(false)
+    end
+  end
+
+  describe "add issue" do
+    it "can add an issue" do
+      page = Struct.new(:url).new("http://example.com/wat")
+      checker = described_class.new(page)
+      checker.add_issue(code: :watman, title: "is invalid")
+
+      expect(checker.issues.first.code).to eq(:watman)
     end
   end
 end

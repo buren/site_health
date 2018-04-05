@@ -8,6 +8,7 @@ require "site_health/configuration"
 
 require "site_health/key_struct"
 require "site_health/url_map"
+require "site_health/link"
 
 require "site_health/checkers/checker"
 require "site_health/checkers/default_checkers"

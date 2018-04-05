@@ -1,3 +1,5 @@
+require "site_health/issue"
+
 module SiteHealth
   # Parent class for all checkers (all checkers must inheirit from this class)
   class Checker
@@ -18,7 +20,7 @@ module SiteHealth
       html
     ].freeze
 
-    attr_reader :page, :config, :logger
+    attr_reader :page, :config, :logger, :issues, :data
 
     # @param [Spidr::Page] page the crawled page
     # @param config [SiteHealth::Configuration]
@@ -26,12 +28,17 @@ module SiteHealth
       @page = page
       @config = config
       @logger = config.logger
+      @issues = []
+      @data = {}
     end
 
-    # Abstract method that subclasses must implement
-    # @raise [NotImplementedError] subclasses must implement
+    # Run the checker
+    # @yieldparam [Checker] yields self
+    # @return [CheckerResult] returns self
     def call
-      raise(NotImplementedError, "please implement!")
+      check
+      yield(self) if block_given?
+      self
     end
 
     # @return [String] the page URL
@@ -55,6 +62,29 @@ module SiteHealth
     # @return [Boolean] determines whether the checker should run
     def should_check?
       types.any? { |type| page.public_send("#{type}?") }
+    end
+
+    # Adds an issue
+    # @return [Array<Issue>] the current list of issues
+    # @see Issue#initialize
+    def add_issue(**args)
+      issues << Issue.new(**args.merge(checker_name: name))
+    end
+
+    # @return [Hash] hash representation of the object
+    def to_h
+      {
+        data: data.to_h,
+        issues: issues.map(&:to_h)
+      }
+    end
+
+    protected
+
+    # Abstract method that subclasses must implement
+    # @raise [NotImplementedError] subclasses must implement
+    def check
+      raise(NotImplementedError, "please implement!")
     end
   end
 end

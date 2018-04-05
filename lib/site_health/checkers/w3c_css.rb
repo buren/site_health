@@ -5,13 +5,13 @@ require "site_health/w3c_journal_builder"
 module SiteHealth
   # Checks for various CSS errors and warnings (backed by the excellent W3CValidations gem)
   class W3CCSS < Checker
-    # @return [Hash] with :errors and :warnings keys that return an error of possible violations
-    def call
+    def check
       result = check_content
-      {
+      # @return [Hash] with :errors and :warnings keys that return an error of possible violations
+      add_data(
         errors: result.errors.map { |e| W3CJournalBuilder.build(e) },
         warnings: result.warnings.map { |e| W3CJournalBuilder.build(e) }
-      }
+      )
     end
 
     # @return [String] the name of the checker

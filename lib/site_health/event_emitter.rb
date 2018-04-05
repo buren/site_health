@@ -6,7 +6,7 @@ module SiteHealth
     # @example Simple event emitter
     #    class CrawlEvent < EventEmitter.define(:found_url, :page_title)
     #    end
-    #    
+    #
     #    event = CrawlEvent.new do |on|
     #      on.every_found_url { {|url| puts "Found URL: #{url}" }
     #      on.every_page_title { {|title| puts "Page title: #{title}" }
@@ -32,8 +32,8 @@ module SiteHealth
             blocks_for(name) << block
           end
 
-          define_method(:blocks_for) do |name|
-            variable_name = "@#{name}_blocks"
+          define_method(:blocks_for) do |block_name|
+            variable_name = "@#{block_name}_blocks"
             if value = instance_variable_get(variable_name)
               value
             else

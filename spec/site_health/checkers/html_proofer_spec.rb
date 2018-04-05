@@ -6,37 +6,37 @@ RSpec.describe SiteHealth::HTMLProofer do
   describe "#call" do
     it "returns no failures for 'perfect' page" do
       page = mock_test_page("html/perfect.html")
-      result = described_class.new(page).call
+      checker = described_class.new(page).call
 
-      expect(result).to eq([])
+      expect(checker.data[:errors]).to eq([])
     end
 
     it "returns missing favicon failure" do
       page = mock_test_page("html/missing_favicon.html")
-      result = described_class.new(page).call
+      checker = described_class.new(page).call
 
-      expect(result).to eq(["no favicon specified"])
+      expect(checker.data[:errors]).to eq(["no favicon specified"])
     end
 
     it "returns missing favicon failure" do
       page = mock_test_page("html/missing_image_alt.html")
-      result = described_class.new(page).call
+      checker = described_class.new(page).call
 
-      expect(result.first).to match("does not have an alt attribute")
+      expect(checker.data[:errors].first).to match("does not have an alt attribute")
     end
 
     it "returns bad link failure" do
       page = mock_test_page("html/single_bad_link.html")
-      result = described_class.new(page).call
+      checker = described_class.new(page).call
 
-      expect(result.first).to match("is an invalid URL")
+      expect(checker.data[:errors].first).to match("is an invalid URL")
     end
 
     it "returns bad HTML-syntax" do
       page = mock_test_page("html/bad_syntax.html")
-      result = described_class.new(page).call
+      checker = described_class.new(page).call
 
-      expect(result.first).to match("ERROR: error parsing attribute name")
+      expect(checker.data[:errors].first).to match("ERROR: error parsing attribute name")
     end
   end
 

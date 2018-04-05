@@ -56,6 +56,7 @@ module SiteHealth
     # @return [Array<Checker>] array of default checkers to run
     def default_checkers
       [
+        FacebookShareLink,
         HTMLProofer,
         MissingTitle,
         MissingDescription,

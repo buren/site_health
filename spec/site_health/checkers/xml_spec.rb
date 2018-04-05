@@ -6,16 +6,17 @@ RSpec.describe SiteHealth::XML do
   describe "#call" do
     it "returns *no* error message if XML is valid" do
       page = mock_test_page("xml/good.xml")
-      result = described_class.new(page).call
+      checker = described_class.new(page).call
 
-      expect(result).to be_empty
+      expect(checker.data[:errors]).to be_empty
     end
 
     it "returns error message if XML is invalid" do
       page = mock_test_page("xml/bad.xml")
-      result = described_class.new(page).call
+      checker = described_class.new(page).call
+      error_message = "3:1: FATAL: Extra content at the end of the document"
 
-      expect(result.first).to eq("3:1: FATAL: Extra content at the end of the document")
+      expect(checker.data[:errors].first).to eq(error_message)
     end
   end
 

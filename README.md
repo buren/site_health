@@ -59,8 +59,8 @@ nurse = SiteHealth.check_urls(urls) do |nurse|
       puts "Found page #{page.title} - #{page.url} (checks took #{time_in_seconds})"
     end
 
-    clerk.every_check do |name, result|
-      puts "Ran check: #{name}"
+    clerk.every_check do |check|
+      puts "Ran check: #{check.name}"
     end
 
     clerk.every_failed_url do |url|
@@ -114,8 +114,11 @@ __Add your own checker__:
 
 ```ruby
 class ProfanityChecker < SiteHealth::Checker
-  def call
-    page.body.include?(" damn ")
+  def check
+    add_data(profanity: {
+      damn: page.body.include?(" damn "),
+      shit: page.body.include?(" shit ")
+    })
   end
 
   def name

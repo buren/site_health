@@ -1,3 +1,4 @@
+require "site_health/checkers/facebook_share_link"
 require "site_health/checkers/html_proofer"
 require "site_health/checkers/json_syntax"
 require "site_health/checkers/missing_description"

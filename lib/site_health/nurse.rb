@@ -1,5 +1,6 @@
 require "site_health/url_map"
 require "site_health/event_emitter"
+require "site_health/timer"
 
 module SiteHealth
   class EventHandler < EventEmitter.define(:journal, :failed_url, :check)
@@ -34,8 +35,8 @@ module SiteHealth
     # @return [Hash] result data
     def check_page(page)
       @pages_journal[page.url].tap do |journal|
-        started_at = Time.now
-        journal[:started_at] = started_at
+        timer = Timer.start
+        journal[:started_at] = timer.started_at
         journal[:checked] = true
 
         journal[:url] = page.url
@@ -50,9 +51,8 @@ module SiteHealth
 
         journal[:checks] = lab_results(page)
 
-        finished_at = Time.now
-        journal[:finished_at] = finished_at
-        journal[:runtime_in_seconds] = (finished_at - started_at).round(1)
+        journal[:finished_at] = timer.finished_at
+        journal[:runtime_in_seconds] = timer.diff.round(1)
 
         clerk.emit_journal(journal, page)
       end
@@ -68,7 +68,7 @@ module SiteHealth
         checker.call
 
         clerk.emit_check(checker)
-        journal[checker.name.to_sym] = checker
+        journal[checker.name.to_sym] = checker.to_h
       end
       journal
     end

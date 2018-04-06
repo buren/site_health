@@ -10,6 +10,15 @@ RSpec.describe SiteHealth::Timer do
     end
   end
 
+  describe "::measure" do
+    it "yields to block and returns the timer" do
+      timer = SiteHealth::Timer.measure { sleep 0.3 }
+
+      expect(timer.diff > 0.3).to eq(true)
+      expect(timer.diff < 0.35).to eq(true)
+    end
+  end
+
   describe "#start" do
     it "returns the time when it started" do
       time = Time.local(1990)
@@ -58,11 +67,18 @@ RSpec.describe SiteHealth::Timer do
       expect { timer.diff }.to raise_error(StandardError)
     end
 
-    it "raises StandardError unless finished" do
+    it "if not finished it returns the diff from the start time to current time" do
+      time = Time.local(1990)
       timer = SiteHealth::Timer.new
       timer.start
 
-      expect { timer.diff }.to raise_error(StandardError)
+      Timecop.freeze(time) do
+        allow(Process).to receive(:clock_gettime).and_return(0)
+        timer.start
+        allow(Process).to receive(:clock_gettime).and_return(1)
+
+        expect(timer.diff).to eq(1)
+      end
     end
   end
 end

@@ -21,6 +21,15 @@ RSpec.describe SiteHealth::Checker do
     end
   end
 
+  describe "#to_h" do
+    it "returns a hash representation of the object" do
+      page = Struct.new(:url).new("http://example.com/wat")
+      checker = described_class.new(page)
+
+      expect(checker.to_h).to eq(name: :checker, data: {}, issues: [])
+    end
+  end
+
   describe "#check" do
     it "raises NotImplementedError" do
       expect do

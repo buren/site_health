@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "site_health/issue"
 
 module SiteHealth
@@ -48,10 +50,7 @@ module SiteHealth
 
     # @return [String] the name of the checker
     def name
-      checker_name = self.class.name.downcase
-      return checker_name[0..-8] if checker_name.end_with?("checker")
-
-      checker_name
+      self.class.name.downcase.gsub!(/sitehealth::/, "")
     end
 
     # @return [Array<Symbol>] list of page types the checker will run on
@@ -81,6 +80,7 @@ module SiteHealth
     # @return [Hash] hash representation of the object
     def to_h
       {
+        name: name.to_sym,
         data: data.to_h,
         issues: issues.map(&:to_h)
       }

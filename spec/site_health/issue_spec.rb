@@ -3,7 +3,7 @@ require "spec_helper"
 RSpec.describe SiteHealth::Issue do
   describe "#initialize" do
     it "can be initialized with minimal attributes" do
-      issue = SiteHealth::Issue.new(checker_name: 'c', code: :watman, title: "invalid")
+      issue = SiteHealth::Issue.new(name: 'name', code: :watman, title: "invalid")
 
       expect(issue.code).to eq(:watman)
       expect(issue.title).to eq("invalid")
@@ -14,7 +14,7 @@ RSpec.describe SiteHealth::Issue do
 
       expect do
         SiteHealth::Issue.new(
-          checker_name: 'c',
+          name: 'name',
           code: :watman,
           title: "is invalid",
           links: links
@@ -26,7 +26,7 @@ RSpec.describe SiteHealth::Issue do
       links = [{ href: "https://example.com" }]
 
       issue = SiteHealth::Issue.new(
-        checker_name: 'c',
+        name: 'name',
         code: :watman,
         title: "is invalid",
         links: links
@@ -37,7 +37,7 @@ RSpec.describe SiteHealth::Issue do
     it "raises error when passed unknown priority" do
       expect do
         SiteHealth::Issue.new(
-          checker_name: 'c',
+          name: 'name',
           code: :watman,
           title: "is invalid",
           priority: :watman
@@ -47,7 +47,7 @@ RSpec.describe SiteHealth::Issue do
 
     it "raises *no* error when passed known priority" do
       issue = SiteHealth::Issue.new(
-        checker_name: 'c',
+        name: 'name',
         code: :watman,
         title: "is invalid",
         priority: :high
@@ -58,7 +58,7 @@ RSpec.describe SiteHealth::Issue do
     it "raises error when passed unknown severity" do
       expect do
         SiteHealth::Issue.new(
-          checker_name: 'c',
+          name: 'name',
           code: :watman,
           title: "is invalid",
           severity: :watman
@@ -67,7 +67,7 @@ RSpec.describe SiteHealth::Issue do
     end
 
     it "raises *no* error when passed known severity" do
-      issue = SiteHealth::Issue.new(checker_name: 'c', code: :watman, title: "is invalid", severity: :major)
+      issue = SiteHealth::Issue.new(name: 'name', code: :watman, title: "is invalid", severity: :major)
       expect(issue.severity).to eq(:major)
     end
   end
@@ -75,7 +75,7 @@ RSpec.describe SiteHealth::Issue do
   describe "#to_h" do
     it "returns a Hash representation of the object" do
       issue = SiteHealth::Issue.new(
-        checker_name: "c",
+        name: "name",
         code: :watman,
         title: "is invalid",
         detail: "a detail",

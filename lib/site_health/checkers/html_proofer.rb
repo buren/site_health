@@ -8,8 +8,11 @@ module SiteHealth
       tempfile(page.body) do |file|
         proofer = ::HTMLProofer.check_file(file.path, config.html_proofer.to_h)
         proofer.run rescue RuntimeError # NOTE: HTMLProofer raises if errors are found
-        result = build_test_failures(proofer.failed_tests)
-        add_data(errors: result)
+        errors = build_test_failures(proofer.failed_tests).each do |error|
+          add_issue(title: error)
+        end
+
+        add_data(errors: errors)
       end
     end
 

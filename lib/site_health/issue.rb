@@ -22,7 +22,7 @@ module SiteHealth
       unknown
     ].freeze
 
-    attr_reader :checker_name, :code, :title, :detail, :links, :meta, :severity, :priority
+    attr_reader :name, :code, :title, :detail, :links, :meta, :severity, :priority
 
     # Initialize an Issue
     # @param [String, Symbol] code an application-specific error code.
@@ -30,17 +30,17 @@ module SiteHealth
     # @param [String] detail a human-readable explanation specific to this occurrence of the problem.
     # @param [Array<Link>]
     def initialize(
-      checker_name:,
-      code:,
+      name:,
       title:,
+      code: nil,
       detail: "",
       severity: :unknown,
       priority: :unknown,
       links: [],
       meta: {}
     )
-      @checker_name = checker_name
-      @code = code.to_sym
+      @name = name
+      @code = code&.to_sym
       @title = title.to_s
       @detail = detail.to_s
       @severity = severity.to_sym.tap { validate_severity!(severity) }

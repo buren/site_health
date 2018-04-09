@@ -1,6 +1,46 @@
 require "spec_helper"
 
 RSpec.describe SiteHealth::Checker do
+  describe "::name" do
+    it "can set & get name in subclass class-macro" do
+      page = Struct.new(:url).new("http://example.com/wat")
+      checker_klass = Class.new(described_class) do
+        name 'checker_test_klass'
+      end
+      checker = checker_klass.new(page)
+
+      expect(checker.name).to eq('checker_test_klass')
+    end
+
+    it "returns default checkable types when no types is set" do
+      page = Struct.new(:url).new("http://example.com/wat")
+      checker_klass = Class.new(described_class)
+      checker = checker_klass.new(page)
+      allow(SecureRandom).to receive(:hex).and_return('fake_hex_string')
+
+      expect(checker.name).to eq('fake_hex_string')
+    end
+  end
+
+  describe "::types" do
+    it "can set & get name in subclass class-macro" do
+      page = Struct.new(:url).new("http://example.com/wat")
+      checker_klass = Class.new(described_class) do
+        types %w[xml]
+      end
+      checker = checker_klass.new(page)
+
+      expect(checker.types).to eq(%i[xml])
+    end
+
+    it "returns default checkable types when no types is set" do
+      page = Struct.new(:url).new("http://example.com/wat")
+      checker = described_class.new(page)
+
+      expect(checker.types).to eq(described_class::CHECKABLE_TYPES)
+    end
+  end
+
   describe "#call" do
     it "returns self" do
       page = Struct.new(:url, :plain_text?).new("http://example.com", plain_text?: true)
@@ -50,11 +90,6 @@ RSpec.describe SiteHealth::Checker do
   end
 
   describe "#name" do
-    it "returns pretty class name for class with \"Checker\" suffix" do
-      WatChecker = Class.new(described_class)
-      expect(WatChecker.new(nil).name).to eq("wat")
-    end
-
     it "returns pretty class name by default" do
       WatSomething = Class.new(described_class)
       expect(WatSomething.new(nil).name).to eq("watsomething")

@@ -22,6 +22,26 @@ module SiteHealth
       html
     ].freeze
 
+    def self.name(name = '__get_value__')
+      if name == '__get_value__'
+        return @name if @name
+
+        @name = (super() || SecureRandom.hex).downcase.gsub(/sitehealth::/, "")
+        return @name
+      end
+
+      @name = name.to_s
+    end
+
+    def self.types(types = '__get_value__')
+      if types == '__get_value__'
+        @types = CHECKABLE_TYPES unless @types
+        return @types
+      end
+
+      @types = types.map(&:to_sym)
+    end
+
     attr_reader :page, :config, :logger, :issues, :data
 
     # @param [Spidr::Page] page the crawled page
@@ -50,12 +70,12 @@ module SiteHealth
 
     # @return [String] the name of the checker
     def name
-      self.class.name.downcase.gsub!(/sitehealth::/, "")
+      self.class.name
     end
 
     # @return [Array<Symbol>] list of page types the checker will run on
     def types
-      CHECKABLE_TYPES
+      self.class.types
     end
 
     # @return [Boolean] determines whether the checker should run
@@ -67,7 +87,7 @@ module SiteHealth
     # @return [Array<Issue>] the current list of issues
     # @see Issue#initialize for supported arguments
     def add_issue(**args)
-      issues << Issue.new(**args.merge(checker_name: name))
+      issues << Issue.new(**args.merge(name: name))
     end
 
     # Adds data

@@ -39,7 +39,7 @@ module SiteHealth
         return @types
       end
 
-      @types = types.map(&:to_sym)
+      @types = Array(types).map(&:to_sym)
     end
 
     attr_reader :page, :config, :logger, :issues, :data

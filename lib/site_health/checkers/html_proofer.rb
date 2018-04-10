@@ -3,6 +3,9 @@ require "tempfile"
 module SiteHealth
   # Checks for various HTML misstakes (backed by the excellent HTMLProofer gem)
   class HTMLProofer < Checker
+    name "html_proofer"
+    types "html"
+
     def check
       # @return [Array<String>] list of HTML-errors
       tempfile(page.body) do |file|
@@ -42,16 +45,6 @@ module SiteHealth
         file.close
       end
       yield(file).tap { file.unlink }
-    end
-
-    # @return [String] the name of the checker
-    def name
-      "html_proofer"
-    end
-
-    # @return [Array<Symbol>] list of page types the checker will run on
-    def types
-      %i[html]
     end
   end
 end

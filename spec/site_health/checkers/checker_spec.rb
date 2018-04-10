@@ -23,7 +23,17 @@ RSpec.describe SiteHealth::Checker do
   end
 
   describe "::types" do
-    it "can set & get name in subclass class-macro" do
+    it "can set & get types in subclass class-macro" do
+      page = Struct.new(:url).new("http://example.com/wat")
+      checker_klass = Class.new(described_class) do
+        types "xml"
+      end
+      checker = checker_klass.new(page)
+
+      expect(checker.types).to eq(%i[xml])
+    end
+
+    it "can set (from array) & get types in subclass class-macro" do
       page = Struct.new(:url).new("http://example.com/wat")
       checker_klass = Class.new(described_class) do
         types %w[xml]

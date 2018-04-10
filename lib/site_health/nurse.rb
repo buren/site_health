@@ -75,6 +75,7 @@ module SiteHealth
 
         clerk.emit_check(checker)
         clerk.emit(checker.name, checker)
+
         journal[checker.name.to_sym] = checker.to_h
       end
       journal

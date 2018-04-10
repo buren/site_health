@@ -3,19 +3,16 @@ require "site_health/event_emitter"
 require "site_health/timer"
 
 module SiteHealth
-  class EventHandler < EventEmitter.define(:journal, :failed_url, :check)
-  end
-
   # Holds page analysis data
   class Nurse
-    attr_reader :config, :failures, :clerk, :checkers
+    attr_reader :config, :failures, :checkers
 
     def initialize(config: SiteHealth.config)
       @config = config
       @checkers = config.checkers
       @pages_journal = UrlMap.new { {} }
       @failures = []
-      @clerk = EventHandler.new
+      @clerk = nil
     end
 
     # @return [Hash] check results
@@ -30,6 +27,15 @@ module SiteHealth
     def check_failed_url(url)
       clerk.emit_failed_url(url)
       @failures << url
+    end
+
+    # @return [Object] the event emitter
+    # @yieldparam [Object] the event emiiter
+    def clerk
+      @clerk ||= begin
+        events = %w[journal failed_url check].concat(checkers.map(&:name))
+        EventEmitter.define(*events).new.tap { |e| yield(e) if block_given? }
+      end
     end
 
     # @return [Hash] result data
@@ -68,6 +74,7 @@ module SiteHealth
         checker.call
 
         clerk.emit_check(checker)
+        clerk.emit(checker.name, checker)
         journal[checker.name.to_sym] = checker.to_h
       end
       journal

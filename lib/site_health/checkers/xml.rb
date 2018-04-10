@@ -9,4 +9,6 @@ module SiteHealth
       add_data(errors: page.doc.errors.map(&:to_s))
     end
   end
+
+  SiteHealth.register_checker(XML)
 end

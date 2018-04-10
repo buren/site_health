@@ -11,4 +11,6 @@ module SiteHealth
       add_data(missing: page.title.to_s.strip.empty?)
     end
   end
+
+  SiteHealth.register_checker(MissingTitle)
 end

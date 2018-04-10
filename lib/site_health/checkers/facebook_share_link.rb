@@ -94,4 +94,6 @@ module SiteHealth
       add_issue(code: :deprecated, title: "URL is valid, however: #{DEPRECATION_NOTICE}")
     end
   end
+
+  SiteHealth.register_checker(FacebookShareLink)
 end

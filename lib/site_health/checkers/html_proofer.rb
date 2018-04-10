@@ -47,4 +47,6 @@ module SiteHealth
       yield(file).tap { file.unlink }
     end
   end
+
+  SiteHealth.register_checker(HTMLProofer)
 end

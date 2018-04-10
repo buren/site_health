@@ -18,4 +18,6 @@ module SiteHealth
       add_data(parsing: data)
     end
   end
+
+  SiteHealth.register_checker(JSONSyntax)
 end

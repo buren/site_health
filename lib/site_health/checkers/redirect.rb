@@ -8,4 +8,6 @@ module SiteHealth
       add_data(redirect: page.redirect?)
     end
   end
+
+  SiteHealth.register_checker(Redirect)
 end

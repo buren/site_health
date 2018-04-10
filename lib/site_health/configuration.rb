@@ -55,16 +55,16 @@ module SiteHealth
 
     # @return [Array<Checker>] array of default checkers to run
     def default_checkers
-      [
-        FacebookShareLink,
-        HTMLProofer,
-        MissingTitle,
-        MissingDescription,
-        Redirect,
-        XML,
-        JSONSyntax,
-        PageNotFound
-      ]
+      %i[
+        facebook_share_link
+        html_proofer
+        missing_title
+        missing_description
+        redirect
+        xml
+        json_syntax
+        page_not_found
+      ].map { |name| SiteHealth.load_checker(name)  }
     end
   end
 end

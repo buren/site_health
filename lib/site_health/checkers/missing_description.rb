@@ -18,4 +18,6 @@ module SiteHealth
       add_data(missing: true)
     end
   end
+
+  SiteHealth.register_checker(MissingDescription)
 end

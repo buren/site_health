@@ -27,11 +27,12 @@ module SiteHealth
     @checkers ||= {}
   end
 
-  # @param [Symbol] name of the checker to be loaded
+  # @param [Symbol, String] name of the checker to be loaded
   def self.load_checker(name)
-    registered_checkers.fetch(name) do
+    name_key = name.to_sym
+    registered_checkers.fetch(name_key) do
       require "site_health/checkers/#{name}"
-      registered_checkers[name]
+      registered_checkers[name_key]
     end
   end
 

@@ -64,7 +64,7 @@ module SiteHealth
         xml
         json_syntax
         page_not_found
-      ].map { |name| SiteHealth.load_checker(name)  }
+      ].map! { |name| SiteHealth.load_checker(name)  }
     end
   end
 end

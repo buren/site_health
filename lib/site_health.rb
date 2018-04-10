@@ -28,6 +28,7 @@ module SiteHealth
   end
 
   # @param [Symbol, String] name of the checker to be loaded
+  # @return [Checker] loaded class that should inherits from Checker
   def self.load_checker(name)
     name_key = name.to_sym
     registered_checkers.fetch(name_key) do

@@ -44,11 +44,11 @@ module SiteHealth
     # @return [Array<Checker>] array of checkers to run
     # @param [Array<Checker>] checkers array of checkers to run
     def checkers=(checkers)
-      Array(checkers).map! { |checker| register_checker(checker) }
+      @checkers = Array(checkers).map! { |checker| register_checker(checker) }
     end
 
     # @param [Checker] checker additional checker to run
-    # @return [Array<Checker>] array of checkers to run
+    # @return [Checker] the registered checker
     def register_checker(checker)
       checker_klass = checker
 
@@ -57,6 +57,7 @@ module SiteHealth
       end
 
       @checkers << checker_klass
+      checker_klass
     end
 
     # @return [Array<Checker>] array of default checkers to run

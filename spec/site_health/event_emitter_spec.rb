@@ -16,6 +16,21 @@ RSpec.describe TestEventEmitter do
     end
   end
 
+  it "raises NoMethodError when unknown #every_* method is called" do
+    described_class.new do |on|
+      expect do
+        on.every_watman { |data| data }
+      end.to raise_error(NoMethodError)
+    end
+  end
+
+  it "raises NoMethodError when unknown #emit_* method is called" do
+    described_class.new do |on|
+      expect do
+        on.emit_watman { |w| w }
+      end.to raise_error(NoMethodError)
+    end
+  end
 
   describe "#data_point event" do
     it "can register and emit event" do

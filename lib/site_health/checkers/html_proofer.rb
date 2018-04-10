@@ -3,13 +3,19 @@ require "tempfile"
 module SiteHealth
   # Checks for various HTML misstakes (backed by the excellent HTMLProofer gem)
   class HTMLProofer < Checker
+    name "html_proofer"
+    types "html"
+
     def check
       # @return [Array<String>] list of HTML-errors
       tempfile(page.body) do |file|
         proofer = ::HTMLProofer.check_file(file.path, config.html_proofer.to_h)
         proofer.run rescue RuntimeError # NOTE: HTMLProofer raises if errors are found
-        result = build_test_failures(proofer.failed_tests)
-        add_data(errors: result)
+        errors = build_test_failures(proofer.failed_tests).each do |error|
+          add_issue(title: error)
+        end
+
+        add_data(errors: errors)
       end
     end
 
@@ -39,16 +45,6 @@ module SiteHealth
         file.close
       end
       yield(file).tap { file.unlink }
-    end
-
-    # @return [String] the name of the checker
-    def name
-      "html_proofer"
-    end
-
-    # @return [Array<Symbol>] list of page types the checker will run on
-    def types
-      %i[html]
     end
   end
 end

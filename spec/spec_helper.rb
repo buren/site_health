@@ -2,6 +2,7 @@ require "simplecov"
 require "coveralls"
 require "webmock"
 require "vcr"
+require "timecop"
 
 
 WebMock.disable_net_connect!(allow_localhost: true)

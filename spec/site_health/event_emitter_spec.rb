@@ -16,6 +16,21 @@ RSpec.describe TestEventEmitter do
     end
   end
 
+  it "raises NoMethodError when unknown #every_* method is called" do
+    described_class.new do |on|
+      expect do
+        on.every_watman { |data| data }
+      end.to raise_error(NoMethodError)
+    end
+  end
+
+  it "raises NoMethodError when unknown #emit_* method is called" do
+    described_class.new do |on|
+      expect do
+        on.emit_watman { |w| w }
+      end.to raise_error(NoMethodError)
+    end
+  end
 
   describe "#data_point event" do
     it "can register and emit event" do
@@ -29,6 +44,27 @@ RSpec.describe TestEventEmitter do
       handler.emit_data_point(data)
 
       expect(result).to eq(data)
+    end
+
+    it "can emit event with #emit method" do
+      result = nil
+
+      handler = described_class.new do |on|
+        on.every_data_point { |data| result = data }
+      end
+
+      data = 2
+      handler.emit(:data_point, data)
+
+      expect(result).to eq(data)
+    end
+
+    it "raises ArgumentError unless block given" do
+      described_class.new do |on|
+        expect do
+          on.every_data_point
+        end.to raise_error(ArgumentError, 'block must be given!')
+      end
     end
   end
 end

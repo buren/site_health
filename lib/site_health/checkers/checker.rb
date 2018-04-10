@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "site_health/issue"
 
 module SiteHealth
@@ -19,6 +21,26 @@ module SiteHealth
       xml
       html
     ].freeze
+
+    def self.name(name = '__get_value__')
+      if name == '__get_value__'
+        return @name if @name
+
+        @name = (super() || SecureRandom.hex).downcase.gsub(/sitehealth::/, "")
+        return @name
+      end
+
+      @name = name.to_s
+    end
+
+    def self.types(types = '__get_value__')
+      if types == '__get_value__'
+        @types = CHECKABLE_TYPES unless @types
+        return @types
+      end
+
+      @types = Array(types).map(&:to_sym)
+    end
 
     attr_reader :page, :config, :logger, :issues, :data
 
@@ -48,15 +70,12 @@ module SiteHealth
 
     # @return [String] the name of the checker
     def name
-      checker_name = self.class.name.downcase
-      return checker_name[0..-8] if checker_name.end_with?("checker")
-
-      checker_name
+      self.class.name
     end
 
     # @return [Array<Symbol>] list of page types the checker will run on
     def types
-      CHECKABLE_TYPES
+      self.class.types
     end
 
     # @return [Boolean] determines whether the checker should run
@@ -68,7 +87,7 @@ module SiteHealth
     # @return [Array<Issue>] the current list of issues
     # @see Issue#initialize for supported arguments
     def add_issue(**args)
-      issues << Issue.new(**args.merge(checker_name: name))
+      issues << Issue.new(**args.merge(name: name))
     end
 
     # Adds data
@@ -81,6 +100,7 @@ module SiteHealth
     # @return [Hash] hash representation of the object
     def to_h
       {
+        name: name.to_sym,
         data: data.to_h,
         issues: issues.map(&:to_h)
       }

@@ -1,20 +1,18 @@
 require "site_health/url_map"
 require "site_health/event_emitter"
+require "site_health/timer"
 
 module SiteHealth
-  class EventHandler < EventEmitter.define(:journal, :failed_url, :check)
-  end
-
   # Holds page analysis data
   class Nurse
-    attr_reader :config, :failures, :clerk, :checkers
+    attr_reader :config, :failures, :checkers
 
     def initialize(config: SiteHealth.config)
       @config = config
       @checkers = config.checkers
       @pages_journal = UrlMap.new { {} }
       @failures = []
-      @clerk = EventHandler.new
+      @clerk = nil
     end
 
     # @return [Hash] check results
@@ -31,11 +29,20 @@ module SiteHealth
       @failures << url
     end
 
+    # @return [Object] the event emitter
+    # @yieldparam [Object] the event emiiter
+    def clerk
+      @clerk ||= begin
+        events = %w[journal failed_url check].concat(checkers.map(&:name))
+        EventEmitter.define(*events).new.tap { |e| yield(e) if block_given? }
+      end
+    end
+
     # @return [Hash] result data
     def check_page(page)
       @pages_journal[page.url].tap do |journal|
-        started_at = Time.now
-        journal[:started_at] = started_at
+        timer = Timer.start
+        journal[:started_at] = timer.started_at
         journal[:checked] = true
 
         journal[:url] = page.url
@@ -50,9 +57,8 @@ module SiteHealth
 
         journal[:checks] = lab_results(page)
 
-        finished_at = Time.now
-        journal[:finished_at] = finished_at
-        journal[:runtime_in_seconds] = (finished_at - started_at).round(1)
+        journal[:finished_at] = timer.finished_at
+        journal[:runtime_in_seconds] = timer.diff.round(1)
 
         clerk.emit_journal(journal, page)
       end
@@ -68,7 +74,8 @@ module SiteHealth
         checker.call
 
         clerk.emit_check(checker)
-        journal[checker.name.to_sym] = checker
+        clerk.emit(checker.name, checker)
+        journal[checker.name.to_sym] = checker.to_h
       end
       journal
     end

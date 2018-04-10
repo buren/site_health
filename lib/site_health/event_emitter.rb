@@ -23,6 +23,10 @@ module SiteHealth
         end
 
         event_names.each do |name|
+          define_method(:emit) do |*args|
+            public_send("emit_#{args.shift}", *args)
+          end
+
           define_method("emit_#{name}") do |*args|
             blocks_for(name).each { |block| block.call(*args) }
           end

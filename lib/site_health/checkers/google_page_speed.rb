@@ -2,6 +2,9 @@ require 'google/apis/pagespeedonline_v2'
 
 module SiteHealth
   class GooglePageSpeed < Checker
+    name "google_page_speed"
+    types "html"
+
     Pagespeedonline = Google::Apis::PagespeedonlineV2
     PagespeedService = Pagespeedonline::PagespeedonlineService
 
@@ -15,16 +18,6 @@ module SiteHealth
 
       Google::Apis.logger = logger
       Google::Apis.logger.level = logger.level if logger.level
-    end
-
-    # @return [String] the name of the checker
-    def name
-      'google_page_speed'
-    end
-
-    # @return [Array<Symbol>] list of page types the checker will run on
-    def types
-      %i[html]
     end
 
     protected

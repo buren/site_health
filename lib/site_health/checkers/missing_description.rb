@@ -1,6 +1,9 @@
 module SiteHealth
   # Checks if HTML-meta description is present
   class MissingDescription < Checker
+    name "missing_description"
+    types "html"
+
     def check
       # @return [Boolean] determines whether the description is missing
       return add_data(missing: false) if page.redirect?
@@ -13,16 +16,6 @@ module SiteHealth
       end
 
       add_data(missing: true)
-    end
-
-    # @return [String] the name of the checker
-    def name
-      "missing_description"
-    end
-
-    # @return [Array<Symbol>] list of page types the checker will run on
-    def types
-      %i[html]
     end
   end
 end

@@ -4,6 +4,9 @@ require "uri"
 
 module SiteHealth
   class FacebookShareLink < Checker
+    name "facebook_share_link"
+    types "html"
+
     DOC_URL = "https://developers.facebook.com/docs/sharing/reference/feed-dialog"
 
     DEPRECATION_NOTICE = <<~DEPNOTICE
@@ -19,16 +22,6 @@ module SiteHealth
     Official answer from fb team
       https://developers.facebook.com/x/bugs/357750474364812/
     DEPNOTICE
-
-    # @return [String] the name of the checker
-    def name
-      "facebook_share_link"
-    end
-
-    # @return [Array<Symbol>] list of page types the checker will run on
-    def types
-      %i[html]
-    end
 
     def should_check?
       return false unless super

@@ -30,5 +30,26 @@ RSpec.describe TestEventEmitter do
 
       expect(result).to eq(data)
     end
+
+    it "can emit event with #emit method" do
+      result = nil
+
+      handler = described_class.new do |on|
+        on.every_data_point { |data| result = data }
+      end
+
+      data = 2
+      handler.emit(:data_point, data)
+
+      expect(result).to eq(data)
+    end
+
+    it "raises ArgumentError unless block given" do
+      described_class.new do |on|
+        expect do
+          on.every_data_point
+        end.to raise_error(ArgumentError, 'block must be given!')
+      end
+    end
   end
 end

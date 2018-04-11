@@ -1,3 +1,4 @@
+require "set"
 require "site_health/null_logger"
 require "site_health/html_proofer_configuration"
 require "site_health/w3c_validators_configuration"
@@ -8,7 +9,7 @@ module SiteHealth
     attr_reader :checkers, :google_page_speed_api_key, :logger, :locale
 
     def initialize
-      @checkers = default_checkers
+      @checkers = Set.new(default_checkers)
       @html_proofer = nil
       @w3c = nil
       @google_page_speed_api_key = nil
@@ -64,7 +65,6 @@ module SiteHealth
     def default_checkers
       %i[
         facebook_share_link
-        html_proofer
         missing_title
         missing_description
         redirect

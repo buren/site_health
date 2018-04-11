@@ -1,7 +1,6 @@
 require "logger"
 
 require "spidr"
-require "html-proofer"
 
 require "site_health/version"
 require "site_health/configuration"
@@ -15,6 +14,18 @@ require "site_health/nurse"
 
 # Top-level module/namespace
 module SiteHealth
+  def self.require_optional_dependency(path, gem_name: nil)
+    gem_name = path unless gem_name
+    require path
+  rescue LoadError => e
+    message_parts = [
+      e.message,
+      "unable to require file from '#{gem_name}' gem",
+      "please install it"
+    ]
+    raise(LoadError, message_parts.join(" -- "))
+  end
+
   # @param [Checker] klass that inherits from Checker
   # @return [see SiteHealth#registered_checkers]
   def self.register_checker(klass)

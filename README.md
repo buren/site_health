@@ -109,8 +109,20 @@ end
 
 __Load non-default checkers__:
 
+A few of the non-default checkers available in this gem require 3rd-party dependencies which aren't installed by default.
+
+| Checker name       | Gem                |
+| ------------------ | ------------------ |
+| google_page_speed  | google-api-client  |
+| html_proofer       | html-proofer       |
+| w3c_html           | w3c_validators     |
+| w3c_css            | w3c_validators     |
+
+If you intend to use any of those checkers make sure to install the gem first. For example to use the `google_page_speed` checker add `google-api-client` to your Gemfile or install it manually with `gem install google-api-client`. Then you register the checker for use.
+
 ```ruby
-SiteHealth.load_checker(:google_page_speed)
+SiteHealth.config.register_checker :google_page_speed
+# LoadError is raised if google-api-client is *not* installed
 ```
 
 __Add your own checker__:

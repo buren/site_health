@@ -8,4 +8,6 @@ module SiteHealth
       add_data(not_found: page.missing?)
     end
   end
+
+  SiteHealth.register_checker(PageNotFound)
 end

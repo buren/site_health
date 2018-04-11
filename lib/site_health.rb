@@ -11,11 +11,32 @@ require "site_health/url_map"
 require "site_health/link"
 
 require "site_health/checkers/checker"
-require "site_health/checkers/default_checkers"
 require "site_health/nurse"
 
 # Top-level module/namespace
 module SiteHealth
+  # @param [Checker] klass that inherits from Checker
+  # @return [see SiteHealth#registered_checkers]
+  def self.register_checker(klass)
+    registered_checkers[klass.name.to_sym] = klass
+    registered_checkers
+  end
+
+  # @return [Hash] all registered checkers
+  def self.registered_checkers
+    @checkers ||= {}
+  end
+
+  # @param [Symbol, String] name of the checker to be loaded
+  # @return [Checker] loaded class that should inherits from Checker
+  def self.load_checker(name)
+    name_key = name.to_sym
+    registered_checkers.fetch(name_key) do
+      require "site_health/checkers/#{name}"
+      registered_checkers[name_key]
+    end
+  end
+
   # @param [String] site to be checked
   # @param config [SiteHealth::Configuration] the configuration to use
   # @yieldparam [SiteHealth::Nurse] nurse (a.k.a agent)

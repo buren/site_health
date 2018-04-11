@@ -85,10 +85,7 @@ All configuration is optional.
 ```ruby
 SiteHealth.configure do |config|
   # Override default checkers
-  config.checkers = [
-    SiteHealth::JSON,
-    SiteHealth::HTML
-  ]
+  config.checkers = [:json_syntax, :html]
 
   # Configure logger
   config.logger = Logger.new(STDOUT).tap do |logger|
@@ -108,6 +105,12 @@ SiteHealth.configure do |config|
     w3c_config.html_uri = 'http://localhost:8888/check'
   end
 end
+```
+
+__Load non-default checkers__:
+
+```ruby
+SiteHealth.load_checker(:google_page_speed)
 ```
 
 __Add your own checker__:

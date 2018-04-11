@@ -44,27 +44,34 @@ module SiteHealth
     # @return [Array<Checker>] array of checkers to run
     # @param [Array<Checker>] checkers array of checkers to run
     def checkers=(checkers)
-      @checkers = Array(checkers)
+      @checkers = Array(checkers).map! { |checker| register_checker(checker) }
     end
 
     # @param [Checker] checker additional checker to run
-    # @return [Array<Checker>] array of checkers to run
+    # @return [Checker] the registered checker
     def register_checker(checker)
-      @checkers << checker
+      checker_klass = checker
+
+      if checker.respond_to?(:to_sym)
+        checker_klass = SiteHealth.load_checker(checker)
+      end
+
+      @checkers << checker_klass
+      checker_klass
     end
 
     # @return [Array<Checker>] array of default checkers to run
     def default_checkers
-      [
-        FacebookShareLink,
-        HTMLProofer,
-        MissingTitle,
-        MissingDescription,
-        Redirect,
-        XML,
-        JSONSyntax,
-        PageNotFound
-      ]
+      %i[
+        facebook_share_link
+        html_proofer
+        missing_title
+        missing_description
+        redirect
+        xml
+        json_syntax
+        page_not_found
+      ].map! { |name| SiteHealth.load_checker(name)  }
     end
   end
 end

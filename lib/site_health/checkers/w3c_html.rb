@@ -25,4 +25,6 @@ module SiteHealth
       validator.validate_text(page.body)
     end
   end
+
+  SiteHealth.register_checker(W3CHTML)
 end

@@ -45,4 +45,6 @@ module SiteHealth
       logger.error "#{page.url.to_s} failed: #{e.message}"
     end
   end
+
+  SiteHealth.register_checker(GooglePageSpeed)
 end

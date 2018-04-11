@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Jacob Burenstam"]
   spec.email         = ["burenstam@gmail.com"]
 
-  spec.summary       = %q{Crawl a site and check various helth indicators.}
-  spec.description   = %q{Crawl a site and check various health indicators, such as: HTTP 4XX, 5XX status, valid HTML/XML/JSON. Missing image alt attributes.}
+  spec.summary       = %q{Crawl a site and check various health indicators.}
+  spec.description   = %q{Crawl a site and check various health indicators, such as: HTTP 4XX, 5XX status, valid HTML/XML/JSON. Missing image alt attributes/missing HTML title/description.}
   spec.homepage      = "https://github.com/buren/site_health"
   spec.license       = "MIT"
 
@@ -21,10 +21,13 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_dependency "spidr", "~> 0.6"
-  spec.add_dependency "w3c_validators", "~> 1.3"
-  spec.add_dependency "html-proofer", "~> 3.8"
-  spec.add_dependency "google-api-client", "~> 0.19"
 
+  # Optional runtime dependencies
+  spec.add_development_dependency "w3c_validators", "~> 1.3"
+  spec.add_development_dependency "html-proofer", "~> 3.8"
+  spec.add_development_dependency "google-api-client", "~> 0.19"
+
+  # Development dependencies
   spec.add_development_dependency "simplecov", "0.14.1"
   spec.add_development_dependency "coveralls", "~> 0.8"
   spec.add_development_dependency "vcr", "~> 4.0"

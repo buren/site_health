@@ -1,6 +1,5 @@
-require "w3c_validators"
-
 require "site_health/w3c_journal_builder"
+SiteHealth.require_optional_dependency("w3c_validators")
 
 module SiteHealth
   # Checks for various CSS errors and warnings (backed by the excellent W3CValidations gem)

@@ -1,4 +1,5 @@
 require "tempfile"
+SiteHealth.require_optional_dependency("html-proofer")
 
 module SiteHealth
   # Checks for various HTML misstakes (backed by the excellent HTMLProofer gem)

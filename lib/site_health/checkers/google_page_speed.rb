@@ -1,4 +1,7 @@
-require 'google/apis/pagespeedonline_v2'
+SiteHealth.require_optional_dependency(
+  "google/apis/pagespeedonline_v2",
+  gem_name: "google-api-client"
+)
 
 module SiteHealth
   class GooglePageSpeed < Checker

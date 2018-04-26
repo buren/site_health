@@ -61,7 +61,9 @@ RSpec.describe SiteHealth::FacebookShareLink do
         checker = SiteHealth::FacebookShareLink.new(page)
         checker.call
 
-        expect(checker.data).to eq({})
+        data = checker.data.to_h
+        %i[started_at finished_at runtime_in_seconds].each { |key| data.delete(key) }
+        expect(data).to eq({})
       end
 
       %W[

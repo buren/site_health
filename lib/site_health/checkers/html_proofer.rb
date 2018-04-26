@@ -23,16 +23,22 @@ module SiteHealth
     # @return [Array<String>] list failures
     def build_test_failures(failed_tests)
       failed_tests.map do |failed_test|
-        # HTMLProofer expects internal links to be present on disk, Jekyll-style,
-        # since we're checking remote pages we ignore those failures
-        if config.html_proofer.ignore_missing_internal_links &&
-           (failed_test.include?("internally linking to") ||
-           failed_test.include?("internal image"))
-          next
-        end
+        next if ignore_test_failure?(failed_test)
 
         failed_test.split(".html:").last.strip # Removes file name from error message
       end.compact
+    end
+
+    # HTMLProofer expects internal links to be present on disk, Jekyll-style,
+    # since we're checking remote pages we ignore those failures
+    # @return [TrueClass, FalseClass] returns true if the failed test should be ignored
+    def ignore_test_failure?(failed_test)
+      return false unless config.html_proofer.ignore_missing_internal_links
+      return true if failed_test.include?("internally linking to")
+      return true if failed_test.include?("internal image")
+      return true if failed_test.include?("internal script")
+
+      false
     end
 
     # Creates a tempfile around the passed block

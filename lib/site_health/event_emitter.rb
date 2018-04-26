@@ -22,6 +22,8 @@ module SiteHealth
           yield(self) if block_given?
         end
 
+        define_method(:events) { event_names }
+
         event_names.each do |name|
           define_method(:emit) do |*args|
             public_send("emit_#{args.shift}", *args)

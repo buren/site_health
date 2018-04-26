@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "site_health/check_data"
+require "site_health/issues"
 require "site_health/issue"
 
 module SiteHealth
@@ -50,15 +52,20 @@ module SiteHealth
       @page = page
       @config = config
       @logger = config.logger
-      @issues = []
-      @data = {}
+      @issues = Issues.new
+      @data = CheckData.new
     end
 
     # Run the checker
     # @yieldparam [Checker] yields self
     # @return [CheckerResult] returns self
     def call
-      check
+      timer = Timer.measure { check }
+      add_data(
+        started_at: timer.started_at,
+        finished_at: timer.finished_at,
+        runtime_in_seconds: timer.diff
+      )
       yield(self) if block_given?
       self
     end
@@ -94,7 +101,7 @@ module SiteHealth
     # @param [Hash] the hash to be added
     # @return [Hash] the current data
     def add_data(hash)
-      data.merge!(hash)
+      data.add(hash)
     end
 
     # @return [Hash] hash representation of the object

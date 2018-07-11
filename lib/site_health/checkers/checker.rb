@@ -24,8 +24,8 @@ module SiteHealth
       html
     ].freeze
 
-    def self.name(name = '__get_value__')
-      if name == '__get_value__'
+    def self.name(name = "__get_value__")
+      if name == "__get_value__"
         return @name if @name
 
         @name = (super() || SecureRandom.hex).downcase.gsub(/sitehealth::/, "")
@@ -35,9 +35,9 @@ module SiteHealth
       @name = name.to_s
     end
 
-    def self.types(types = '__get_value__')
-      if types == '__get_value__'
-        @types = CHECKABLE_TYPES unless @types
+    def self.types(types = "__get_value__")
+      if types == "__get_value__"
+        @types ||= CHECKABLE_TYPES
         return @types
       end
 
@@ -109,7 +109,7 @@ module SiteHealth
       {
         name: name.to_sym,
         data: data.to_h,
-        issues: issues.map(&:to_h)
+        issues: issues.map(&:to_h),
       }
     end
 

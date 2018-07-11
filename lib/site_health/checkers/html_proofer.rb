@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "tempfile"
 SiteHealth.require_optional_dependency("html-proofer")
 
@@ -11,7 +13,11 @@ module SiteHealth
       # @return [Array<String>] list of HTML-errors
       tempfile(page.body) do |file|
         proofer = ::HTMLProofer.check_file(file.path, config.html_proofer.to_h)
-        proofer.run rescue RuntimeError # NOTE: HTMLProofer raises if errors are found
+        begin
+          proofer.run
+        rescue StandardError
+          RuntimeError
+        end # NOTE: HTMLProofer raises if errors are found
         errors = build_test_failures(proofer.failed_tests).each do |error|
           add_issue(title: error)
         end

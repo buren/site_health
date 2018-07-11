@@ -7,14 +7,14 @@ module SiteHealth
     attr_reader :started_at, :finished_at
 
     def self.start
-      new.tap { |timer| timer.start }
+      new.tap(&:start)
     end
 
     def self.measure(&block)
       new.tap { |timer| timer.measure(&block) }
     end
 
-    def measure(&block)
+    def measure
       start
       yield
       finish

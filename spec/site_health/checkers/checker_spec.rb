@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "spec_helper"
 
 RSpec.describe SiteHealth::Checker do
@@ -5,21 +7,21 @@ RSpec.describe SiteHealth::Checker do
     it "can set & get name in subclass class-macro" do
       page = Struct.new(:url).new("http://example.com/wat")
       checker_klass = Class.new(described_class) do
-        name 'checker_test_klass'
+        name "checker_test_klass"
       end
       checker = checker_klass.new(page)
 
-      expect(checker.name).to eq('checker_test_klass')
+      expect(checker.name).to eq("checker_test_klass")
     end
 
     it "returns default checkable types when no types is set" do
-      allow(SecureRandom).to receive(:hex).and_return('fake_hex_string')
+      allow(SecureRandom).to receive(:hex).and_return("fake_hex_string")
 
       page = Struct.new(:url).new("http://example.com/wat")
       checker_klass = Class.new(described_class)
       checker = checker_klass.new(page)
 
-      expect(checker.name).to eq('fake_hex_string')
+      expect(checker.name).to eq("fake_hex_string")
     end
   end
 

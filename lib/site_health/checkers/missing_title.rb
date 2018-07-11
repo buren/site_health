@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module SiteHealth
   # Checks if HTML-meta title is present
   class MissingTitle < Checker
@@ -12,7 +14,7 @@ module SiteHealth
       add_data(missing: missing_title)
 
       if missing_title
-        add_issue(title: 'page not found', severity: :medium, priority: :high)
+        add_issue(title: "page not found", severity: :medium, priority: :high)
       end
     end
   end

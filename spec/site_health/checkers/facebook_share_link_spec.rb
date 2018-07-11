@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "spec_helper"
 require "site_health/checkers/facebook_share_link"
 
@@ -113,7 +115,7 @@ RSpec.describe SiteHealth::FacebookShareLink do
         ["http://facebook.com/sharer/sharer.php?u=#{share_url}", :deprecated],
         ["https://www.facebook.com/sharer.php?u=#{share_url}", :deprecated],
         ["https://www.facebook.com/share?u=#{share_url}", :invalid],
-        ["#{valid_base_url}?u=#{bad_share_url}", :invalid]
+        ["#{valid_base_url}?u=#{bad_share_url}", :invalid],
       ].each do |data|
         url, status = data
 

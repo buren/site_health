@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "spec_helper"
 require "site_health/event_emitter"
 
@@ -63,7 +65,7 @@ RSpec.describe TestEventEmitter do
       described_class.new do |on|
         expect do
           on.every_data_point
-        end.to raise_error(ArgumentError, 'block must be given!')
+        end.to raise_error(ArgumentError, "block must be given!")
       end
     end
   end

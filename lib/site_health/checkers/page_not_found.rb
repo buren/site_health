@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module SiteHealth
   # Checks if HTML-meta title is present
   class PageNotFound < Checker
@@ -7,7 +9,7 @@ module SiteHealth
       # @return [Boolean] determines whether the page returned a HTTP 404 status code
       if page.missing?
         add_data(not_found: true)
-        add_issue(title: 'page not found', severity: :major, priority: :high)
+        add_issue(title: "page not found", severity: :major, priority: :high)
         return
       end
 

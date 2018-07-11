@@ -10,17 +10,13 @@ module SiteHealth
     DOC_URL = "https://developers.facebook.com/docs/sharing/reference/feed-dialog"
 
     DEPRECATION_NOTICE = <<~DEPNOTICE
-
-    [DEPCREATED]
-
-    StackOverflow
-      https://stackoverflow.com/questions/20956229/has-facebook-sharer-php-changed-to-no-longer-accept-detailed-parameters
-
-    Use dialog/feeds instead of sharer.php
-      https://developers.facebook.com/docs/sharing/reference/feed-dialog
-
-    Official answer from fb team
-      https://developers.facebook.com/x/bugs/357750474364812/
+      [DEPCREATED]
+      StackOverflow
+       https://stackoverflow.com/questions/20956229/has-facebook-sharer-php-changed-to-no-longer-accept-detailed-parameters
+      Use dialog/feeds instead of sharer.php
+       https://developers.facebook.com/docs/sharing/reference/feed-dialog
+      Official answer from fb team
+       https://developers.facebook.com/x/bugs/357750474364812/
     DEPNOTICE
 
     def should_check?

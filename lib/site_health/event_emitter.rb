@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module SiteHealth
   module EventEmitter
     # Returns an event emitter class with given event names
@@ -33,8 +35,8 @@ module SiteHealth
             blocks_for(name).each { |block| block.call(*args) }
           end
 
-          define_method("every_#{name}") do |*args, &block|
-            raise(ArgumentError, 'block must be given!') unless block
+          define_method("every_#{name}") do |*_args, &block|
+            raise(ArgumentError, "block must be given!") unless block
             blocks_for(name) << block
           end
 

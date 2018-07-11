@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "json"
 
 module SiteHealth
@@ -10,7 +12,7 @@ module SiteHealth
       # @return [String] the error message or "OK" if syntax is valid
       message = begin
         JSON.parse(page.body)
-        'OK'
+        "OK"
       rescue ::JSON::ParserError => e
         e.message
       end

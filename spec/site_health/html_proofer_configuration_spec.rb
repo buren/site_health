@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "spec_helper"
 require "site_health/configuration/html_proofer_configuration"
 

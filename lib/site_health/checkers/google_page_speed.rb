@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 SiteHealth.require_optional_dependency(
   "google/apis/pagespeedonline_v2",
   gem_name: "google-api-client"
@@ -43,9 +45,9 @@ module SiteHealth
       # Google::Apis::ClientError: noDocumentLoaded: The URL was fetched, but nothing
       # was rendered. Ensure that the URL points to an HTML page that loads
       # successfully in a web browser.
-      logger.error "#{page.url.to_s} failed: #{e.message}"
+      logger.error "#{page.url} failed: #{e.message}"
     rescue Google::Apis::ServerError => e
-      logger.error "#{page.url.to_s} failed: #{e.message}"
+      logger.error "#{page.url} failed: #{e.message}"
     end
   end
 

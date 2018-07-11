@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "spec_helper"
 
 require "site_health/checkers/json_syntax"
@@ -8,7 +10,7 @@ RSpec.describe SiteHealth::JSONSyntax do
       page = mock_test_page("json/good.json")
       checker = described_class.new(page).call
 
-      expect(checker.data[:parsing]).to eq('OK')
+      expect(checker.data[:parsing]).to eq("OK")
     end
 
     it "returns error message if JSON is invalid" do

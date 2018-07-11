@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module SiteHealth
   # Checks for XML-errors (backed by the excellent Nokogiri gem)
   class XML < Checker

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "spec_helper"
 
 require "site_health/check_data"
@@ -7,7 +9,7 @@ RSpec.describe SiteHealth::CheckData do
     it "can retrieve key" do
       data = described_class.new
       data.add(wat: :man)
-      
+
       expect(data[:wat]).to eq(:man)
     end
   end

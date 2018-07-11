@@ -58,7 +58,7 @@ module SiteHealth
         severity: severity,
         priority: priority,
         links: links,
-        meta: meta
+        meta: meta,
       }
     end
 
@@ -66,12 +66,12 @@ module SiteHealth
 
     def validate_severity!(severity)
       return if SEVERITIES.include?(severity)
-      raise ArgumentError, "unknown value: '#{severity}', chose one of #{SEVERITIES.join(", ")}."
+      raise ArgumentError, "unknown value: '#{severity}', chose one of #{SEVERITIES.join(', ')}."
     end
 
     def validate_priority!(priority)
       return if PRIORITIES.include?(priority)
-      raise ArgumentError, "unknown value: '#{severity}', chose one of #{PRIORITIES.join(", ")}."
+      raise ArgumentError, "unknown value: '#{severity}', chose one of #{PRIORITIES.join(', ')}."
     end
 
     def validate_links!(links)

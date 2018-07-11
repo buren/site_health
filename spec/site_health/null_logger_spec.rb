@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "spec_helper"
 
 RSpec.describe SiteHealth::NullLogger do
@@ -12,6 +14,6 @@ RSpec.describe SiteHealth::NullLogger do
 
   it "has #add method that can recieve args and a block" do
     logger = described_class.new("buren")
-    expect(logger.add('buren', &:nil?)).to be_nil
+    expect(logger.add("buren", &:nil?)).to be_nil
   end
 end

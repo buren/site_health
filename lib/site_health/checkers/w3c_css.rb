@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "site_health/w3c_journal_builder"
 SiteHealth.require_optional_dependency("w3c_validators")
 

@@ -1,20 +1,21 @@
+# frozen_string_literal: true
+
 require "simplecov"
 require "coveralls"
 require "webmock"
 require "vcr"
 require "timecop"
 
-
 WebMock.disable_net_connect!(allow_localhost: true)
 
 VCR.configure do |c|
-  c.cassette_library_dir = 'spec/vcr'
+  c.cassette_library_dir = "spec/vcr"
   c.hook_into :webmock
 end
 
 formatters = [
   SimpleCov::Formatter::HTMLFormatter,
-  Coveralls::SimpleCov::Formatter
+  Coveralls::SimpleCov::Formatter,
 ]
 SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter.new(formatters)
 SimpleCov.start do

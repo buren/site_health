@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module SiteHealth
   # Enhance Struct to work with keywords
   class KeyStruct < Struct

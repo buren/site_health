@@ -15,7 +15,7 @@ module SiteHealth
     # @param [Issue] issue if nil then a keywords are expected
     # @return [Array<Issue>] the current list of issues
     # @see Issue#initialize for supported keyword arguments
-    def add(issue = nil, **issue_args)
+    def add(issue = nil, **_issue_args)
       @issues << issue || Issue.new(**args.merge(name: name))
     end
     alias_method :<<, :add

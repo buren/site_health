@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "set"
 require "site_health/null_logger"
 require "site_health/configuration/html_proofer_configuration"
@@ -16,7 +18,7 @@ module SiteHealth
       @w3c = nil
       @google_page_speed_api_key = nil
       @logger = NullLogger.new
-      @locale = 'en'
+      @locale = "en"
     end
 
     # Set logger
@@ -58,7 +60,7 @@ module SiteHealth
       end
 
       unless checker.respond_to?(:check) || checker.instance_methods.include?(:check)
-        raise(InvalidCheckerError, 'checker must implement #check')
+        raise(InvalidCheckerError, "checker must implement #check")
       end
 
       @checkers << checker
@@ -75,7 +77,7 @@ module SiteHealth
         xml
         json_syntax
         page_not_found
-      ].map! { |name| SiteHealth.load_checker(name)  }
+      ].map! { |name| SiteHealth.load_checker(name) }
     end
   end
 end

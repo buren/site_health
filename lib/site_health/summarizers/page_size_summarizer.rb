@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module SiteHealth
   class PageSpeedSummarizer
     def initialize(data)
@@ -5,7 +7,7 @@ module SiteHealth
     end
 
     def to_csv
-      to_matrix.map { |row| row.join(',') }.join("\n")
+      to_matrix.map { |row| row.join(",") }.join("\n")
     end
 
     def to_matrix
@@ -50,7 +52,7 @@ module SiteHealth
         bytes_to_kb(stats[:html_response_bytes]),
         bytes_to_kb(stats[:image_response_bytes]),
         bytes_to_kb(stats[:javascript_response_bytes]),
-        bytes_to_kb(stats[:other_response_bytes])
+        bytes_to_kb(stats[:other_response_bytes]),
       ]
       kbytes_columns << kbytes_columns.sum.round(1)
 
@@ -59,7 +61,7 @@ module SiteHealth
         stats[:number_js_resources],
         stats[:number_css_resources],
         stats[:number_resources],
-        stats[:number_static_resources]
+        stats[:number_static_resources],
       ]
 
       total_speed_score = pagespeed_data.dig(:rule_groups, :SPEED, :score)

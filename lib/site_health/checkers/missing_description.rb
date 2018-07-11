@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module SiteHealth
   # Checks if HTML-meta description is present
   class MissingDescription < Checker

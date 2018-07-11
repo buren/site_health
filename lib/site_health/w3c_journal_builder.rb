@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module SiteHealth
   # Holds WC3Validator errors/warnings data
   W3CJournal = KeyStruct.new(

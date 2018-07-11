@@ -50,12 +50,14 @@ module SiteHealth
         journal[:http_status] = page.code
         journal[:redirect] = page.redirect?
         journal[:title] = page.title
-        journal[:links_to] = page.each_url.map do |url|
+        journal[:links_to] = page.each_link.map do |url|
           (@pages_journal[url][:links_from] ||= []) << page.url
           url.to_s
         end
 
         journal[:checks] = lab_results(page)
+
+        timer.finish
 
         journal[:finished_at] = timer.finished_at
         journal[:runtime_in_seconds] = timer.diff.round(1)

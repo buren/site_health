@@ -3,7 +3,7 @@ require "logger"
 require "spidr"
 
 require "site_health/version"
-require "site_health/configuration"
+require "site_health/configuration/configuration"
 
 require "site_health/key_struct"
 require "site_health/url_map"

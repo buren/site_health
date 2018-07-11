@@ -1,11 +1,13 @@
 require "set"
 require "site_health/null_logger"
-require "site_health/html_proofer_configuration"
-require "site_health/w3c_validators_configuration"
+require "site_health/configuration/html_proofer_configuration"
+require "site_health/configuration/w3c_validators_configuration"
 
 module SiteHealth
   # Holds configuration data
   class Configuration
+    class InvalidCheckerError < ArgumentError; end
+
     attr_reader :checkers, :google_page_speed_api_key, :logger, :locale
 
     def initialize
@@ -48,17 +50,19 @@ module SiteHealth
       @checkers = Array(checkers).map! { |checker| register_checker(checker) }
     end
 
-    # @param [Checker] checker additional checker to run
+    # @param [Checker, String, Symbol] checker additional checker to run can also be the name of an existing checker
     # @return [Checker] the registered checker
     def register_checker(checker)
-      checker_klass = checker
-
-      if checker.respond_to?(:to_sym)
-        checker_klass = SiteHealth.load_checker(checker)
+      if [String, Symbol].include?(checker.class)
+        checker = SiteHealth.load_checker(checker)
       end
 
-      @checkers << checker_klass
-      checker_klass
+      unless checker.respond_to?(:check) || checker.instance_methods.include?(:check)
+        raise(InvalidCheckerError, 'checker must implement #check')
+      end
+
+      @checkers << checker
+      checker
     end
 
     # @return [Array<Checker>] array of default checkers to run

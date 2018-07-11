@@ -8,7 +8,12 @@ module SiteHealth
       # @return [Boolean] determines whether the title is missing
       return add_data(missing: false) if page.redirect?
 
-      add_data(missing: page.title.to_s.strip.empty?)
+      missing_title = page.title.to_s.strip.empty?
+      add_data(missing: missing_title)
+
+      if missing_title
+        add_issue(title: 'page not found', severity: :medium, priority: :high)
+      end
     end
   end
 

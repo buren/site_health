@@ -13,10 +13,11 @@ RSpec.describe SiteHealth::Checker do
     end
 
     it "returns default checkable types when no types is set" do
+      allow(SecureRandom).to receive(:hex).and_return('fake_hex_string')
+
       page = Struct.new(:url).new("http://example.com/wat")
       checker_klass = Class.new(described_class)
       checker = checker_klass.new(page)
-      allow(SecureRandom).to receive(:hex).and_return('fake_hex_string')
 
       expect(checker.name).to eq('fake_hex_string')
     end
@@ -163,7 +164,7 @@ RSpec.describe SiteHealth::Checker do
       checker.add_data(any: :thing)
       checker.add_data(any: :thang)
 
-      expect(checker.data).to eq(any: :thang)
+      expect(checker.data.to_h).to eq(any: :thang)
     end
   end
 end

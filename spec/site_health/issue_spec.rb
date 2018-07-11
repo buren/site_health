@@ -88,6 +88,7 @@ RSpec.describe SiteHealth::Issue do
       )
 
       expected = {
+        name: 'name',
         code: :watman,
         title: 'is invalid',
         detail: 'a detail',

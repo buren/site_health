@@ -53,6 +53,7 @@ module SiteHealth
     # @return [Hash] hash representation of the object
     def to_h
       {
+        name: name,
         code: code,
         title: title,
         detail: detail,

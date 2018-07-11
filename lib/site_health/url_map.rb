@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module SiteHealth
   # Hash-like data structure that holds URI as keys and can be accessed using
   # an URI instance or the String representation
@@ -14,7 +16,7 @@ module SiteHealth
 
     # @yieldparam [Object] value for key
     # @return [Enumerator] data
-    def each(&block)
+    def each
       @data.each do |key, value|
         yield(key, value) if block_given?
       end

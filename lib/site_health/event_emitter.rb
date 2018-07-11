@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module SiteHealth
   module EventEmitter
     # Returns an event emitter class with given event names
@@ -11,7 +13,9 @@ module SiteHealth
     #      on.every_found_url { {|url| puts "Found URL: #{url}" }
     #      on.every_page_title { {|title| puts "Page title: #{title}" }
     #      # you can add multiple blocks
-    #      on.every_page_title { |title| puts "[WARNING] Title too long!: #{title}" if title.length > 155 }
+    #      on.every_page_title do |title|
+    #        puts "[WARNING] Title too long!: #{title}" if title.length > 155
+    #      end
     #    end
     #
     #    event.emit_page_title(page_title)
@@ -33,7 +37,7 @@ module SiteHealth
             blocks_for(name).each { |block| block.call(*args) }
           end
 
-          define_method("every_#{name}") do |*args, &block|
+          define_method("every_#{name}") do |*_args, &block|
             raise(ArgumentError, 'block must be given!') unless block
             blocks_for(name) << block
           end

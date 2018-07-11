@@ -1,7 +1,9 @@
-require "set"
-require "site_health/null_logger"
-require "site_health/configuration/html_proofer_configuration"
-require "site_health/configuration/w3c_validators_configuration"
+# frozen_string_literal: true
+
+require 'set'
+require 'site_health/null_logger'
+require 'site_health/configuration/html_proofer_configuration'
+require 'site_health/configuration/w3c_validators_configuration'
 
 module SiteHealth
   # Holds configuration data
@@ -50,7 +52,8 @@ module SiteHealth
       @checkers = Array(checkers).map! { |checker| register_checker(checker) }
     end
 
-    # @param [Checker, String, Symbol] checker additional checker to run can also be the name of an existing checker
+    # @param [Checker, String, Symbol] checker
+    #   additional checker to run can also be the name of an existing checker
     # @return [Checker] the registered checker
     def register_checker(checker)
       if [String, Symbol].include?(checker.class)
@@ -75,7 +78,7 @@ module SiteHealth
         xml
         json_syntax
         page_not_found
-      ].map! { |name| SiteHealth.load_checker(name)  }
+      ].map! { |name| SiteHealth.load_checker(name) }
     end
   end
 end

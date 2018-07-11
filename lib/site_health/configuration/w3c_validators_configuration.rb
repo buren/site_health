@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module SiteHealth
   # Holds W3CValidators configuration data
   class W3CValidatorsConfiguration

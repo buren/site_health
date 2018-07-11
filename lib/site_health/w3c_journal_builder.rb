@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module SiteHealth
   # Holds WC3Validator errors/warnings data
   W3CJournal = KeyStruct.new(
@@ -24,7 +26,7 @@ module SiteHealth
     # @return [W3CJournal]
     def self.build(result)
       W3CJournal.new(
-        message: (result.message || "").strip,
+        message: (result.message || '').strip,
         value: result.value,
         source: result.source,
         type: result.type,

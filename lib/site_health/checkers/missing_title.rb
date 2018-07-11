@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 module SiteHealth
   # Checks if HTML-meta title is present
   class MissingTitle < Checker
-    name "missing_title"
-    types "html"
+    name 'missing_title'
+    types 'html'
 
     def check
       # @return [Boolean] determines whether the title is missing

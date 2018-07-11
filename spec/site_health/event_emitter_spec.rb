@@ -1,11 +1,13 @@
-require "spec_helper"
-require "site_health/event_emitter"
+# frozen_string_literal: true
+
+require 'spec_helper'
+require 'site_health/event_emitter'
 
 TestEventEmitter = SiteHealth::EventEmitter.define(:data_point)
 
 RSpec.describe TestEventEmitter do
-  describe "#initialize" do
-    it "yields self to block" do
+  describe '#initialize' do
+    it 'yields self to block' do
       event = nil
 
       event_handler = described_class.new do |handler|
@@ -16,7 +18,7 @@ RSpec.describe TestEventEmitter do
     end
   end
 
-  it "raises NoMethodError when unknown #every_* method is called" do
+  it 'raises NoMethodError when unknown #every_* method is called' do
     described_class.new do |on|
       expect do
         on.every_watman { |data| data }
@@ -24,7 +26,7 @@ RSpec.describe TestEventEmitter do
     end
   end
 
-  it "raises NoMethodError when unknown #emit_* method is called" do
+  it 'raises NoMethodError when unknown #emit_* method is called' do
     described_class.new do |on|
       expect do
         on.emit_watman { |w| w }
@@ -32,8 +34,8 @@ RSpec.describe TestEventEmitter do
     end
   end
 
-  describe "#data_point event" do
-    it "can register and emit event" do
+  describe '#data_point event' do
+    it 'can register and emit event' do
       result = nil
 
       handler = described_class.new do |on|
@@ -46,7 +48,7 @@ RSpec.describe TestEventEmitter do
       expect(result).to eq(data)
     end
 
-    it "can emit event with #emit method" do
+    it 'can emit event with #emit method' do
       result = nil
 
       handler = described_class.new do |on|
@@ -59,7 +61,7 @@ RSpec.describe TestEventEmitter do
       expect(result).to eq(data)
     end
 
-    it "raises ArgumentError unless block given" do
+    it 'raises ArgumentError unless block given' do
       described_class.new do |on|
         expect do
           on.every_data_point

@@ -1,20 +1,20 @@
 # frozen_string_literal: true
 
-require "time"
+require 'time'
 
 module SiteHealth
   class Timer
     attr_reader :started_at, :finished_at
 
     def self.start
-      new.tap { |timer| timer.start }
+      new.tap(&:start)
     end
 
     def self.measure(&block)
       new.tap { |timer| timer.measure(&block) }
     end
 
-    def measure(&block)
+    def measure
       start
       yield
       finish
@@ -32,7 +32,7 @@ module SiteHealth
     end
 
     def diff
-      fail(StandardError, "timer must be started") unless @started
+      fail(StandardError, 'timer must be started') unless @started
 
       finish = @finished || high_precision_time
       finish - @started

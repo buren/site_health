@@ -27,13 +27,14 @@ module SiteHealth
     # Initialize an Issue
     # @param [String, Symbol] code an application-specific error code.
     # @param [String] title a short, human-readable summary of the problem.
-    # @param [String] detail a human-readable explanation specific to this occurrence of the problem.
+    # @param [String] detail
+    #  a human-readable explanation specific to this occurrence of the problem.
     # @param [Array<Link>]
     def initialize(
       name:,
       title:,
       code: nil,
-      detail: "",
+      detail: '',
       severity: :unknown,
       priority: :unknown,
       links: [],
@@ -58,7 +59,7 @@ module SiteHealth
         severity: severity,
         priority: priority,
         links: links,
-        meta: meta
+        meta: meta,
       }
     end
 
@@ -66,18 +67,20 @@ module SiteHealth
 
     def validate_severity!(severity)
       return if SEVERITIES.include?(severity)
-      raise ArgumentError, "unknown value: '#{severity}', chose one of #{SEVERITIES.join(", ")}."
+      severities = SEVERITIES.join(', ')
+      raise ArgumentError, "unknown value: '#{severity}', chose one of #{severities}."
     end
 
     def validate_priority!(priority)
       return if PRIORITIES.include?(priority)
-      raise ArgumentError, "unknown value: '#{severity}', chose one of #{PRIORITIES.join(", ")}."
+      priorities = PRIORITIES.join(', ')
+      raise ArgumentError, "unknown value: '#{severity}', chose one of #{priorities}."
     end
 
     def validate_links!(links)
       links.each do |link|
         next if link.key?(:href)
-        raise ArgumentError, "href key must be present for every link"
+        raise ArgumentError, 'href key must be present for every link'
       end
     end
   end

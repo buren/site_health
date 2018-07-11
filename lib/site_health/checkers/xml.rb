@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 module SiteHealth
   # Checks for XML-errors (backed by the excellent Nokogiri gem)
   class XML < Checker
-    name "xml"
-    types "xml"
+    name 'xml'
+    types 'xml'
 
     def check
       # @return [Array<String>] list of XML errors

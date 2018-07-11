@@ -1,12 +1,14 @@
+# frozen_string_literal: true
+
 SiteHealth.require_optional_dependency(
-  "google/apis/pagespeedonline_v2",
-  gem_name: "google-api-client"
+  'google/apis/pagespeedonline_v2',
+  gem_name: 'google-api-client'
 )
 
 module SiteHealth
   class GooglePageSpeed < Checker
-    name "google_page_speed"
-    types "html"
+    name 'google_page_speed'
+    types 'html'
 
     Pagespeedonline = Google::Apis::PagespeedonlineV2
     PagespeedService = Pagespeedonline::PagespeedonlineService
@@ -33,7 +35,7 @@ module SiteHealth
     private
 
     # @return [Google::Apis::PagespeedonlineV2::Result, nil] Google page speed result
-    def perform_request(strategy: "desktop")
+    def perform_request(strategy: 'desktop')
       service.run_pagespeed(
         page.url.to_s,
         locale: config.locale,
@@ -43,9 +45,9 @@ module SiteHealth
       # Google::Apis::ClientError: noDocumentLoaded: The URL was fetched, but nothing
       # was rendered. Ensure that the URL points to an HTML page that loads
       # successfully in a web browser.
-      logger.error "#{page.url.to_s} failed: #{e.message}"
+      logger.error "#{page.url} failed: #{e.message}"
     rescue Google::Apis::ServerError => e
-      logger.error "#{page.url.to_s} failed: #{e.message}"
+      logger.error "#{page.url} failed: #{e.message}"
     end
   end
 

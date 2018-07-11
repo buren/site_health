@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module SiteHealth
   # Patch version
   PATCH = 0

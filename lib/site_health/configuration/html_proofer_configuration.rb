@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module SiteHealth
   # Holds HTMLProofer configuration data
   class HTMLProoferConfiguration
@@ -43,13 +45,12 @@ module SiteHealth
       @ignore_missing_internal_links = true
     end
 
-
     # @param [Symbol] level desired log level
     # @return [Symbol] current log level
     # @raise [ArgumentError] raises if invalid log level
     def log_level=(level)
       unless LOG_LEVELS.include?(level.to_sym)
-        raise ArgumentError, "unknown log level :#{level}, must be one of: #{LOG_LEVELS.join(",")}"
+        raise ArgumentError, "unknown log level :#{level}, must be one of: #{LOG_LEVELS.join(',')}" # rubocop:disable Metrics/LineLength
       end
 
       @log_level = level
@@ -60,7 +61,7 @@ module SiteHealth
     # @raise [ArgumentError] raises if invalid error sorting
     def error_sort=(sort)
       unless ERROR_SORTS.include?(sort.to_sym)
-        raise ArgumentError, "unknown sort order :#{sort}, must be one of: #{ERROR_SORTS.join(",")}"
+        raise ArgumentError, "unknown sort order :#{sort}, must be one of: #{ERROR_SORTS.join(',')}" # rubocop:disable Metrics/LineLength
       end
 
       @error_sort = sort
@@ -80,7 +81,7 @@ module SiteHealth
         assume_extension: assume_extension,
         report_missing_names: report_missing_names,
         report_invalid_tags: report_invalid_tags,
-        check_favicon: check_favicon
+        check_favicon: check_favicon,
       }
     end
   end

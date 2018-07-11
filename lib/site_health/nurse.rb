@@ -1,6 +1,8 @@
-require "site_health/url_map"
-require "site_health/event_emitter"
-require "site_health/timer"
+# frozen_string_literal: true
+
+require 'site_health/url_map'
+require 'site_health/event_emitter'
+require 'site_health/timer'
 
 module SiteHealth
   # Holds page analysis data
@@ -19,7 +21,7 @@ module SiteHealth
     def journal
       {
         checked_urls: @pages_journal.to_h,
-        internal_server_error_urls: failures
+        internal_server_error_urls: failures,
       }
     end
 

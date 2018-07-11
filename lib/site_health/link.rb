@@ -1,17 +1,17 @@
 # frozen_string_literal: true
 
-require "uri"
+require 'uri'
 
 module SiteHealth
   class Link
-    def self.valid?(*args, **kwargs)
-      new(*args, **kwargs).valid?
+    def self.valid?(*args)
+      new(*args).valid?
     end
 
     attr_reader :uri, :url
 
-    def initialize(url, decode: false)
-      @url = decode_url(url, decode)
+    def initialize(url)
+      @url = url
       @uri = safe_parse_url(@url)
       @valid = @uri.absolute?
     end
@@ -23,19 +23,10 @@ module SiteHealth
     private
 
     # @param [String] url
-    # @param [Boolean] decode
-    def decode_url(url, decode)
-      return url.to_s if url.is_a?(URI)
-      return URI.decode(url) if decode
-
-      url
-    end
-
-    # @param [String] url
     def safe_parse_url(url)
       URI.parse(url)
     rescue URI::InvalidURIError
-      URI.parse("")
+      URI.parse('')
     end
   end
 end

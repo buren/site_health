@@ -1,26 +1,22 @@
 # frozen_string_literal: true
 
-require "uri"
+require 'uri'
 
 module SiteHealth
   class FacebookShareLink < Checker
-    name "facebook_share_link"
-    types "html"
+    name 'facebook_share_link'
+    types 'html'
 
-    DOC_URL = "https://developers.facebook.com/docs/sharing/reference/feed-dialog"
+    DOC_URL = 'https://developers.facebook.com/docs/sharing/reference/feed-dialog'
 
     DEPRECATION_NOTICE = <<~DEPNOTICE
-
-    [DEPCREATED]
-
-    StackOverflow
-      https://stackoverflow.com/questions/20956229/has-facebook-sharer-php-changed-to-no-longer-accept-detailed-parameters
-
-    Use dialog/feeds instead of sharer.php
-      https://developers.facebook.com/docs/sharing/reference/feed-dialog
-
-    Official answer from fb team
-      https://developers.facebook.com/x/bugs/357750474364812/
+      [DEPCREATED]
+      StackOverflow
+       https://stackoverflow.com/questions/20956229/has-facebook-sharer-php-changed-to-no-longer-accept-detailed-parameters
+      Use dialog/feeds instead of sharer.php
+       https://developers.facebook.com/docs/sharing/reference/feed-dialog
+      Official answer from fb team
+       https://developers.facebook.com/x/bugs/357750474364812/
     DEPNOTICE
 
     def should_check?
@@ -38,7 +34,7 @@ module SiteHealth
         return
       end
 
-      if url.path.include?("/share")
+      if url.path.include?('/share')
         check_url_deprecated
         return
       end
@@ -49,8 +45,8 @@ module SiteHealth
     def look_like_facebook_share_url?
       base_url = "#{url.host}#{url.path}"
 
-      base_url.include?("facebook.com/share") ||
-        base_url.include?("facebook.com/dialog/feed")
+      base_url.include?('facebook.com/share') ||
+        base_url.include?('facebook.com/dialog/feed')
     end
 
     private
@@ -61,32 +57,32 @@ module SiteHealth
 
     def check_url
       # check presence of required params
-      unless query.key?("app_id") && query.key?("display")
-        add_issue(code: :required_params_missing, title: "invalid URL")
+      unless query.key?('app_id') && query.key?('display')
+        add_issue(code: :required_params_missing, title: 'invalid URL')
       end
 
       # IIRC the only valid values for a regular web page are
       # I'm not entirely sure though...
-      unless query["display"] == "page" || query["display"] == "popup"
-        add_issue(code: :display_invalid, title: "invalid URL")
+      unless query['display'] == 'page' || query['display'] == 'popup'
+        add_issue(code: :display_invalid, title: 'invalid URL')
       end
 
-      if query["link"] && !Link.valid?(query["link"])
-        add_issue(code: :link_invalid, title: "link-param must be a valid URL")
+      if query['link'] && !Link.valid?(query['link'])
+        add_issue(code: :link_invalid, title: 'link-param must be a valid URL')
       end
 
-      if query["redirect_uri"] && !Link.valid?(query["redirect_uri"])
-        add_issue(code: :redirect_uri_invalid, title: "redirect_uri-param must be a valid URL")
+      if query['redirect_uri'] && !Link.valid?(query['redirect_uri'])
+        add_issue(code: :redirect_uri_invalid, title: 'redirect_uri-param must be a valid URL')
       end
     end
 
     def check_url_deprecated
-      unless url.path.include?("/sharer/sharer.php") || url.path.include?("/sharer.php")
+      unless url.path.include?('/sharer/sharer.php') || url.path.include?('/sharer.php')
         add_issue(code: :invalid, title: "wrong sharer path #{DEPRECATION_NOTICE}")
         return
       end
 
-      unless Link.valid?(query["u"])
+      unless Link.valid?(query['u'])
         add_issue(code: :invalid, title: "u-param must be a valid url #{DEPRECATION_NOTICE}")
         return
       end

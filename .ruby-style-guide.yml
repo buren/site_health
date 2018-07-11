@@ -184,14 +184,13 @@ Metrics/LineLength:
   Enabled: true
   Max: 95
   Exclude:
-  - lib/honey_format/cli/*
   - Gemfile
-  - honey_format.gemspec
+  - site_health.gemspec
   - spec/**/*
 Metrics/BlockLength:
   Enabled: true
   Exclude:
-  - lib/honey_format/cli/*
+  - site_health.gemspec
   - spec/**/*
 Lint/AssignmentInCondition:
   Description: Don't use assignment in conditions.

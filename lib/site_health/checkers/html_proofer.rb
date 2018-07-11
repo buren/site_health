@@ -13,11 +13,13 @@ module SiteHealth
       # @return [Array<String>] list of HTML-errors
       tempfile(page.body) do |file|
         proofer = ::HTMLProofer.check_file(file.path, config.html_proofer.to_h)
+        # NOTE: HTMLProofer raises if errors are found
         begin
           proofer.run
         rescue StandardError
           RuntimeError
-        end # NOTE: HTMLProofer raises if errors are found
+        end
+
         errors = build_test_failures(proofer.failed_tests).each do |error|
           add_issue(title: error)
         end

@@ -29,7 +29,7 @@ module SiteHealth
         finished_at
         runtime_in_seconds
       ]
-      rows = @data.map do |url, data|
+      rows = @data.map do |_, data|
         pagespeed_data = data.dig(:checks, :google_page_speed).data
         next unless pagespeed_data
 
@@ -65,7 +65,9 @@ module SiteHealth
       ]
 
       total_speed_score = pagespeed_data.dig(:rule_groups, :SPEED, :score)
-      [url, total_speed_score] + kbytes_columns + host_columns + [started_at, finished_at, runtime_in_seconds]
+
+      [url, total_speed_score] + kbytes_columns + host_columns +
+        [started_at, finished_at, runtime_in_seconds]
     end
 
     def bytes_to_kb(bytes, round: 1)

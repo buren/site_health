@@ -6,7 +6,6 @@ module SiteHealth
     name "redirect"
 
     def check
-      # @return [Boolean] determines whether the page is a redirect (HTTP 3XX or HTML meta redirect)
       add_data(redirect: page.redirect?)
     end
   end

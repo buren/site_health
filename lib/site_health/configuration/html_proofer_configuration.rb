@@ -50,7 +50,7 @@ module SiteHealth
     # @raise [ArgumentError] raises if invalid log level
     def log_level=(level)
       unless LOG_LEVELS.include?(level.to_sym)
-        raise ArgumentError, "unknown log level :#{level}, must be one of: #{LOG_LEVELS.join(',')}"
+        raise ArgumentError, "unknown log level :#{level}, must be one of: #{LOG_LEVELS.join(',')}" # rubocop:disable Metrics/LineLength
       end
 
       @log_level = level
@@ -61,7 +61,7 @@ module SiteHealth
     # @raise [ArgumentError] raises if invalid error sorting
     def error_sort=(sort)
       unless ERROR_SORTS.include?(sort.to_sym)
-        raise ArgumentError, "unknown sort order :#{sort}, must be one of: #{ERROR_SORTS.join(',')}"
+        raise ArgumentError, "unknown sort order :#{sort}, must be one of: #{ERROR_SORTS.join(',')}" # rubocop:disable Metrics/LineLength
       end
 
       @error_sort = sort

@@ -13,7 +13,9 @@ module SiteHealth
     #      on.every_found_url { {|url| puts "Found URL: #{url}" }
     #      on.every_page_title { {|title| puts "Page title: #{title}" }
     #      # you can add multiple blocks
-    #      on.every_page_title { |title| puts "[WARNING] Title too long!: #{title}" if title.length > 155 }
+    #      on.every_page_title do |title|
+    #        puts "[WARNING] Title too long!: #{title}" if title.length > 155
+    #      end
     #    end
     #
     #    event.emit_page_title(page_title)

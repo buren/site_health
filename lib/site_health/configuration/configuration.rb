@@ -52,7 +52,8 @@ module SiteHealth
       @checkers = Array(checkers).map! { |checker| register_checker(checker) }
     end
 
-    # @param [Checker, String, Symbol] checker additional checker to run can also be the name of an existing checker
+    # @param [Checker, String, Symbol] checker
+    #   additional checker to run can also be the name of an existing checker
     # @return [Checker] the registered checker
     def register_checker(checker)
       if [String, Symbol].include?(checker.class)

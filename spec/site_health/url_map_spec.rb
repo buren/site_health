@@ -6,7 +6,7 @@ require "site_health/url_map"
 RSpec.describe SiteHealth::UrlMap do
   describe "#[] & #[]=" do
     it "sets and gets value ands converts the key to a string" do
-      map = described_class.new.tap { |map| map[:wat] = :man }
+      map = described_class.new.tap { |m| m[:wat] = :man }
 
       expect(map[:wat]).to eq(:man)
       expect(map["wat"]).to eq(:man)
@@ -14,7 +14,7 @@ RSpec.describe SiteHealth::UrlMap do
   end
 
   it "quacks like an Enumerable" do
-    map = described_class.new.tap { |map| map[:wat] = :man }
+    map = described_class.new.tap { |m| m[:wat] = :man }
 
     expect(map.map.to_a).to eq([["wat", :man]])
     expect(map.to_a).to eq([["wat", :man]])

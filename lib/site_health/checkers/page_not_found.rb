@@ -8,7 +8,10 @@ module SiteHealth
       if page.missing?
         add_data(not_found: true)
         add_issue(title: 'page not found', severity: :major, priority: :high)
+        return
       end
+
+      add_data(not_found: false)
     end
   end
 

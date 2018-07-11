@@ -1,5 +1,5 @@
 require "spec_helper"
-require "site_health/w3c_validators_configuration"
+require "site_health/configuration/w3c_validators_configuration"
 
 RSpec.describe SiteHealth::W3CValidatorsConfiguration do
   describe "#css_config" do

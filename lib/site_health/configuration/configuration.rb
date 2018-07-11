@@ -1,7 +1,7 @@
 require "set"
 require "site_health/null_logger"
-require "site_health/html_proofer_configuration"
-require "site_health/w3c_validators_configuration"
+require "site_health/configuration/html_proofer_configuration"
+require "site_health/configuration/w3c_validators_configuration"
 
 module SiteHealth
   # Holds configuration data

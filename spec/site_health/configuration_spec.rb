@@ -1,6 +1,6 @@
 require "spec_helper"
 
-require "site_health/configuration"
+require "site_health/configuration/configuration"
 
 RSpec.describe SiteHealth::Configuration do
   describe "#w3c" do

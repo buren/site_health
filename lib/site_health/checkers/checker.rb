@@ -52,7 +52,7 @@ module SiteHealth
       @page = page
       @config = config
       @logger = config.logger
-      @issues = Issues.new
+      @issues = Issues.new(name)
       @data = CheckData.new
     end
 
@@ -64,7 +64,7 @@ module SiteHealth
       add_data(
         started_at: timer.started_at,
         finished_at: timer.finished_at,
-        runtime_in_seconds: timer.diff
+        runtime_in_seconds: timer.diff.to_f
       )
       yield(self) if block_given?
       self

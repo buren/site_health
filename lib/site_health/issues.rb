@@ -4,7 +4,10 @@ module SiteHealth
   class Issues
     include Enumerable
 
-    def initialize
+    attr_reader :id
+
+    def initialize(id)
+      @id = id
       @issues = []
     end
 

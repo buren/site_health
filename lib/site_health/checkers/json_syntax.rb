@@ -8,14 +8,14 @@ module SiteHealth
 
     def check
       # @return [String] the error message or "OK" if syntax is valid
-      data = begin
+      message = begin
         JSON.parse(page.body)
         'OK'
       rescue ::JSON::ParserError => e
         e.message
       end
 
-      add_data(parsing: data)
+      add_data(parsing: message)
     end
   end
 

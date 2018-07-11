@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "uri"
+require 'uri'
 
 module SiteHealth
   class Link
@@ -26,7 +26,7 @@ module SiteHealth
     def safe_parse_url(url)
       URI.parse(url)
     rescue URI::InvalidURIError
-      URI.parse("")
+      URI.parse('')
     end
   end
 end

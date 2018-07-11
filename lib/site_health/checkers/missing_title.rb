@@ -3,8 +3,8 @@
 module SiteHealth
   # Checks if HTML-meta title is present
   class MissingTitle < Checker
-    name "missing_title"
-    types "html"
+    name 'missing_title'
+    types 'html'
 
     def check
       # @return [Boolean] determines whether the title is missing
@@ -14,7 +14,7 @@ module SiteHealth
       add_data(missing: missing_title)
 
       if missing_title
-        add_issue(title: "page not found", severity: :medium, priority: :high)
+        add_issue(title: 'page not found', severity: :medium, priority: :high)
       end
     end
   end

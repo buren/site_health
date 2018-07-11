@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "logger"
+require 'logger'
 
 module SiteHealth
   # Don't log anyting / Send the logs to the abyss

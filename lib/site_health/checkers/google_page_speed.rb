@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 
 SiteHealth.require_optional_dependency(
-  "google/apis/pagespeedonline_v2",
-  gem_name: "google-api-client"
+  'google/apis/pagespeedonline_v2',
+  gem_name: 'google-api-client'
 )
 
 module SiteHealth
   class GooglePageSpeed < Checker
-    name "google_page_speed"
-    types "html"
+    name 'google_page_speed'
+    types 'html'
 
     Pagespeedonline = Google::Apis::PagespeedonlineV2
     PagespeedService = Pagespeedonline::PagespeedonlineService
@@ -35,7 +35,7 @@ module SiteHealth
     private
 
     # @return [Google::Apis::PagespeedonlineV2::Result, nil] Google page speed result
-    def perform_request(strategy: "desktop")
+    def perform_request(strategy: 'desktop')
       service.run_pagespeed(
         page.url.to_s,
         locale: config.locale,

@@ -1,17 +1,17 @@
 # frozen_string_literal: true
 
-require "spec_helper"
-require "site_health/timer"
+require 'spec_helper'
+require 'site_health/timer'
 
 RSpec.describe SiteHealth::Timer do
-  describe "::start" do
-    it "returns an instance of timer" do
+  describe '::start' do
+    it 'returns an instance of timer' do
       expect(SiteHealth::Timer.start).to be_a(SiteHealth::Timer)
     end
   end
 
-  describe "::measure" do
-    it "yields to block and returns the timer" do
+  describe '::measure' do
+    it 'yields to block and returns the timer' do
       timer = SiteHealth::Timer.measure { sleep 0.3 }
 
       expect(timer.diff > 0.3).to eq(true)
@@ -19,8 +19,8 @@ RSpec.describe SiteHealth::Timer do
     end
   end
 
-  describe "#start" do
-    it "returns the time when it started" do
+  describe '#start' do
+    it 'returns the time when it started' do
       time = Time.local(1990)
       timer = SiteHealth::Timer.new
 
@@ -32,8 +32,8 @@ RSpec.describe SiteHealth::Timer do
     end
   end
 
-  describe "#finish" do
-    it "returns the time when it finished" do
+  describe '#finish' do
+    it 'returns the time when it finished' do
       time = Time.local(1990)
       timer = SiteHealth::Timer.new
       timer.start
@@ -46,8 +46,8 @@ RSpec.describe SiteHealth::Timer do
     end
   end
 
-  describe "#diff" do
-    it "returns the diff in seconds" do
+  describe '#diff' do
+    it 'returns the diff in seconds' do
       time = Time.local(1990)
       timer = SiteHealth::Timer.new
 
@@ -61,13 +61,13 @@ RSpec.describe SiteHealth::Timer do
       end
     end
 
-    it "raises StandardError unless started" do
+    it 'raises StandardError unless started' do
       timer = SiteHealth::Timer.new
 
       expect { timer.diff }.to raise_error(StandardError)
     end
 
-    it "if not finished it returns the diff from the start time to current time" do
+    it 'if not finished it returns the diff from the start time to current time' do
       time = Time.local(1990)
       timer = SiteHealth::Timer.new
       timer.start

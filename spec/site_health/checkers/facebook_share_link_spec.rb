@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-require "spec_helper"
-require "site_health/checkers/facebook_share_link"
+require 'spec_helper'
+require 'site_health/checkers/facebook_share_link'
 
 RSpec.describe SiteHealth::FacebookShareLink do
-  describe "#should_check?" do
+  describe '#should_check?' do
     %w[
       https://stackoverflow.com
       https://developers.facebook.com/docs/sharing
@@ -12,26 +12,26 @@ RSpec.describe SiteHealth::FacebookShareLink do
       https://www.facebook.com/dialog/
       https://www.example.com/sharer/sharer.php
     ].each do |url|
-      it "returns false for urls that does *not* look like Facebook share links" do
-        page = mock_page(url: url, content_type: "html")
+      it 'returns false for urls that does *not* look like Facebook share links' do
+        page = mock_page(url: url, content_type: 'html')
         checker = SiteHealth::FacebookShareLink.new(page)
 
         expect(checker.should_check?).to eq(false)
       end
     end
 
-    it "returns true for url that looks like Facebook share links" do
-      url = "https://www.facebook.com/sharer/sharer.php"
-      page = mock_page(url: url, content_type: "html")
+    it 'returns true for url that looks like Facebook share links' do
+      url = 'https://www.facebook.com/sharer/sharer.php'
+      page = mock_page(url: url, content_type: 'html')
       checker = SiteHealth::FacebookShareLink.new(page)
 
       expect(checker.should_check?).to eq(true)
     end
   end
 
-  describe "#call" do
-    it "ignores non-absolute urls" do
-      url = "facebook.com/sharer/sharer.php"
+  describe '#call' do
+    it 'ignores non-absolute urls' do
+      url = 'facebook.com/sharer/sharer.php'
       page = mock_page(url: url)
       checker = SiteHealth::FacebookShareLink.new(page)
       checker.call
@@ -39,8 +39,8 @@ RSpec.describe SiteHealth::FacebookShareLink do
       expect(checker.issues.first.code).to eq(:invalid)
     end
 
-    xit "adds protocol to url that starts with //" do
-      url = "//facebook.com/sharer/sharer.php"
+    xit 'adds protocol to url that starts with //' do
+      url = '//facebook.com/sharer/sharer.php'
       page = mock_page(url: url)
       checker = SiteHealth::FacebookShareLink.new(page)
       checker.call
@@ -48,8 +48,8 @@ RSpec.describe SiteHealth::FacebookShareLink do
       expect(checker.issues.first.code).to eq(:valid)
     end
 
-    context "when using /dialog/feed path" do
-      base_url = "https://www.facebook.com/dialog/feed/"
+    context 'when using /dialog/feed path' do
+      base_url = 'https://www.facebook.com/dialog/feed/'
       # VALID EXAMPLE:
       #   https://www.facebook.com/dialog/feed?
       #     app_id=145634995501895
@@ -57,7 +57,7 @@ RSpec.describe SiteHealth::FacebookShareLink do
       #     &link=https%3A%2F%2Fdevelopers.facebook.com%2Fdocs%2Fdialogs%2F
       #     &redirect_uri=https://developers.facebook.com/tools/explorer
 
-      it "returns correct data" do
+      it 'returns correct data' do
         url = "#{base_url}?app_id=145634995501895&display=popup"
         page = mock_page(url: url)
         checker = SiteHealth::FacebookShareLink.new(page)
@@ -103,10 +103,10 @@ RSpec.describe SiteHealth::FacebookShareLink do
       end
     end
 
-    context "when using *deprecated* /sharer/ path" do
-      valid_base_url = "https://www.facebook.com/sharer/sharer.php"
-      share_url = "http://example.com"
-      bad_share_url = "example.com"
+    context 'when using *deprecated* /sharer/ path' do
+      valid_base_url = 'https://www.facebook.com/sharer/sharer.php'
+      share_url = 'http://example.com'
+      bad_share_url = 'example.com'
 
       [
         # url, status

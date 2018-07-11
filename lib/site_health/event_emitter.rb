@@ -38,7 +38,7 @@ module SiteHealth
           end
 
           define_method("every_#{name}") do |*_args, &block|
-            raise(ArgumentError, "block must be given!") unless block
+            raise(ArgumentError, 'block must be given!') unless block
             blocks_for(name) << block
           end
 

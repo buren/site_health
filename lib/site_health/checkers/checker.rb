@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require "site_health/check_data"
-require "site_health/issues"
-require "site_health/issue"
+require 'site_health/check_data'
+require 'site_health/issues'
+require 'site_health/issue'
 
 module SiteHealth
   # Parent class for all checkers (all checkers must inheirit from this class)
@@ -24,19 +24,19 @@ module SiteHealth
       html
     ].freeze
 
-    def self.name(name = "__get_value__")
-      if name == "__get_value__"
+    def self.name(name = '__get_value__')
+      if name == '__get_value__'
         return @name if @name
 
-        @name = (super() || SecureRandom.hex).downcase.gsub(/sitehealth::/, "")
+        @name = (super() || SecureRandom.hex).downcase.gsub(/sitehealth::/, '')
         return @name
       end
 
       @name = name.to_s
     end
 
-    def self.types(types = "__get_value__")
-      if types == "__get_value__"
+    def self.types(types = '__get_value__')
+      if types == '__get_value__'
         @types ||= CHECKABLE_TYPES
         return @types
       end
@@ -118,7 +118,7 @@ module SiteHealth
     # Abstract method that subclasses must implement
     # @raise [NotImplementedError] subclasses must implement
     def check
-      raise(NotImplementedError, "please implement!")
+      raise(NotImplementedError, 'please implement!')
     end
   end
 end

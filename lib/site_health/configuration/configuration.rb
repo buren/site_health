@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require "set"
-require "site_health/null_logger"
-require "site_health/configuration/html_proofer_configuration"
-require "site_health/configuration/w3c_validators_configuration"
+require 'set'
+require 'site_health/null_logger'
+require 'site_health/configuration/html_proofer_configuration'
+require 'site_health/configuration/w3c_validators_configuration'
 
 module SiteHealth
   # Holds configuration data
@@ -18,7 +18,7 @@ module SiteHealth
       @w3c = nil
       @google_page_speed_api_key = nil
       @logger = NullLogger.new
-      @locale = "en"
+      @locale = 'en'
     end
 
     # Set logger
@@ -61,7 +61,7 @@ module SiteHealth
       end
 
       unless checker.respond_to?(:check) || checker.instance_methods.include?(:check)
-        raise(InvalidCheckerError, "checker must implement #check")
+        raise(InvalidCheckerError, 'checker must implement #check')
       end
 
       @checkers << checker

@@ -7,7 +7,7 @@ module SiteHealth
     end
 
     def to_csv
-      to_matrix.map { |row| row.join(",") }.join("\n")
+      to_matrix.map { |row| row.join(',') }.join("\n")
     end
 
     def to_matrix

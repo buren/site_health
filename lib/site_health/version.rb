@@ -8,5 +8,5 @@ module SiteHealth
   # Major version
   MAJOR = 0
   # Current version
-  VERSION = [MAJOR, MINOR, PATCH].join(".").freeze
+  VERSION = [MAJOR, MINOR, PATCH].join('.').freeze
 end

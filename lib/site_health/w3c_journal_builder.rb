@@ -26,7 +26,7 @@ module SiteHealth
     # @return [W3CJournal]
     def self.build(result)
       W3CJournal.new(
-        message: (result.message || "").strip,
+        message: (result.message || '').strip,
         value: result.value,
         source: result.source,
         type: result.type,

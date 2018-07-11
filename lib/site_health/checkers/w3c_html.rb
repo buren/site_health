@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
-require "site_health/w3c_journal_builder"
-SiteHealth.require_optional_dependency("w3c_validators")
+require 'site_health/w3c_journal_builder'
+SiteHealth.require_optional_dependency('w3c_validators')
 
 module SiteHealth
   # Checks for various HTML errors and warnings (backed by the excellent W3CValidations gem)
   class W3CHTML < Checker
-    name "w3c_html"
-    types "html"
+    name 'w3c_html'
+    types 'html'
 
     def check
       result = check_content

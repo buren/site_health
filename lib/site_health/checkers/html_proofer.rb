@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
-require "tempfile"
-SiteHealth.require_optional_dependency("html-proofer")
+require 'tempfile'
+SiteHealth.require_optional_dependency('html-proofer')
 
 module SiteHealth
   # Checks for various HTML misstakes (backed by the excellent HTMLProofer gem)
   class HTMLProofer < Checker
-    name "html_proofer"
-    types "html"
+    name 'html_proofer'
+    types 'html'
 
     def check
       # @return [Array<String>] list of HTML-errors
@@ -33,7 +33,7 @@ module SiteHealth
       failed_tests.map do |failed_test|
         next if ignore_test_failure?(failed_test)
 
-        failed_test.split(".html:").last.strip # Removes file name from error message
+        failed_test.split('.html:').last.strip # Removes file name from error message
       end.compact
     end
 
@@ -42,9 +42,9 @@ module SiteHealth
     # @return [TrueClass, FalseClass] returns true if the failed test should be ignored
     def ignore_test_failure?(failed_test)
       return false unless config.html_proofer.ignore_missing_internal_links
-      return true if failed_test.include?("internally linking to")
-      return true if failed_test.include?("internal image")
-      return true if failed_test.include?("internal script")
+      return true if failed_test.include?('internally linking to')
+      return true if failed_test.include?('internal image')
+      return true if failed_test.include?('internal script')
 
       false
     end
@@ -53,7 +53,7 @@ module SiteHealth
     # @return [Object] whatever the passed block returns
     # @yieldparam [Tempfile] the temporary file
     def tempfile(string)
-      file = Tempfile.new([name, ".html"])
+      file = Tempfile.new([name, '.html'])
       begin
         file.write(string)
       ensure

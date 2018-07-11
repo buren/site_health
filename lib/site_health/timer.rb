@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "time"
+require 'time'
 
 module SiteHealth
   class Timer
@@ -32,7 +32,7 @@ module SiteHealth
     end
 
     def diff
-      fail(StandardError, "timer must be started") unless @started
+      fail(StandardError, 'timer must be started') unless @started
 
       finish = @finished || high_precision_time
       finish - @started

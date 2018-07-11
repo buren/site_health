@@ -34,7 +34,7 @@ module SiteHealth
       name:,
       title:,
       code: nil,
-      detail: "",
+      detail: '',
       severity: :unknown,
       priority: :unknown,
       links: [],
@@ -67,20 +67,20 @@ module SiteHealth
 
     def validate_severity!(severity)
       return if SEVERITIES.include?(severity)
-      severities = SEVERITIES.join(", ")
+      severities = SEVERITIES.join(', ')
       raise ArgumentError, "unknown value: '#{severity}', chose one of #{severities}."
     end
 
     def validate_priority!(priority)
       return if PRIORITIES.include?(priority)
-      priorities = PRIORITIES.join(", ")
+      priorities = PRIORITIES.join(', ')
       raise ArgumentError, "unknown value: '#{severity}', chose one of #{priorities}."
     end
 
     def validate_links!(links)
       links.each do |link|
         next if link.key?(:href)
-        raise ArgumentError, "href key must be present for every link"
+        raise ArgumentError, 'href key must be present for every link'
       end
     end
   end

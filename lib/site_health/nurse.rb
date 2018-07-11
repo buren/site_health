@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require "site_health/url_map"
-require "site_health/event_emitter"
-require "site_health/timer"
+require 'site_health/url_map'
+require 'site_health/event_emitter'
+require 'site_health/timer'
 
 module SiteHealth
   # Holds page analysis data

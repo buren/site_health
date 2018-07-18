@@ -1,9 +1,8 @@
 # frozen_string_literal: true
 
 module SiteHealth
+  # Represents a found issue inspired by the JSONAPI error spec
   class Issue
-    class MissingLinkHrefKey < ArgumentError; end
-
     PRIORITIES = %i[
       critial
       high

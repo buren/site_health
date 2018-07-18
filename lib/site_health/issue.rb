@@ -40,7 +40,7 @@ module SiteHealth
       meta: {}
     )
       @name = name
-      @code = code&.to_sym
+      @code = code
       @title = title.to_s
       @detail = detail.to_s
       @severity = severity.to_sym.tap { validate_severity!(severity) }

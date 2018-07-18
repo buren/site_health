@@ -29,9 +29,13 @@ module SiteHealth
 
     def check
       unless url.absolute?
-        title = "URL must be an absolute and include http(s):// see #{DOC_URL}"
-        add_issue(code: :invalid, title: title)
-        return
+        temp_url = url.dup.tap { |u| u.scheme = 'http' }
+
+        unless temp_url.absolute?
+          title = "URL must be an absolute and include http(s):// or // see #{DOC_URL}"
+          add_issue(code: :invalid, title: title)
+          return
+        end
       end
 
       if url.path.include?('/share')
@@ -52,7 +56,7 @@ module SiteHealth
     private
 
     def query
-      @query ||= URI.decode_www_form(url.query).to_h
+      @query ||= URI.decode_www_form(url.query.to_s).to_h
     end
 
     def check_url
@@ -61,8 +65,7 @@ module SiteHealth
         add_issue(code: :required_params_missing, title: 'invalid URL')
       end
 
-      # IIRC the only valid values for a regular web page are
-      # I'm not entirely sure though...
+      # IIRC the only valid values for a regular web page are (not sure though..)
       unless query['display'] == 'page' || query['display'] == 'popup'
         add_issue(code: :display_invalid, title: 'invalid URL')
       end

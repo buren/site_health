@@ -39,13 +39,25 @@ RSpec.describe SiteHealth::FacebookShareLink do
       expect(checker.issues.first.code).to eq(:invalid)
     end
 
-    it 'correctly validates url that starts with //' do
-      url = '//www.facebook.com/dialog/feed/?app_id=145634995501895&display=popup'
-      page = mock_page(url: url)
-      checker = SiteHealth::FacebookShareLink.new(page)
-      checker.call
 
-      expect(checker.issues).to be_empty
+    context 'URL that start with //' do
+      it 'returns no issues for valid URL' do
+        url = '//www.facebook.com/dialog/feed/?app_id=145634995501895&display=popup'
+        page = mock_page(url: url)
+        checker = SiteHealth::FacebookShareLink.new(page)
+        checker.call
+
+        expect(checker.issues).to be_empty
+      end
+
+      it 'returns issue for invalid URL' do
+        url = '//www.facebook'
+        page = mock_page(url: url)
+        checker = SiteHealth::FacebookShareLink.new(page)
+        checker.call
+
+        expect(checker.issues).not_to be_empty
+      end
     end
 
     context 'when using /dialog/feed path' do

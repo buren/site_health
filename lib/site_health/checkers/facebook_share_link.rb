@@ -29,7 +29,7 @@ module SiteHealth
 
     def check
       unless url.absolute?
-        temp_url = url.dup.tap { |u| u.scheme = 'http' }
+        temp_url = url.to_s.start_with?('//') ? URI.parse("http:#{url}") : url
 
         unless temp_url.absolute?
           title = "URL must be an absolute and include http(s):// or // see #{DOC_URL}"

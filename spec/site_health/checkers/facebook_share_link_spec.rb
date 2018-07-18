@@ -39,7 +39,6 @@ RSpec.describe SiteHealth::FacebookShareLink do
       expect(checker.issues.first.code).to eq(:invalid)
     end
 
-
     context 'URL that start with //' do
       it 'returns no issues for valid URL' do
         url = '//www.facebook.com/dialog/feed/?app_id=145634995501895&display=popup'

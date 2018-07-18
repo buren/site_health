@@ -17,7 +17,7 @@ module SiteHealth
     # @see Issue#initialize for supported keyword arguments
     def add(issue = nil, **args)
       unless issue
-        args[:name] ||= name
+        args[:name] ||= id
         issue = Issue.new(args)
       end
 

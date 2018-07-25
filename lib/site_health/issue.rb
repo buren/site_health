@@ -1,25 +1,31 @@
 # frozen_string_literal: true
 
+require 'set'
+
 module SiteHealth
   # Represents a found issue inspired by the JSONAPI error spec
   class Issue
-    PRIORITIES = %i[
-      critial
-      high
-      medium
-      low
-      fyi
-      unknown
-    ].freeze
+    PRIORITIES = Set.new(
+      %i[
+        critial
+        high
+        medium
+        low
+        fyi
+        unknown
+      ].freeze
+    )
 
-    SEVERITIES = %i[
-      critial
-      major
-      medium
-      low
-      fyi
-      unknown
-    ].freeze
+    SEVERITIES = Set.new(
+      %i[
+        critial
+        major
+        medium
+        low
+        fyi
+        unknown
+      ].freeze
+    )
 
     attr_reader :name, :code, :title, :detail, :links, :meta, :severity, :priority
 
@@ -67,13 +73,13 @@ module SiteHealth
 
     def validate_severity!(severity)
       return if SEVERITIES.include?(severity)
-      severities = SEVERITIES.join(', ')
+      severities = SEVERITIES.to_a.join(', ')
       raise ArgumentError, "unknown value: '#{severity}', chose one of #{severities}."
     end
 
     def validate_priority!(priority)
       return if PRIORITIES.include?(priority)
-      priorities = PRIORITIES.join(', ')
+      priorities = PRIORITIES.to_a.join(', ')
       raise ArgumentError, "unknown value: '#{severity}', chose one of #{priorities}."
     end
 

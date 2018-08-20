@@ -83,6 +83,7 @@ RSpec.describe SiteHealth::Issue do
         detail: 'a detail',
         severity: :major,
         priority: :high,
+        url: 'https://example.com',
         links: [{ href: 'http://example.com', about: 'just an example' }],
         meta: { extra: :data }
       )
@@ -94,6 +95,7 @@ RSpec.describe SiteHealth::Issue do
         detail: 'a detail',
         severity: :major,
         priority: :high,
+        url: 'https://example.com',
         links: [{ href: 'http://example.com', about: 'just an example' }],
         meta: { extra: :data },
       }

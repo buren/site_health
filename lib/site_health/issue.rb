@@ -27,7 +27,7 @@ module SiteHealth
       ].freeze
     )
 
-    attr_reader :name, :code, :title, :detail, :links, :meta, :severity, :priority
+    attr_reader :name, :code, :title, :detail, :url, :links, :meta, :severity, :priority
 
     # Initialize an Issue
     # @param [String, Symbol] code an application-specific error code.
@@ -42,6 +42,7 @@ module SiteHealth
       detail: '',
       severity: :unknown,
       priority: :unknown,
+      url: nil,
       links: [],
       meta: {}
     )
@@ -51,6 +52,7 @@ module SiteHealth
       @detail = detail.to_s
       @severity = severity.to_sym.tap { validate_severity!(severity) }
       @priority = priority.to_sym.tap { validate_priority!(priority) }
+      @url = url
       @links = links.tap { validate_links!(links) }
       @meta = meta
     end
@@ -64,6 +66,7 @@ module SiteHealth
         detail: detail,
         severity: severity,
         priority: priority,
+        url: url,
         links: links,
         meta: meta,
       }

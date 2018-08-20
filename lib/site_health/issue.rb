@@ -27,7 +27,8 @@ module SiteHealth
       ].freeze
     )
 
-    attr_reader :name, :code, :title, :detail, :url, :links, :meta, :severity, :priority
+    attr_reader :name, :code, :title, :detail, :url, :links, :meta,
+                :severity, :priority
 
     # Initialize an Issue
     # @param [String, Symbol] code an application-specific error code.

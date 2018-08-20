@@ -94,7 +94,7 @@ module SiteHealth
     # @return [Array<Issue>] the current list of issues
     # @see Issue#initialize for supported arguments
     def add_issue(**args)
-      issues << Issue.new(**args.merge(name: name))
+      issues << Issue.new({ name: name, url: page.url }.merge!(**args))
     end
 
     # Adds data

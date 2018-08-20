@@ -48,6 +48,16 @@ json = JSON.pretty_generate(nurse.journal)
 File.write("result.json", json)
 ```
 
+Each issue
+
+```ruby
+SiteHealth.check_urls(urls) do |nurse|
+  nurse.clerk do |clerk|
+    clerk.every_issue { |issue| puts "#{issue.severity}, #{issue.title}" }
+  end
+end
+```
+
 Event handlers
 
 ```ruby

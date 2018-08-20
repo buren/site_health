@@ -61,6 +61,19 @@ RSpec.describe TestEventEmitter do
       expect(result).to eq(data)
     end
 
+    it 'can emit event with #emit_each method' do
+      result = 0
+
+      handler = described_class.new do |on|
+        on.every_data_point { |value| result += value }
+      end
+
+      values = [2, 3, 4]
+      handler.emit_each(:data_point, values)
+
+      expect(result).to eq(values.inject(:+))
+    end
+
     it 'raises ArgumentError unless block given' do
       described_class.new do |on|
         expect do

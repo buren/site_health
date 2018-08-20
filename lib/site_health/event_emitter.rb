@@ -37,6 +37,16 @@ module SiteHealth
             blocks_for(name).each { |block| block.call(*args) }
           end
 
+          define_method(:emit_each) do |*args|
+            public_send("emit_each_#{args.shift}", *args)
+          end
+
+          define_method("emit_each_#{name}") do |array|
+            blocks_for(name).each do |block|
+              array.each { |o| block.call(o) }
+            end
+          end
+
           define_method("every_#{name}") do |*_args, &block|
             raise(ArgumentError, 'block must be given!') unless block
             blocks_for(name) << block

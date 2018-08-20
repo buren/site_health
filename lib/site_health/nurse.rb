@@ -35,7 +35,7 @@ module SiteHealth
     # @yieldparam [Object] the event emiiter
     def clerk
       @clerk ||= begin
-        events = %w[journal failed_url check].concat(checkers.map(&:name))
+        events = %w[journal failed_url check issue].concat(checkers.map(&:name))
         EventEmitter.define(*events).new.tap { |e| yield(e) if block_given? }
       end
     end
@@ -79,6 +79,7 @@ module SiteHealth
 
         clerk.emit_check(checker)
         clerk.emit(checker.name, checker)
+        clerk.emit_each_issue(checker.issues)
 
         journal[checker.name.to_sym] = checker.to_h
       end

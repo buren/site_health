@@ -35,7 +35,7 @@ module SiteHealth
     # @yieldparam [Object] the event emiiter
     def clerk
       @clerk ||= begin
-        events = %w[journal failed_url check issue].concat(checkers.map(&:name))
+        events = %w[journal failed_url check page issue].concat(checkers.map(&:name))
         EventEmitter.define(*events).new.tap { |e| yield(e) if block_given? }
       end
     end
@@ -44,9 +44,10 @@ module SiteHealth
     def check_page(page)
       @pages_journal[page.url].tap do |journal|
         timer = Timer.start
+        clerk.emit_page(page)
+
         journal[:started_at] = timer.started_at
         journal[:checked] = true
-
         journal[:url] = page.url
         journal[:content_type] = page.content_type
         journal[:http_status] = page.code

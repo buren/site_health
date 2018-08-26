@@ -14,7 +14,7 @@ module SiteHealth
       add_data(missing: missing_title)
 
       if missing_title
-        add_issue(title: 'page not found', severity: :medium, priority: :high)
+        add_issue(title: 'missing title', severity: :medium, priority: :high)
       end
     end
   end

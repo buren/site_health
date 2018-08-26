@@ -17,7 +17,6 @@ module SiteHealth
         begin
           proofer.run
         rescue StandardError
-          RuntimeError
         end
 
         errors = build_test_failures(proofer.failed_tests).each do |error|

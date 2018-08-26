@@ -27,8 +27,8 @@ module SiteHealth
       ].freeze
     )
 
-    attr_reader :name, :code, :title, :detail, :url, :links, :meta,
-                :severity, :priority
+    attr_accessor :name, :code, :url, :meta
+    attr_reader :title, :detail, :links, :severity, :priority
 
     # Initialize an Issue
     # @param [String, Symbol] code an application-specific error code.
@@ -47,15 +47,15 @@ module SiteHealth
       links: [],
       meta: {}
     )
-      @name = name
-      @code = code
-      @title = title.to_s
-      @detail = detail.to_s
-      @severity = severity.to_sym.tap { validate_severity!(severity) }
-      @priority = priority.to_sym.tap { validate_priority!(priority) }
-      @url = url
-      @links = links.tap { validate_links!(links) }
-      @meta = meta
+      self.name = name
+      self.code = code
+      self.url = url
+      self.meta = meta
+      self.title = title
+      self.detail = detail
+      self.links = links
+      self.severity = severity
+      self.priority = priority
     end
 
     # @return [Hash] hash representation of the object
@@ -73,25 +73,56 @@ module SiteHealth
       }
     end
 
-    private
-
-    def validate_severity!(severity)
-      return if SEVERITIES.include?(severity)
-      severities = SEVERITIES.to_a.join(', ')
-      raise ArgumentError, "unknown value: '#{severity}', chose one of #{severities}."
+    # Set issue title.
+    # @param [String] title
+    def title=(title)
+      @title = title.to_s
     end
 
-    def validate_priority!(priority)
-      return if PRIORITIES.include?(priority)
-      priorities = PRIORITIES.to_a.join(', ')
-      raise ArgumentError, "unknown value: '#{severity}', chose one of #{priorities}."
+    # Set issue detail.
+    # @param [String] detail
+    def detail=(detail)
+      @detail = detail.to_s
     end
 
-    def validate_links!(links)
+    # Set issue links.
+    # @param [Array<Hash>] links
+    # @raise [ArgumentError] if href key is not present
+    def links=(links)
       links.each do |link|
         next if link.key?(:href)
         raise ArgumentError, 'href key must be present for every link'
       end
+
+      @links = links
+    end
+
+    # Set issue priority.
+    # @param [String, Symbol] priority
+    # @raise [ArgumentError] if priority is unknown
+    def priority=(priority)
+      priority = priority.to_sym
+
+      unless PRIORITIES.include?(priority)
+        priorities = PRIORITIES.to_a.join(', ')
+        raise ArgumentError, "unknown value: '#{priority}', chose one of #{priorities}."
+      end
+
+      @priority = priority
+    end
+
+    # Set issue severity.
+    # @param [String, Symbol] severity
+    # @raise [ArgumentError] if severity is unknown
+    def severity=(severity)
+      severity = severity.to_sym
+
+      unless SEVERITIES.include?(severity)
+        severities = SEVERITIES.to_a.join(', ')
+        raise ArgumentError, "unknown value: '#{severity}', chose one of #{severities}."
+      end
+
+      @severity = severity
     end
   end
 end

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'logger'
-
 require 'spidr'
 
 require 'site_health/version'

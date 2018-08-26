@@ -35,7 +35,7 @@ module SiteHealth
     # @yieldparam [Object] the event emiiter
     def clerk
       @clerk ||= begin
-        events = %w[journal failed_url check issue].concat(checkers.map(&:name))
+        events = %w[journal failed_url check page issue].concat(checkers.map(&:name))
         EventEmitter.define(*events).new.tap { |e| yield(e) if block_given? }
       end
     end
@@ -44,9 +44,10 @@ module SiteHealth
     def check_page(page)
       @pages_journal[page.url].tap do |journal|
         timer = Timer.start
+        clerk.emit_page(page)
+
         journal[:started_at] = timer.started_at
         journal[:checked] = true
-
         journal[:url] = page.url
         journal[:content_type] = page.content_type
         journal[:http_status] = page.code
@@ -84,6 +85,32 @@ module SiteHealth
         journal[checker.name.to_sym] = checker.to_h
       end
       journal
+    end
+
+    # Provides transparent access to the methods in {#clerk}.
+    # @param [Symbol] name
+    #   The name of the missing method.
+    # @param [Array] arguments
+    #   Additional arguments for the missing method.
+    # @raise [NoMethodError]
+    #   The missing method did not map to a method in {#clerk}.
+    # @see #clerk
+    def method_missing(method, *args, &block)
+      if clerk.respond_to?(method)
+        return clerk.public_send(method, *args, &block)
+      end
+
+      super
+    end
+
+    # @param [Symbol] name
+    #   The name of the missing method.
+    # @param [Boolean] include_private optional (default: false)
+    #   Whether to include private methods
+    # @return [Boolean]
+    #   true if it can respond to method name, false otherwise
+    def respond_to_missing?(method, include_private = false)
+      clerk.respond_to?(method, include_private) || super
     end
   end
 end

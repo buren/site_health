@@ -11,6 +11,7 @@ module SiteHealth
 
     def check
       result = check_content
+      # TODO: Add issues
       add_data(
         errors: result.errors.map { |e| W3CJournalBuilder.build(e) },
         warnings: result.warnings.map { |e| W3CJournalBuilder.build(e) }

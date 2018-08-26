@@ -86,5 +86,31 @@ module SiteHealth
       end
       journal
     end
+
+    # Provides transparent access to the methods in {#clerk}.
+    # @param [Symbol] name
+    #   The name of the missing method.
+    # @param [Array] arguments
+    #   Additional arguments for the missing method.
+    # @raise [NoMethodError]
+    #   The missing method did not map to a method in {#clerk}.
+    # @see #clerk
+    def method_missing(method, *args, &block)
+      if clerk.respond_to?(method)
+        return clerk.public_send(method, *args, &block)
+      end
+
+      super
+    end
+
+    # @param [Symbol] name
+    #   The name of the missing method.
+    # @param [Boolean] include_private optional (default: false)
+    #   Whether to include private methods
+    # @return [Boolean]
+    #   true if it can respond to method name, false otherwise
+    def respond_to_missing?(method, include_private = false)
+      clerk.respond_to?(method, include_private) || super
+    end
   end
 end

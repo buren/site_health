@@ -22,6 +22,18 @@ RSpec.describe SiteHealth::Nurse do
     end
   end
 
+  describe '#respond_to_missing?' do
+    it 'returns true for method that exist on clerk' do
+      nurse = described_class.new
+      expect(nurse.respond_to?(:every_issue)).to eq(true)
+    end
+
+    it 'returns false for method that does *not* exist on clerk' do
+      nurse = described_class.new
+      expect(nurse.respond_to?(:every_watman)).to eq(false)
+    end
+  end
+
   describe '#check_page'
   describe '#lab_results'
 end

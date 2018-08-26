@@ -8,7 +8,11 @@ module SiteHealth
 
     def check
       # @return [Array<String>] list of XML errors
-      add_data(errors: page.doc.errors.map(&:to_s))
+      errors = page.doc.errors.map(&:to_s)
+      errors.each do |error|
+        add_issue(title: 'XML error', detail: error, severity: :major, priority: :high)
+      end
+      add_data(errors: errors)
     end
   end
 

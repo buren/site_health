@@ -6,25 +6,25 @@ require 'site_health/checkers/missing_description'
 
 RSpec.describe SiteHealth::MissingDescription do
   describe '#call' do
-    it 'returns false if description is present' do
+    it 'adds no issues if description is present and "correct"' do
       page = mock_test_page('html/index.html')
       checker = described_class.new(page).call
 
-      expect(checker.data[:missing]).to eq(false)
+      expect(checker.issues).to be_empty
     end
 
-    it 'returns true if description is missing' do
+    it 'adds issue if description is missing' do
       page = mock_test_page('html/missing_description.html')
       checker = described_class.new(page).call
 
-      expect(checker.data[:missing]).to eq(true)
+      expect(checker.issues.first&.title).to eq('description missing')
     end
 
-    it 'returns true if description is present, but empty' do
+    it 'adds issue if description is present, but empty' do
       page = mock_test_page('html/empty_description.html')
       checker = described_class.new(page).call
 
-      expect(checker.data[:missing]).to eq(true)
+      expect(checker.issues.first&.title).to eq('description missing')
     end
   end
 

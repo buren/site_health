@@ -44,6 +44,15 @@ module SiteHealth
       @types = Array(types).map(&:to_sym)
     end
 
+    def self.issue_types(types = '__get_value__')
+      if types == '__get_value__'
+        return @issues_types ||= {}
+      end
+
+      default = types.fetch(:_default, {})
+      @issues_types = types.map { |key, data| [key, default.merge(data)] }.to_h
+    end
+
     attr_reader :page, :config, :logger, :issues, :data
 
     # @param [Spidr::Page] page the crawled page
@@ -85,6 +94,11 @@ module SiteHealth
       self.class.types
     end
 
+    # @return [Hash] issue types data
+    def issue_types
+      self.class.issue_types
+    end
+
     # @return [Boolean] determines whether the checker should run
     def should_check?
       types.any? { |type| page.public_send("#{type}?") }
@@ -95,6 +109,14 @@ module SiteHealth
     # @see Issue#initialize for supported arguments
     def add_issue(**args)
       issues << Issue.new({ name: name, url: page.url }.merge!(**args))
+    end
+
+    def add_issue_type(type)
+      data = issue_types.fetch(type) do
+        raise(ArgumentError, "unknown issue type #{type}, known types are: #{issue_types.keys.join(', ')}") # rubocop:disable Metrics/LineLength
+      end
+
+      add_issue(data)
     end
 
     # Adds data

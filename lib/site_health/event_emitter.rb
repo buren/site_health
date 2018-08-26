@@ -21,6 +21,7 @@ module SiteHealth
     #    event.emit_page_title(page_title)
     #    event.emmit_found_url(url)
     def self.define(*event_names)
+      # rubocop:disable Metrics/BlockLength
       Class.new do
         def initialize
           yield(self) if block_given?
@@ -62,6 +63,7 @@ module SiteHealth
           end
         end
       end
+      # rubocop:enable Metrics/BlockLength
     end
   end
 end

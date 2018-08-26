@@ -17,6 +17,7 @@ module SiteHealth
         e.message
       end
 
+      add_issue(title: 'JSON parse error', detail: message, severity: :major, priority: :high)
       add_data(parsing: message)
     end
   end

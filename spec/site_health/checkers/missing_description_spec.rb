@@ -20,6 +20,20 @@ RSpec.describe SiteHealth::MissingDescription do
       expect(checker.issues.first&.title).to eq('description missing')
     end
 
+    it 'adds issue with correct priority if description is missing' do
+      page = mock_test_page('html/missing_description.html')
+      checker = described_class.new(page).call
+
+      expect(checker.issues.first&.priority).to eq(:high)
+    end
+
+    it 'adds issue with correct severity if description is missing' do
+      page = mock_test_page('html/missing_description.html')
+      checker = described_class.new(page).call
+
+      expect(checker.issues.first&.severity).to eq(:medium)
+    end
+
     it 'adds issue if description is present, but empty' do
       page = mock_test_page('html/empty_description.html')
       checker = described_class.new(page).call

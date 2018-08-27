@@ -7,9 +7,11 @@ module SiteHealth
     types 'html'
     issue_types({
       _default: {
+        severity: :medium,
+        priority: :medium,
         links: [{ href: 'https://moz.com/learn/seo/meta-description' }]
       },
-      missing: { title: 'description missing' },
+      missing: { title: 'description missing', priority: :high  },
       too_long: { title: 'description too long' },
       too_short: { title: 'description too short' },
     })

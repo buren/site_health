@@ -167,7 +167,7 @@ RSpec.describe SiteHealth::Checker do
       expect { checker.add_issue_type(:watman) }.to raise_error(ArgumentError)
     end
 
-    it 'adds issue from ISSUES' do
+    it 'adds issue' do
       page = Struct.new(:url).new('http://example.com/wat')
       klass = Class.new(described_class) do
         issue_types missing: { title: 'missing' }
@@ -178,15 +178,15 @@ RSpec.describe SiteHealth::Checker do
       expect(checker.issues.first.title).to eq('missing')
     end
 
-    it 'adds issue from ISSUES with default data' do
+    it 'adds issue with default data' do
       page = Struct.new(:url).new('http://example.com/wat')
       klass = Class.new(described_class) do
-        issue_types missing: { title: 'missing' }, _default: { code: 500 }
+        issue_types missing: { title: 'missing' }, _default: { code: :not_found }
       end
       checker = klass.new(page)
       checker.add_issue_type(:missing)
 
-      expect(checker.issues.first.code).to eq(500)
+      expect(checker.issues.first.code).to eq(:not_found)
       expect(checker.issues.first.title).to eq('missing')
     end
   end

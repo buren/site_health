@@ -4,11 +4,18 @@ module SiteHealth
   # Checks if HTML-meta title is present
   class PageNotFound < Checker
     name 'page_not_found'
+    issue_types(
+      not_found: {
+        title: 'Page not found',
+        severity: :medium,
+        priority: :high
+      }
+    )
 
     def check
       if page.missing?
         add_data(not_found: true)
-        add_issue(title: 'page not found', severity: :major, priority: :high)
+        add_issue_type(:not_found)
         return
       end
 

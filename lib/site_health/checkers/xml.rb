@@ -5,13 +5,19 @@ module SiteHealth
   class XML < Checker
     name 'xml'
     types 'xml'
+    issue_types(
+      parse_error: {
+        title: 'XML error',
+        severity: :major,
+        priority: :high,
+      }
+    )
 
     def check
       errors = page.doc.errors.map(&:to_s)
       errors.each do |error|
-        add_issue(title: 'XML error', detail: error, severity: :major, priority: :high)
+        add_issue_type(:parse_error, detail: error)
       end
-      add_data(errors: errors)
     end
   end
 

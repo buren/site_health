@@ -9,7 +9,6 @@ module SiteHealth
     types 'json'
 
     def check
-      # @return [String] the error message or "OK" if syntax is valid
       message = begin
         JSON.parse(page.body)
         'OK'

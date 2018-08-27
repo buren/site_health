@@ -7,7 +7,6 @@ module SiteHealth
     types 'xml'
 
     def check
-      # @return [Array<String>] list of XML errors
       errors = page.doc.errors.map(&:to_s)
       errors.each do |error|
         add_issue(title: 'XML error', detail: error, severity: :major, priority: :high)

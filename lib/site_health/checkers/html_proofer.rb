@@ -10,7 +10,6 @@ module SiteHealth
     types 'html'
 
     def check
-      # @return [Array<String>] list of HTML-errors
       tempfile(page.body) do |file|
         proofer = ::HTMLProofer.check_file(file.path, config.html_proofer.to_h)
         # NOTE: HTMLProofer raises if errors are found

@@ -4,11 +4,8 @@ require 'uri'
 
 module SiteHealth
   class FacebookShareLink < Checker
-    name 'facebook_share_link'
-    types 'html'
-
     DOC_URL = 'https://developers.facebook.com/docs/sharing/reference/feed-dialog'
-
+    DOC_REF = "See Facebooks documentation at #{DOC_URL}."
     DEPRECATION_NOTICE = <<~DEPNOTICE
       [DEPCREATED]
       StackOverflow
@@ -18,6 +15,40 @@ module SiteHealth
       Official answer from fb team
        https://developers.facebook.com/x/bugs/357750474364812/
     DEPNOTICE
+
+    name 'facebook_share_link'
+    types 'html'
+    issue_types({
+      _default: {
+        title: 'URL Invalid',
+        links:  [{ href: DOC_URL }],
+      },
+      not_absolute_url: {
+        detail: "URL must be absolute. #{DOC_REF}",
+      },
+      app_id_query_param: {
+        detail: "app_id query param invalid. #{DOC_REF}",
+      },
+      display_query_param: {
+        detail: "display query param invalid. #{DOC_REF}",
+      },
+      link_query_param: {
+        detail: "link query param invalid - must be a valid URL. #{DOC_REF}",
+      },
+      redirect_uri_query_param: {
+        detail: "redirect_uri query param invalid - must be a valid URL. #{DOC_REF}",
+      },
+      deprecated_url_style: {
+        title: 'URL-style depcreated',
+        detail: "This style of Facebook share URL has been deprecated. #{DOC_URL}\n#{DEPRECATION_NOTICE}", # rubocop:disable Metrics/LineLength
+      },
+      sharer_path: {
+        detail: "Wrong sharer path. #{DOC_URL}\n#{DEPRECATION_NOTICE}",
+      },
+      u_query_param: {
+        detail: "u query param must be a valid URL. #{DOC_URL}\n#{DEPRECATION_NOTICE}",
+      },
+    })
 
     def should_check?
       return false unless super
@@ -32,20 +63,18 @@ module SiteHealth
         temp_url = url.to_s.start_with?('//') ? URI.parse("http:#{url}") : url
 
         unless temp_url.absolute?
-          title = "URL must be an absolute and include http(s):// or // see #{DOC_URL}"
-          add_issue(code: :invalid, title: title)
-          return
+          return add_issue_type(:not_absolute_url)
         end
       end
 
       if url.path.include?('/share')
-        check_url_deprecated
-        return
+        return check_url_deprecated
       end
 
       check_url
     end
 
+    # @return [Boolean] true if the link looks like a Facebook share URL
     def look_like_facebook_share_url?
       base_url = "#{url.host}#{url.path}"
 
@@ -60,37 +89,34 @@ module SiteHealth
     end
 
     def check_url
-      # check presence of required params
-      unless query.key?('app_id') && query.key?('display')
-        add_issue(code: :required_params_missing, title: 'invalid URL')
+      unless query.key?('app_id')
+        add_issue_type(:app_id_query_param)
       end
 
-      # IIRC the only valid values for a regular web page are (not sure though..)
+      # IIRC the only valid values for a regular web page are page and popup (not sure though..)
       unless query['display'] == 'page' || query['display'] == 'popup'
-        add_issue(code: :display_invalid, title: 'invalid URL')
+        add_issue_type(:display_query_param)
       end
 
       if query['link'] && !Link.valid?(query['link'])
-        add_issue(code: :link_invalid, title: 'link-param must be a valid URL')
+        add_issue_type(:link_query_param)
       end
 
       if query['redirect_uri'] && !Link.valid?(query['redirect_uri'])
-        add_issue(code: :redirect_uri_invalid, title: 'redirect_uri-param must be a valid URL')
+        add_issue_type(:redirect_uri_query_param)
       end
     end
 
     def check_url_deprecated
+      add_issue_type(:deprecated_url_style)
+
       unless url.path.include?('/sharer/sharer.php') || url.path.include?('/sharer.php')
-        add_issue(code: :invalid, title: "wrong sharer path #{DEPRECATION_NOTICE}")
-        return
+        add_issue_type(:sharer_path)
       end
 
       unless Link.valid?(query['u'])
-        add_issue(code: :invalid, title: "u-param must be a valid url #{DEPRECATION_NOTICE}")
-        return
+        add_issue_type(:u_query_param)
       end
-
-      add_issue(code: :deprecated, title: "URL is valid, however: #{DEPRECATION_NOTICE}")
     end
   end
 

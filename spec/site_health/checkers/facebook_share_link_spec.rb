@@ -36,7 +36,7 @@ RSpec.describe SiteHealth::FacebookShareLink do
       checker = SiteHealth::FacebookShareLink.new(page)
       checker.call
 
-      expect(checker.issues.first.code).to eq(:invalid)
+      expect(checker.issues.map(&:code)).to include(:not_absolute_url)
     end
 
     context 'URL that start with //' do
@@ -96,10 +96,10 @@ RSpec.describe SiteHealth::FacebookShareLink do
 
       [
         # url, code
-        ["#{base_url}?app_id=145634995501895&display=popup&link=developers.facebook.com%2Fdocs%2Fdialogs%2F", :link_invalid],
-        ["#{base_url}?app_id=145634995501895&display=popup&redirect_uri=developers.facebook.com/tools/explorer", :redirect_uri_invalid],
-        ["#{base_url}?app_id=145634995501895", :required_params_missing],
-        ["#{base_url}?display=popup", :required_params_missing],
+        ["#{base_url}?app_id=145634995501895&display=popup&link=developers.facebook.com%2Fdocs%2Fdialogs%2F", :link_query_param],
+        ["#{base_url}?app_id=145634995501895&display=popup&redirect_uri=developers.facebook.com/tools/explorer", :redirect_uri_query_param],
+        ["#{base_url}?app_id=145634995501895", :display_query_param],
+        ["#{base_url}?display=popup", :app_id_query_param],
       ].each do |data|
         url, status = data
 
@@ -107,9 +107,8 @@ RSpec.describe SiteHealth::FacebookShareLink do
           page = mock_page(url: url)
           checker = SiteHealth::FacebookShareLink.new(page)
           checker.call
-          issue = checker.issues.detect { |i| i.code == status }
 
-          expect(issue.code).to eq(status)
+          expect(checker.issues.map(&:code)).to include(status)
         end
       end
     end
@@ -121,12 +120,12 @@ RSpec.describe SiteHealth::FacebookShareLink do
 
       [
         # url, status
-        ["#{valid_base_url}?u=#{share_url}", :deprecated],
-        ["https://facebook.com/sharer/sharer.php?u=#{share_url}", :deprecated],
-        ["http://facebook.com/sharer/sharer.php?u=#{share_url}", :deprecated],
-        ["https://www.facebook.com/sharer.php?u=#{share_url}", :deprecated],
-        ["https://www.facebook.com/share?u=#{share_url}", :invalid],
-        ["#{valid_base_url}?u=#{bad_share_url}", :invalid],
+        ["#{valid_base_url}?u=#{share_url}", :deprecated_url_style],
+        ["https://facebook.com/sharer/sharer.php?u=#{share_url}", :deprecated_url_style],
+        ["http://facebook.com/sharer/sharer.php?u=#{share_url}", :deprecated_url_style],
+        ["https://www.facebook.com/sharer.php?u=#{share_url}", :deprecated_url_style],
+        ["https://www.facebook.com/share?u=#{share_url}", :sharer_path],
+        ["#{valid_base_url}?u=#{bad_share_url}", :u_query_param],
       ].each do |data|
         url, status = data
 
@@ -135,17 +134,18 @@ RSpec.describe SiteHealth::FacebookShareLink do
           checker = SiteHealth::FacebookShareLink.new(page)
           checker.call
 
-          expect(checker.issues.first.code).to eq(status)
+          expect(checker.issues.map(&:code)).to include(status)
         end
 
-        it "adds deprecated notice for #{url}" do
+        it "adds #{status} issue for #{url}" do
           page = mock_page(url: url)
           checker = SiteHealth::FacebookShareLink.new(page)
           checker.call
-          title = checker.issues.first.title
+          issue = checker.issues.detect { |i| i.code == status }
           deprecated_notice = checker.class::DEPRECATION_NOTICE
 
-          expect(title.include?(deprecated_notice)).to eq(true)
+
+          expect(issue&.detail&.include?(deprecated_notice)).to eq(true)
         end
       end
     end

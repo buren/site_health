@@ -7,17 +7,18 @@ module SiteHealth
   class JSONSyntax < Checker
     name 'json_syntax'
     types 'json'
+    issue_types({
+      parse_error: {
+        title: 'JSON parse error',
+        severity: :major,
+        priority: :high,
+      }
+    })
 
     def check
-      message = begin
-        JSON.parse(page.body)
-        'OK'
-      rescue ::JSON::ParserError => e
-        e.message
-      end
-
-      add_issue(title: 'JSON parse error', detail: message, severity: :major, priority: :high)
-      add_data(parsing: message)
+      JSON.parse(page.body)
+    rescue ::JSON::ParserError => e
+      add_issue_type(:parse_error, detail: e.message)
     end
   end
 

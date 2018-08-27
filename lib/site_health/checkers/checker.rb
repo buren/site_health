@@ -118,12 +118,12 @@ module SiteHealth
       issues << Issue.new({ name: name, url: page.url }.merge!(**args))
     end
 
-    def add_issue_type(type)
+    def add_issue_type(type, **args)
       data = issue_types.fetch(type) do
         raise(ArgumentError, "unknown issue type #{type}, known types are: #{issue_types.keys.join(', ')}") # rubocop:disable Metrics/LineLength
       end
 
-      add_issue(data)
+      add_issue(data.merge(**args))
     end
 
     # Adds data

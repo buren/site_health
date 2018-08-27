@@ -189,6 +189,19 @@ RSpec.describe SiteHealth::Checker do
       expect(checker.issues.first.code).to eq(:not_found)
       expect(checker.issues.first.title).to eq('missing')
     end
+
+    it 'adds issue and arguments' do
+      page = Struct.new(:url).new('http://example.com/wat')
+      klass = Class.new(described_class) do
+        issue_types missing: { title: 'missing' }, _default: { code: :not_found }
+      end
+      checker = klass.new(page)
+      checker.add_issue_type(:missing, detail: 'watman')
+
+      expect(checker.issues.first.code).to eq(:not_found)
+      expect(checker.issues.first.title).to eq('missing')
+      expect(checker.issues.first.detail).to eq('watman')
+    end
   end
 
   describe '#add_data' do

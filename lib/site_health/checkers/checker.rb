@@ -50,13 +50,13 @@ module SiteHealth
     # @return [Hash] the issues types data
     def self.issue_types(types = :__get_value__)
       if types == :__get_value__
-        return @issues_types ||= {}
+        return @issue_types ||= {}
       end
 
       default = types.fetch(:_default, {})
-      @issues_types = types.map do |key, data|
-        type_data = { code: key }.merge!(default).merge!(data)
-        [key, type_data]
+      @issue_types = types.map do |key, data|
+        issue_data = { code: key }.merge!(default).merge!(data)
+        [key, issue_data]
       end.to_h
     end
 

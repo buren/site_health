@@ -5,22 +5,23 @@ module SiteHealth
   class MissingTitle < Checker
     name 'missing_title'
     types 'html'
-    issue_types({
+    issue_types(
       _default: {
         severity: :major,
         priority: :high,
-        links: [{ href: 'https://moz.com/learn/seo/title-tag' }]
+        links: [{ href: 'https://moz.com/learn/seo/title-tag' }],
       },
       missing: {
         title: 'title missing',
-        detail: 'titles are important for SEO'
-
+        detail: 'titles are important for SEO',
       },
       too_long: {
         title: 'title too long',
         detail: 'keep titles under 60 characters - titles are important for SEO',
-      },
-    })
+      }
+    )
+
+    protected
 
     def check
       return if page.redirect?

@@ -58,13 +58,13 @@ RSpec.describe SiteHealth::HTMLProofer do
     it 'yields tempfile to passed block' do
       file_content = 'file content'
 
-      described_class.new(nil_page).tempfile(file_content) do |file|
+      described_class.new(nil_page).send(:tempfile, file_content) do |file|
         expect(File.read(file.path)).to eq(file_content)
       end
     end
 
     it 'has .html file extension' do
-      described_class.new(nil_page).tempfile('') do |file|
+      described_class.new(nil_page).send(:tempfile, '') do |file|
         expect(file.path.end_with?('.html')).to eq(true)
       end
     end
@@ -73,7 +73,7 @@ RSpec.describe SiteHealth::HTMLProofer do
       file_content = 'file content'
       path = nil
 
-      described_class.new(nil_page).tempfile(file_content) do |file|
+      described_class.new(nil_page).send(:tempfile, file_content) do |file|
         path = file.path
       end
 

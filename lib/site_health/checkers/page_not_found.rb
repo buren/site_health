@@ -7,10 +7,13 @@ module SiteHealth
     issue_types(
       not_found: {
         title: 'Page not found',
+        detail: 'The server responded with 404 - page not found.',
         severity: :medium,
-        priority: :high
+        priority: :high,
       }
     )
+
+    protected
 
     def check
       if page.missing?

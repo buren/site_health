@@ -18,7 +18,7 @@ module SiteHealth
 
     name 'facebook_share_link'
     types 'html'
-    issue_types({
+    issue_types(
       _default: {
         title: 'URL Invalid',
         links:  [{ href: DOC_URL }],
@@ -47,8 +47,8 @@ module SiteHealth
       },
       u_query_param: {
         detail: "u query param must be a valid URL. #{DOC_URL}\n#{DEPRECATION_NOTICE}",
-      },
-    })
+      }
+    )
 
     def should_check?
       return false unless super
@@ -93,7 +93,7 @@ module SiteHealth
         add_issue_type(:app_id_query_param)
       end
 
-      # IIRC the only valid values for a regular web page are page and popup (not sure though..)
+      # IIRC the only valid values for a regular web page are page and popup
       unless query['display'] == 'page' || query['display'] == 'popup'
         add_issue_type(:display_query_param)
       end

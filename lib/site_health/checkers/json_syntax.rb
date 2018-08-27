@@ -7,13 +7,15 @@ module SiteHealth
   class JSONSyntax < Checker
     name 'json_syntax'
     types 'json'
-    issue_types({
+    issue_types(
       parse_error: {
         title: 'JSON parse error',
         severity: :major,
         priority: :high,
       }
-    })
+    )
+
+    protected
 
     def check
       JSON.parse(page.body)

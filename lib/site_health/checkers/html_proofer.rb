@@ -9,6 +9,8 @@ module SiteHealth
     name 'html_proofer'
     types 'html'
 
+    protected
+
     def check
       tempfile(page.body) do |file|
         proofer = ::HTMLProofer.check_file(file.path, config.html_proofer.to_h)

@@ -44,7 +44,6 @@ module SiteHealth
       @types = Array(types).map(&:to_sym)
     end
 
-
     # @param [Hash] types
     # the issues data - optional, if not present it will return the current data
     # @return [Hash] the issues types data

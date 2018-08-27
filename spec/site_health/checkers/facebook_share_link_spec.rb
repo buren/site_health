@@ -144,7 +144,6 @@ RSpec.describe SiteHealth::FacebookShareLink do
           issue = checker.issues.detect { |i| i.code == status }
           deprecated_notice = checker.class::DEPRECATION_NOTICE
 
-
           expect(issue&.detail&.include?(deprecated_notice)).to eq(true)
         end
       end

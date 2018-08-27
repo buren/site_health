@@ -13,6 +13,8 @@ module SiteHealth
       }
     )
 
+    protected
+
     def check
       errors = page.doc.errors.map(&:to_s)
       errors.each do |error|

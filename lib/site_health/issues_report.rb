@@ -6,8 +6,6 @@ require 'site_health/issue'
 
 module SiteHealth
   class IssuesReport
-    attr_writer :fields
-
     def initialize(issues)
       @issues = issues
       @fields = Issue.fields

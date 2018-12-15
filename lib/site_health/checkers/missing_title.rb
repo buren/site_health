@@ -18,6 +18,7 @@ module SiteHealth
       too_long: {
         title: 'title too long',
         detail: 'keep titles under 60 characters - titles are important for SEO',
+        severity: :medium,
       }
     )
 

@@ -87,6 +87,7 @@ module SiteHealth
     def links=(links)
       links.each do |link|
         next if link.key?(:href)
+
         raise ArgumentError, 'href key must be present for every link'
       end
 

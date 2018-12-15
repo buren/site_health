@@ -38,11 +38,12 @@ module SiteHealth
 
     private
 
-    def each(&block)
+    def each
       @issues.each do |issue|
         next unless @select_block.call(issue)
+
         hash = issue.to_h.select { |k| @fields.include?(k) }
-        block.call(hash)
+        yield(hash)
       end
     end
   end

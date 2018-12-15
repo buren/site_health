@@ -15,14 +15,14 @@ RSpec.describe SiteHealth::IssuesReport do
       priority: :high,
       url: 'https://example.com',
       links: [{ href: 'http://example.com', about: 'just an example' }],
-      meta: { extra: :data }
+      meta: { extra: :data },
     }
   end
 
   let(:issues) do
     [
       SiteHealth::Issue.new(base_data),
-      SiteHealth::Issue.new(base_data.merge(priority: :medium))
+      SiteHealth::Issue.new(base_data.merge(priority: :medium)),
     ]
   end
 
@@ -43,8 +43,8 @@ RSpec.describe SiteHealth::IssuesReport do
   describe '#to_csv' do
     it 'generates correct CSV' do
       expected = <<~CSV
-      code,name,title
-      watman,name,is invalid
+        code,name,title
+        watman,name,is invalid
       CSV
 
       expect(report.to_csv).to eq(expected)

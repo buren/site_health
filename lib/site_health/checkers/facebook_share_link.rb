@@ -21,7 +21,7 @@ module SiteHealth
     issue_types(
       _default: {
         title: 'URL Invalid',
-        links:  [{ href: DOC_URL }],
+        links: [{ href: DOC_URL }],
       },
       not_absolute_url: {
         detail: "URL must be absolute. #{DOC_REF}",
@@ -53,6 +53,7 @@ module SiteHealth
     def should_check?
       return false unless super
       return false unless look_like_facebook_share_url?
+
       true
     end
 

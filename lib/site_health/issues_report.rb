@@ -8,8 +8,8 @@ module SiteHealth
   class IssuesReport
     attr_writer :fields
 
-    def initialize(nurse)
-      @nurse = nurse
+    def initialize(issues)
+      @issues = issues
       @fields = Issue.fields
       @select_block = proc { true }
       yield(self) if block_given?
@@ -39,7 +39,7 @@ module SiteHealth
     private
 
     def each(&block)
-      @nurse.issues.each do |issue|
+      @issues.each do |issue|
         next unless @select_block.call(issue)
         hash = issue.to_h.select { |k| @fields.include?(k) }
         block.call(hash)

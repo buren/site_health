@@ -26,10 +26,8 @@ RSpec.describe SiteHealth::IssuesReport do
     ]
   end
 
-  let(:nurse) { Struct.new(:issues).new(issues) }
-
   let(:report) do
-    described_class.new(nurse) do |r|
+    described_class.new(issues) do |r|
       r.fields = %i[code name title]
       r.select { |issue| issue.priority == :high }
     end

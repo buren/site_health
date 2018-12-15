@@ -30,7 +30,7 @@ OptionParser.new do |parser|
     options[:url] = url
   end
 
-  parser.on('--fields=priority,title,url', Array, 'Issue fields to include - by default all fields are included') do |fields|
+  parser.on('--fields=priority,title,url', Array, 'Issue fields to include - by default all fields are included') do |fields| # rubocop:disable Metrics/LineLength
     options[:fields] = fields
   end
 

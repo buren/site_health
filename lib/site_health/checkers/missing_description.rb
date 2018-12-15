@@ -20,7 +20,7 @@ module SiteHealth
     protected
 
     def check
-      return if page.redirect?
+      return if page.redirect? || page.missing?
 
       description_meta = page.search('//meta').detect do |meta|
         name = (meta.attributes['name'] || meta.attributes['http-equiv']).to_s.strip

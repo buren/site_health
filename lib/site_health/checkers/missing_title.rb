@@ -25,7 +25,7 @@ module SiteHealth
     protected
 
     def check
-      return if page.redirect?
+      return if page.redirect? || page.missing?
 
       title = page.title.to_s.strip
 

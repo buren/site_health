@@ -15,6 +15,10 @@ module SiteHealth
       yield(self) if block_given?
     end
 
+    def fields=(fields)
+      @fields = fields.map(&:to_sym)
+    end
+
     def select(&block)
       @select_block = block
     end

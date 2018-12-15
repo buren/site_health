@@ -4,7 +4,7 @@ module SiteHealth
   # Patch version
   PATCH = 0
   # Minor version
-  MINOR = 1
+  MINOR = 2
   # Major version
   MAJOR = 0
   # Current version

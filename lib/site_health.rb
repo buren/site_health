@@ -64,7 +64,7 @@ module SiteHealth
       spider.every_page { |page| nurse.check_page(page) }
     end
 
-    nurse
+    nurse.punch_out!
   end
 
   # @param [Array<String>, String] urls to be checked
@@ -89,7 +89,7 @@ module SiteHealth
       nurse.check_page(page)
     end
 
-    nurse
+    nurse.punch_out!
   end
 
   # @see Configuration#logger

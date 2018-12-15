@@ -7,7 +7,10 @@ require 'site_health/timer'
 module SiteHealth
   # Holds page analysis data
   class Nurse
-    attr_reader :config, :failures, :checkers, :issues
+    attr_reader :config, :failures, :checkers
+
+    # @return [Array<Issue>] found issues
+    attr_reader :issues
 
     def initialize(config: SiteHealth.config)
       @config = config
@@ -16,6 +19,15 @@ module SiteHealth
       @failures = []
       @issues = []
       @clerk = nil
+      @punched_out = false
+    end
+
+    # @return [Nurse] returns self
+    def punch_out!
+      post_shift_analysis unless @punched_out
+
+      @punched_out = true
+      self
     end
 
     # @return [Hash] check results
@@ -54,7 +66,7 @@ module SiteHealth
         journal[:http_status] = page.code
         journal[:redirect] = page.redirect?
         journal[:title] = page.title
-        journal[:links_to] = page.each_link.map do |url|
+        journal[:links_to] = page.each_url.map do |url|
           (@pages_journal[url][:links_from] ||= []) << page.url
           url.to_s
         end
@@ -115,6 +127,41 @@ module SiteHealth
     #   true if it can respond to method name, false otherwise
     def respond_to_missing?(method, include_private = false)
       clerk.respond_to?(method, include_private) || super
+    end
+
+    private
+
+    def post_shift_analysis
+      issues = links_to_page_not_found_issues
+      clerk.emit_each_issue(issues)
+      @issues.concat(issues)
+    end
+
+    def links_to_page_not_found_issues
+      issues = []
+      not_found = @issues.
+                  select { |issue| issue.code == :not_found }.
+                  map { |issue| issue.url.to_s }
+
+      not_found.each do |url|
+        (@pages_journal[url][:links_from] || []).each do |link_from_url|
+          issues << build_links_to_not_found_issue(link_from_url, url)
+        end
+      end
+
+      issues
+    end
+
+    def build_links_to_not_found_issue(url, not_found_url)
+      Issue.new(
+        name: 'links_to_page_not_found',
+        code: :links_to_not_found,
+        title: 'Links to page not found',
+        detail: "Links to #{not_found_url} that is 404 page not found",
+        severity: :major,
+        priority: :high,
+        url: url
+      )
     end
   end
 end

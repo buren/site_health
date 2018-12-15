@@ -4,12 +4,21 @@ module SiteHealth
   # Checks if HTML-meta title is present
   class PageNotFound < Checker
     name 'page_not_found'
+    issue_types(
+      not_found: {
+        title: 'Page not found',
+        detail: 'The server responded with 404 - page not found.',
+        severity: :medium,
+        priority: :high,
+      }
+    )
+
+    protected
 
     def check
-      # @return [Boolean] determines whether the page returned a HTTP 404 status code
       if page.missing?
         add_data(not_found: true)
-        add_issue(title: 'page not found', severity: :major, priority: :high)
+        add_issue_type(:not_found)
         return
       end
 

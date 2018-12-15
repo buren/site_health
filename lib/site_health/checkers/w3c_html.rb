@@ -9,6 +9,8 @@ module SiteHealth
     name 'w3c_html'
     types 'html'
 
+    protected
+
     def check
       result = check_content
       # TODO: Add issues

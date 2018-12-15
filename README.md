@@ -58,6 +58,19 @@ SiteHealth.check_urls(urls) do |nurse|
 end
 ```
 
+Simple issue reports
+```ruby
+nurse = SiteHealth.check("https://example.com")
+report = SiteHealth::IssuesReport.new(nurse.issue) do |r|
+  r.fields = %i[url title detail] # issue fields
+  r.select { |issue| issue.url.include?('blog/') }
+end
+
+report.to_a
+report.to_csv
+report.to_json
+```
+
 Event handlers
 
 ```ruby

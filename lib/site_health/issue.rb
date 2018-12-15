@@ -58,19 +58,15 @@ module SiteHealth
       self.priority = priority
     end
 
+    def self.fields
+      %i[name code title detail severity priority url links meta]
+    end
+
     # @return [Hash] hash representation of the object
     def to_h
-      {
-        name: name,
-        code: code,
-        title: title,
-        detail: detail,
-        severity: severity,
-        priority: priority,
-        url: url,
-        links: links,
-        meta: meta,
-      }
+      self.class.fields.
+        map { |field| [field, send(field)] }.
+        to_h
     end
 
     # Set issue title.
@@ -91,6 +87,7 @@ module SiteHealth
     def links=(links)
       links.each do |link|
         next if link.key?(:href)
+
         raise ArgumentError, 'href key must be present for every link'
       end
 

@@ -6,25 +6,25 @@ require 'site_health/checkers/missing_title'
 
 RSpec.describe SiteHealth::MissingTitle do
   describe '#call' do
-    it 'returns false if title is present' do
+    it 'adds no issue if title is present' do
       page = mock_test_page('html/index.html')
       checker = described_class.new(page).call
 
-      expect(checker.data[:missing]).to eq(false)
+      expect(checker.issues).to be_empty
     end
 
-    it 'returns true if title is missing' do
+    it 'adds issue if title is missing' do
       page = mock_test_page('html/missing_title.html')
       checker = described_class.new(page).call
 
-      expect(checker.data[:missing]).to eq(true)
+      expect(checker.issues.first.title).to eq('title missing')
     end
 
-    it 'returns true if title is present, but empty' do
+    it 'adds issue if title is present, but empty' do
       page = mock_test_page('html/empty_title.html')
       checker = described_class.new(page).call
 
-      expect(checker.data[:missing]).to eq(true)
+      expect(checker.issues.first.title).to eq('title missing')
     end
   end
 

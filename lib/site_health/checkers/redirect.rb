@@ -5,6 +5,8 @@ module SiteHealth
   class Redirect < Checker
     name 'redirect'
 
+    protected
+
     def check
       add_data(redirect: page.redirect?)
     end

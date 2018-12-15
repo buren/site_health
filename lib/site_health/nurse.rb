@@ -7,13 +7,14 @@ require 'site_health/timer'
 module SiteHealth
   # Holds page analysis data
   class Nurse
-    attr_reader :config, :failures, :checkers
+    attr_reader :config, :failures, :checkers, :issues
 
     def initialize(config: SiteHealth.config)
       @config = config
       @checkers = config.checkers
       @pages_journal = UrlMap.new { {} }
       @failures = []
+      @issues = []
       @clerk = nil
     end
 
@@ -78,9 +79,12 @@ module SiteHealth
 
         checker.call
 
+        issues = checker.issues
+        @issues.concat(issues.to_a)
+
         clerk.emit_check(checker)
         clerk.emit(checker.name, checker)
-        clerk.emit_each_issue(checker.issues)
+        clerk.emit_each_issue(issues)
 
         journal[checker.name.to_sym] = checker.to_h
       end

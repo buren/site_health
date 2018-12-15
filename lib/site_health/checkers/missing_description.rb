@@ -5,28 +5,44 @@ module SiteHealth
   class MissingDescription < Checker
     name 'missing_description'
     types 'html'
+    issue_types(
+      _default: {
+        severity: :medium,
+        priority: :medium,
+        links: [{ href: 'https://moz.com/learn/seo/meta-description' }],
+      },
+      missing_tag: { title: 'description meta tag missing', priority: :high },
+      missing: { title: 'description missing', priority: :high },
+      too_long: { title: 'description too long' },
+      too_short: { title: 'description too short' }
+    )
+
+    protected
 
     def check
-      # @return [Boolean] determines whether the description is missing
-      return add_data(missing: false) if page.redirect?
+      return if page.redirect?
 
-      page.search('//meta').each do |meta|
+      description_meta = page.search('//meta').detect do |meta|
         name = (meta.attributes['name'] || meta.attributes['http-equiv']).to_s.strip
-        next unless name == 'description'
-
-        missing = meta.attributes['content'].to_s.strip.empty?
-        return add_missing_issue_and_data if missing
-        return add_data(missing: false)
+        name == 'description'
       end
 
-      add_missing_issue_and_data
-    end
+      unless description_meta
+        return add_issue_type(:missing_tag)
+      end
 
-    private
+      description = description_meta.attributes['content'].to_s.strip
+      if description.empty?
+        return add_issue_type(:missing)
+      end
 
-    def add_missing_issue_and_data
-      add_data(missing: true)
-      add_issue(title: 'missing description', severity: :medium, priority: :high)
+      if description.length <= 50
+        return add_issue_type(:too_short)
+      end
+
+      if description.length > 300
+        return add_issue_type(:too_long)
+      end
     end
   end
 

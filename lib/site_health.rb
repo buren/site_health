@@ -12,6 +12,7 @@ require 'site_health/link'
 
 require 'site_health/checkers/checker'
 require 'site_health/nurse'
+require 'site_health/issues_report'
 
 # Top-level module/namespace
 module SiteHealth

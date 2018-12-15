@@ -159,6 +159,51 @@ RSpec.describe SiteHealth::Checker do
     end
   end
 
+  describe '#add_issue_type' do
+    it 'raises ArgumentError for unknown issue type' do
+      page = Struct.new(:url).new('http://example.com/wat')
+      checker = described_class.new(page)
+
+      expect { checker.add_issue_type(:watman) }.to raise_error(ArgumentError)
+    end
+
+    it 'adds issue' do
+      page = Struct.new(:url).new('http://example.com/wat')
+      klass = Class.new(described_class) do
+        issue_types missing: { title: 'missing' }
+      end
+      checker = klass.new(page)
+      checker.add_issue_type(:missing)
+
+      expect(checker.issues.first.title).to eq('missing')
+    end
+
+    it 'adds issue with default data' do
+      page = Struct.new(:url).new('http://example.com/wat')
+      klass = Class.new(described_class) do
+        issue_types missing: { title: 'missing' }, _default: { code: :not_found }
+      end
+      checker = klass.new(page)
+      checker.add_issue_type(:missing)
+
+      expect(checker.issues.first.code).to eq(:not_found)
+      expect(checker.issues.first.title).to eq('missing')
+    end
+
+    it 'adds issue and arguments' do
+      page = Struct.new(:url).new('http://example.com/wat')
+      klass = Class.new(described_class) do
+        issue_types missing: { title: 'missing' }, _default: { code: :not_found }
+      end
+      checker = klass.new(page)
+      checker.add_issue_type(:missing, detail: 'watman')
+
+      expect(checker.issues.first.code).to eq(:not_found)
+      expect(checker.issues.first.title).to eq('missing')
+      expect(checker.issues.first.detail).to eq('watman')
+    end
+  end
+
   describe '#add_data' do
     it 'merges the new data with the current data' do
       page = Struct.new(:url).new('http://example.com/wat')

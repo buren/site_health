@@ -6,13 +6,15 @@ require 'site_health/issue'
 
 module SiteHealth
   class IssuesReport
-    attr_writer :fields
-
     def initialize(issues)
       @issues = issues
       @fields = Issue.fields
       @select_block = proc { true }
       yield(self) if block_given?
+    end
+
+    def fields=(fields)
+      @fields = fields.map(&:to_sym)
     end
 
     def select(&block)

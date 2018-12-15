@@ -29,6 +29,8 @@ Or install it yourself as:
 
 ## Usage
 
+[CLI usage](#cli).
+
 Crawl and check site
 
 ```ruby
@@ -167,6 +169,17 @@ end
 SiteHealth.configure do |config|
   config.register_checker ProfanityChecker
 end
+```
+
+## CLI
+
+```
+Usage: site_health --help
+        --url=val0
+        --fields=priority,title,url  Issue fields to include - by default all fields are included
+        --output=result.csv          Output format, .csv or .json
+        --[no-]progress
+    -h, --help                       How to use
 ```
 
 ## Development

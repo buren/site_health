@@ -2,6 +2,7 @@
 # frozen_string_literal: true
 
 require 'optparse'
+require 'set'
 
 # for dev purposes
 require 'bundler/setup' if ENV['SITE_HEALTH_GEM_DEV']
@@ -46,15 +47,15 @@ OptionParser.new do |parser|
     options[:fields] = fields
   end
 
-  parser.on('--output=result.csv', String, 'Output patg, .csv or .json') do |output|
+  parser.on('--output=result.csv', String, 'Output path, .csv or .json') do |output|
     options[:output] = output
   end
 
-  parser.on('--stats-output=stats-result.csv', String, 'Stats output path, .csv or .json') do |output|
+  parser.on('--stats-output=stats.csv', String, 'Stats output path, .csv or .json') do |output|
     options[:stats_output] = output
   end
 
-  parser.on('--[no-]progress', '') do |progress|
+  parser.on('--[no-]progress', 'Print progress while running to STDOUT') do |progress|
     options[:progress] = progress
   end
 
@@ -82,9 +83,39 @@ end
 
 url = options.fetch(:url) { die(ArgumentError, '--url is required') }
 output = options.fetch(:output) { die(ArgumentError, '--output is required') }
+stats_output = options[:stats_output]
 progress = options.fetch(:progress, true)
 fields = options.fetch(:fields, nil)
 
+# Issues report
 reports = site_report(url, fields, progress)
-content = reports[:issues].public_send(format_method(output))
+content = reports.fetch(:issues).public_send(format_method(output))
 File.write(output, content)
+
+
+# Journal report
+if stats_output
+  stats_format = format_method(stats_output)
+  stats_keys = Set.new(%i[url http_status content_type title started_at finished_at runtime_in_seconds])
+
+  journal_data = reports.dig(:journal, :checked_urls).map do |_, data|
+    next unless data[:checked] == true
+    next data if stats_format == :to_json
+
+    csv_data = data.select { |k| stats_keys.include?(k) }
+    csv_data[:issue_count] = data.fetch(:checks, []).map { |_, v| v[:issues].length }.sum
+    csv_data[:links_to_count] = data.fetch(:links_to, []).length
+    csv_data[:links_from_count] = data.fetch(:links_from, []).length
+    csv_data.values
+  end.compact
+
+  stats_content = if stats_format == :to_json
+                    JSON.dump(journal_data)
+                  else
+                    CSV.generate do |csv|
+                      csv << (stats_keys.to_a + %i[issue_count links_to_count links_from_count])
+                      journal_data.each { |row| csv << row }
+                    end
+                  end
+  File.write(stats_output, stats_content)
+end

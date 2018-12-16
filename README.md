@@ -177,8 +177,9 @@ end
 Usage: site_health --help
         --url=val0
         --fields=priority,title,url  Issue fields to include - by default all fields are included
-        --output=result.csv          Output format, .csv or .json
-        --[no-]progress
+        --output=result.csv          Output path, .csv or .json
+        --stats-output=stats.csv     Stats output path, .csv or .json
+        --[no-]progress              Print progress while running to STDOUT
     -h, --help                       How to use
 ```
 

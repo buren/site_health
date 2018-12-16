@@ -25,9 +25,12 @@ def site_report(url, fields, progress)
       end
     end
   end
-  SiteHealth::IssuesReport.new(nurse.issues) do |r|
-    r.fields = fields if fields
-  end
+  {
+    issues: SiteHealth::IssuesReport.new(nurse.issues) do |r|
+      r.fields = fields if fields
+    end,
+    journal: nurse.journal
+  }
 end
 
 options = {}
@@ -43,8 +46,12 @@ OptionParser.new do |parser|
     options[:fields] = fields
   end
 
-  parser.on('--output=result.csv', String, 'Output format, .csv or .json') do |output|
+  parser.on('--output=result.csv', String, 'Output patg, .csv or .json') do |output|
     options[:output] = output
+  end
+
+  parser.on('--stats-output=stats-result.csv', String, 'Stats output path, .csv or .json') do |output|
+    options[:stats_output] = output
   end
 
   parser.on('--[no-]progress', '') do |progress|
@@ -61,11 +68,16 @@ def die(error_klass, message)
   fail(error_klass, "#{message} - run `site_health --help`")
 end
 
-def perform(output, url, fields, progress, format_method)
-  File.write(
-    output,
-    site_report(url, fields, progress).public_send(format_method)
-  )
+def format_method(path)
+  extension = File.extname(path)
+  case extension
+  when '.csv' then :to_csv
+  when '.json' then :to_json
+  when ''
+    die(ArgumentError, "missing file extension from '#{output}'")
+  else
+    die(ArgumentError, "unknown file extension '#{extension}'")
+  end
 end
 
 url = options.fetch(:url) { die(ArgumentError, '--url is required') }
@@ -73,12 +85,6 @@ output = options.fetch(:output) { die(ArgumentError, '--output is required') }
 progress = options.fetch(:progress, true)
 fields = options.fetch(:fields, nil)
 
-extension = File.extname(output)
-case extension
-when '.csv' then perform(output, url, fields, progress, :to_csv)
-when '.json' then perform(output, url, fields, progress, :to_json)
-when ''
-  die(ArgumentError, "missing file extension from '#{output}'")
-else
-  die(ArgumentError, "unknown file extension '#{extension}'")
-end
+reports = site_report(url, fields, progress)
+content = reports[:issues].public_send(format_method(output))
+File.write(output, content)

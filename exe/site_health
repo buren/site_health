@@ -39,7 +39,7 @@ OptionParser.new do |parser|
   parser.banner = 'Usage: site_health --help'
   parser.default_argv = ARGV
 
-  parser.on('--url=val0', String, '') do |url|
+  parser.on('--url=https://example.com', String, 'The URL to start from') do |url|
     options[:url] = url
   end
 

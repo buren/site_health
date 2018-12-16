@@ -76,7 +76,7 @@ module SiteHealth
         timer.finish
 
         journal[:finished_at] = timer.finished_at
-        journal[:runtime_in_seconds] = timer.diff.round(1)
+        journal[:runtime_in_seconds] = timer.diff.round(3)
 
         clerk.emit_journal(journal, page)
       end

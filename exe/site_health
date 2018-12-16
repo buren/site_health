@@ -8,11 +8,20 @@ require 'bundler/setup' if ENV['SITE_HEALTH_GEM_DEV']
 require 'site_health'
 
 def site_report(url, fields, progress)
-  puts 'severity,title,url' if progress
   nurse = SiteHealth.check(url) do |n|
     n.clerk do |clerk|
       clerk.every_issue do |issue|
-        puts [issue.severity, issue.title, issue.url].join(',') if progress
+        puts '[ISSUE] ' + [issue.severity, issue.title, issue.url].join(',') if progress
+      end
+
+      clerk.every_journal do |journal|
+        issues = journal[:checks].map { |_, v| v[:issues] }.flatten(1)
+        puts '[PAGE] ' + [
+          "HTTP #{journal[:http_status]}",
+          "#{issues.length} issue(s)",
+          "Checks took #{journal[:runtime_in_seconds]} sec",
+          journal[:url]
+        ].join(',')
       end
     end
   end
